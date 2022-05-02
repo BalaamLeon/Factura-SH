@@ -1,0 +1,321 @@
+#bootstrap-overrides .checkbox-inline {
+  display: block;
+  margin-left: 10px
+}
+
+.add-edit  {
+    padding-left: 0px;
+}
+.add-edit img {
+    height: 25px;
+    margin-top: 16px;
+}
+
+.checkbox, .radio {
+    position: relative;
+    display: block;
+    margin-top: 30px;
+}
+
+.checkbox label, .radio label {
+    min-height: 20px;
+    padding-left: 20px;
+    margin-bottom: 0px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.checkbox input[type=checkbox]{
+    width: 20px;
+    height: 20px;
+    margin-left: -25px;
+    margin-top: 0px;
+}
+
+
+
+.image-uploader-container {
+    margin-bottom: 20px;
+}
+
+/* Add Image Button */
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    width: 46%;
+    height: 50px;
+    border: 1px solid transparent;
+    left: 8px;
+    padding: 15px;
+    font-weight: 700;
+    float: left;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+
+/* Product Image Grid */
+/*.list {
+    background-color: pink;
+    font-size: 30px;
+    text-align: center;
+    cursor: pointer;
+    font-family: Geneva,Arial,Helvetica,sans-serif;
+    border: 1px solid gray;
+} */
+
+#p_images .ui-selected {
+    background: red;
+    color: white;
+    font-weight: bold;
+}
+
+#p_images {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: 295px;
+}
+
+
+#p_images li {
+    float: left;
+    margin: 0.5vw;
+    width: 6vw;
+    height: 6vw;
+    overflow: hidden;
+    overflow: hidden;
+    position: relative;
+}
+
+#p_images li:first-child {
+    width: 20vw;
+    height: 20vw;
+/*    border: 1px solid; */
+}
+
+.highlight {
+    /* border: 2px solid red; */
+    opacity: 0.5;
+    background-color: lightblue;
+}
+
+#P_images img {
+    height: 100%;
+    width: auto;
+    position: absolute;
+    left: -25%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.remove_img {
+    border: 4px dashed rgb(140 140 140 / 80%);
+    height: 50px;
+    margin-left: 20px;
+    width: 46%;
+    display: none;
+    justify-content: center;
+    padding: 6px;
+    float: left;
+    float: left;
+}
+
+
+.product-thumbnail {
+    float:left;
+    position:relative;
+    width: 70px;
+}
+.product-thumbnail img{
+    /* ... */
+    width:70px;
+    height:auto;
+}
+/*
+.product-thumbnail:hover img {
+    position:relative;
+    top:-25px;
+    left:-35px;
+    width:300px;
+    height:auto;
+    display:block;
+    z-index:999;
+}
+*/
+
+/* Filter */
+
+#filter p {
+    display: inline;
+    margin-inline: 10px;
+}
+
+
+/* Product Detail */
+.product-detail-thumbnail, .product-detail-thumbnail-list {
+    display: flex;
+    justify-content: center;
+}
+
+.product-detail-thumbnail img {
+    max-width: 70%;
+    margin-top: -50px;
+}
+
+.product-detail-thumbnail-list img{
+    /* ... */
+    width:70px;
+    height:auto;
+}
+
+/* Select2 */
+.select2-container{
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single {
+    height: 58px !important;
+    position: relative;
+
+}
+
+
+.select2-container .select2-selection--single .select2-selection__rendered{
+    margin: 0;
+    position: absolute !important;
+    top: 70% !important;
+    transform: translateY(-50%);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    margin: 0;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%);
+}
+
+/* Checkboxes */
+.chk-container > .mb-3, .btn-container, .il-chk-container > .mb-3 {
+    height: 58px !important;
+    position: relative;
+    margin-bottom: 0px !important;
+}
+
+.chk-container .mb-3 > div, .btn-container > .btn{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.chk-container .checkboxinput, .il-chk-container .checkboxinput{
+    width: 1.5em;
+    height: 1.5em;
+    margin-top: 0;
+    margin-left: 10;
+}
+
+.chk-container label {
+    margin-left: 40px;
+}
+
+.il-chk-container .mb-3 > div {
+    margin: 0;
+    position: absolute;
+    top: 85%;
+    transform: translateY(-50%);
+}
+
+#taxes-holder {
+    height: auto;
+}
+
+/* dataTable */
+table.dataTable tbody tr.selected {
+    background-color: #b0bed9;
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+    width: 65px;
+}
+
+/* Sidebar */
+.main-sidebar, .main-sidebar::before {
+    width: 200;
+}
+
+.nav-link {
+    padding: 0.5rem 0.5rem;
+}
+
+.sidebar-mini .main-sidebar .nav-link, .sidebar-mini-md .main-sidebar .nav-link, .sidebar-mini-xs .main-sidebar .nav-link {
+    width: auto;
+}
+
+@media (min-width: 768px) {
+    body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 991.98px){
+    body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer, body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
+        margin-left: 0;
+    }
+}
+
+.layout-fixed .brand-link {
+    width: 200px;
+}
+
+/* Modal */
+.modal-header {
+    box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+/*    margin-bottom: 1rem; */
+}
+
+/* Floating Label */
+.form-floating>label {
+    left: 10px;
+}
+
+
+.form-row>.col, .form-row>[class*=col-] {
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+}
+
+/* select2 multiple */
+.select2-selection--multiple {
+    height: calc(3.5rem + 2px) !important;
+    padding-top: 1.4rem;
+    padding-bottom: 0.625rem;
+}
+
+.select2-selection__choice {
+    color: var(--bs-body-color) !important;
+}
+
+/* Section Menu */
+.section-menu button {
+    width:50px;
+    height:50px;
+}
+
+
+/* Font Awesome */
+.fa-wharehouse:before {
+  content: "\f494"; }
+
+.fa-building-columns:before {
+  content: "\f19c"; }
