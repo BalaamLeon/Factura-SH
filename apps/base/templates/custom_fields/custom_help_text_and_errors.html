@@ -1,0 +1,23 @@
+{% if help_text_inline and not error_text_inline %}
+    {% include 'facturash/layout/help_text.html' %}
+{% endif %}
+
+{% if error_text_inline %}
+    {% if form_show_errors and field.errors %}
+        {% for error in field.errors %}
+            <span id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="invalid-feedback" data-error-field="{{ field.auto_id }}"><strong>{{ error }}</strong></span>
+        {% endfor %}
+    {% endif %}
+{% else %}
+    {% if form_show_errors and field.errors %}
+        {% for error in field.errors %}
+            <p id="error_{{ forloop.counter }}_{{ field.auto_id }}" class="invalid-feedback" data-error-field="{{ field.auto_id }}"><strong>{{ error }}</strong></p>
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% if not help_text_inline %}
+    {% include 'facturash/layout/help_text.html' %}
+{% endif %}
+
+

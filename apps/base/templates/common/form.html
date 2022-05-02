@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_tags %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+{% include "common/_modal.html" %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb breadcrumbs.0.name breadcrumbs.0.url %}
+{% breadcrumb action page_url %}
+{% endblock %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <form id="form" method="post" role="form" class="needs-validation" novalidate>
+                <div class="card-header" style="background-color:#ffffff;">
+                    <a title=" {{ _('Back') }}" href="{{ back_url }}" class="btn"><i class="fas fa-arrow-left"></i></a>
+                    <button title=" {{ _('Save') }}" type="submit" class="btn btn-light"><i class="far fa-save"></i>
+                    </button>
+                </div>
+
+
+                <div class="card-body">
+                    {% if crispy_form == True %}
+                    {% load crispy_forms_tags %}
+                    {% crispy form %}
+                    {% else %}
+                    {% include "common/_form.html" %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">{% translate 'Save' %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% block javascript %}
+    {{ form.media.js }}
+    {% if js_vars %}
+        <script>
+            {% for key, value in js_vars.items %}
+                var {{ key }} = '{{ value }}';
+            {% endfor %}
+        </script>
+    {% endif %}
+<!--<script type="text/javascript" src="{% static js_file %}"></script>-->
+    <script>
+    {% for js_file in js_files %}
+        $(document).ready(function() {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "{% static js_file %}";
+        document.getElementsByTagName("body")[0].appendChild(script);
+        return false;
+        });
+    {% endfor %}
+    </script>
+{% endblock %}
+{% endblock %}
+

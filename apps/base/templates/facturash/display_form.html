@@ -1,0 +1,13 @@
+{% if form.form_html %}
+    {% if include_media %}
+        <div id="form-media">
+            {{ form.media }}
+        </div>
+    {% endif %}
+    {% if form_show_errors %}
+        {% include "facturash/errors.html" %}
+    {% endif %}
+    {{ form.form_html }}
+{% else %}
+    {% include "facturash/uni_form.html" %}
+{% endif %}

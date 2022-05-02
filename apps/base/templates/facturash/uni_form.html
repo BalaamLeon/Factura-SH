@@ -1,0 +1,15 @@
+{% load crispy_forms_utils %}
+
+{% specialspaceless %}
+    {% if include_media %}
+        <div id="form-media">
+          {{ form.media }}
+        </div>
+    {% endif %}
+    {% if form_show_errors %}
+        {% include "facturash/errors.html" %}
+    {% endif %}
+    {% for field in form %}
+        {% include field_template %}
+    {% endfor %}
+{% endspecialspaceless %}

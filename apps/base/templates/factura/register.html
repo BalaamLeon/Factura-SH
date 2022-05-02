@@ -1,0 +1,97 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Facturación | Sabores Hidalgo</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'vendor/admin-lte/plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{% static 'vendor/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'vendor/admin-lte/dist/css/adminlte.min.css' %}">
+
+    <!-- Bootstrap 5.1.3 -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap-5.1.3-dist/css/bootstrap.min.css' %}">
+
+    <!-- Custom style -->
+    <link rel="stylesheet" href="{% static 'dist/css/custom.css' %}">
+
+</head>
+<body class="hold-transition register-page" style="height: auto;">
+
+<div class="modal fade" id="modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">File</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body" id="modal-body">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="register-box" style="width:640px">
+    <div class="register-logo" style="height: 12rem;">
+        <img src="{% static 'img/logo-sabores.png' %}" style="max-height: 100%;">
+    </div>
+
+    <div class="card">
+        <div class="card-body register-card-body">
+            <div class="text-center">
+                <h4>Llena el formulario con tus datos.</h4>
+                <h4>Asegúrate de que estén correctos.</h4>
+            </div>
+            <form method="POST" style="margin-top: 2rem;" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% load crispy_forms_tags %}
+                {% crispy form %}
+                <button type="submit" class="btn btn-success btn-block">Continuar</button>
+            </form>
+        </div>
+        <!-- /.form-box -->
+    </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<!-- jQuery -->
+<script src="{% static 'vendor/admin-lte/plugins/jquery/jquery.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'vendor/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'vendor/admin-lte/dist/js/adminlte.min.js' %}"></script>
+
+<script src="{% static 'vendor/PDFObject-master/pdfobject.js' %}"></script>
+
+<script type="text/javascript">
+    var constancia_button = $("#div_id_constancia").find("a")[0];
+    var file_src = constancia_button.href;
+    var file_name = constancia_button.text;
+    if (!file_src.includes("/constancias/")) {
+        file_src = file_src.substring(0, file_src.lastIndexOf("/"));
+        file_src += "/constancias/";
+        file_src += file_name;
+    };
+    constancia_button.setAttribute("data-toggle", "modal");
+    constancia_button.setAttribute("data-target", "#modal");
+    PDFObject.embed(file_src, "#modal-body");
+
+    constancia_button.onclick = function (e) {
+            e.preventDefault();
+            $("#modal").modal("show");
+        };
+
+
+</script>
+</body>
+</html>

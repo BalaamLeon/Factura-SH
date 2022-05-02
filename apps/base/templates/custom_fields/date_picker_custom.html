@@ -1,0 +1,61 @@
+{% load crispy_forms_field %}
+
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+    <{% if tag %}{{ tag }}{% else %}div{% endif %} id="div_{{ field.auto_id }}" class="form-floating {% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if field.css_classes %} {{ field.css_classes }}{% endif %} input-group">
+
+    {% if field|is_select %}
+        {%if field.errors %}
+            {% crispy_field field 'class' 'form-select is-invalid' 'placeholder' field.name %}
+        {% else %}
+            {% crispy_field field 'class' 'form-select' 'placeholder' field.name %}
+        {% endif %}
+    {% else %}
+        {% if field.errors %}
+            {% crispy_field field 'class' 'form-control is-invalid' 'placeholder' field.name %}
+        {% else %}
+            {% crispy_field field 'class' 'form-control' 'placeholder' field.name %}
+        {% endif %}
+    {% endif %}
+
+    <label {% if field.id_for_label %}for="{{ field.id_for_label }}"{% endif %}{% if label_class %} class="{{ label_class }}"{% endif %}>
+        {{ field.label }}
+    </label>
+
+    <div class="input-group-append">
+        <div class="input-group-text">
+            <i class="fas fa-calendar"></i>
+        </div>
+    </div>
+
+    {% include 'facturash/layout/help_text_and_errors.html' %}
+
+    <script>
+        (function(window) {
+            var callback = function() {
+                $(function(){
+                    $("#div_{{ field.auto_id }}:has(input:not([readonly],[disabled]))").datepicker({{ options }});
+                });
+            };
+            // if window object id loaded already, call directly callback function
+            if (-1 != $.inArray(
+                    document.readyState,
+                    ["loaded", "interactive", "complete"]
+                )
+            ) {
+                callback();
+            }
+            else if (window.addEventListener) {
+                window.addEventListener("load", callback, false);
+            }
+            else if (window.attachEvent) {
+                window.attachEvent("onload", callback);
+            }
+            else
+                window.onload = callback;
+        })(window);
+    </script>
+
+    </{% if tag %}{{ tag }}{% else %}div{% endif %}>
+{% endif %}

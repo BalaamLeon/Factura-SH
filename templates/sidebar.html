@@ -1,0 +1,165 @@
+{% load static %}
+{% load i18n %}
+<!-- Brand Logo -->
+<!--<a href="{% url 'base:dashboard' %}" class="brand-link">-->
+<!--    <img src="{% static 'img/logo-sabores.png' %}" alt="Sabores Hidalgo Logo" class="" style="max-width: 100%;">-->
+<!--    <span class="brand-text font-weight-light"></span>-->
+<!--</a>-->
+<!-- Brand Logo -->
+<a href="{% url 'base:dashboard' %}" class="brand-link">
+    <img src="{% static 'vendor/admin-lte/dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo"
+         class="brand-image img-circle elevation-3"
+         style="opacity: .8">
+    <span class="brand-text font-weight-light">Sabores Hidalgo</span>
+</a>
+<div class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img src="{% static 'vendor/admin-lte/dist/img/avatar5.png' %}" class="img-circle elevation-2"
+                 alt="User Image">
+        </div>
+        <div class=" info">
+            <a href="#">{% if request.user.first_name or request.user.last_name %} {{ request.user.first_name }}
+                {{ request.user.last_name }} {% else %} {{ request.user.username }} {% endif %}</a>
+
+        </div>
+    </div>
+
+    <!-- SidebarSearch Form -->
+    <div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-sidebar">
+                    <i class="fas fa-search fa-fw"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+
+            <!-- Dashboard -->
+            <li class="nav-item">
+                <a href="{% url 'base:dashboard' %}" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                        Dashboard
+                    </p>
+                </a>
+            </li>
+
+            <!-- Customers -->
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-box"></i>
+                    <p>
+                        {% translate 'Customers' %}
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{% url 'Customer:list' %}" class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>{% translate 'Customer List' %}</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'Customer:add' %}" class="nav-link">
+                            <i class="fas fa-plus-circle nav-icon"></i>
+                            <p>{% translate 'New Customer' %}</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Invoices -->
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-shopping-cart"></i>
+                    <p>
+                        {% translate 'Invoices' %}
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{% url 'Invoice:list' %}" class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>{% translate 'Invoices List' %}</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'Invoice:add' %}" class="nav-link">
+                            <i class="fas fa-plus-circle nav-icon"></i>
+                            <p>{% translate 'New Invoice' %}</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+        </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->
+<div class="sidebar-custom">
+    <div class="form-check form-switch" style="float:left;">
+        <input class="form-check-input" type="checkbox" id="theme-switch" role="switch">
+        <label class="theme-switch form-check-label" for="theme-switch" style="color: #fff;">
+            <i class="fas fa-moon nav-icon"></i>
+        </label>
+    </div>
+    <a href="#" class="btn btn-secondary hide-on-collapse pos-right"><i class="fas fa-cogs"></i></a>
+<!--    <a href="#" class="btn btn-secondary hide-on-collapse pos-right">Help</a>-->
+</div>
+<script>
+  var toggleSwitch = document.getElementById('theme-switch');
+  var currentTheme = localStorage.getItem('theme');
+  var mainHeader = document.querySelector('.main-header');
+
+  if (currentTheme) {
+    if (currentTheme === 'dark') {
+      if (!document.body.classList.contains('dark-mode')) {
+        document.body.classList.add("dark-mode");
+      }
+      if (mainHeader.classList.contains('navbar-light')) {
+        mainHeader.classList.add('navbar-dark');
+        mainHeader.classList.remove('navbar-light');
+      }
+      toggleSwitch.checked = true;
+    }
+  }
+
+  function switchTheme(e) {
+    if (e.target.checked) {
+      if (!document.body.classList.contains('dark-mode')) {
+        document.body.classList.add("dark-mode");
+      }
+      if (mainHeader.classList.contains('navbar-light')) {
+        mainHeader.classList.add('navbar-dark');
+        mainHeader.classList.remove('navbar-light');
+      }
+      localStorage.setItem('theme', 'dark');
+    } else {
+      if (document.body.classList.contains('dark-mode')) {
+        document.body.classList.remove("dark-mode");
+      }
+      if (mainHeader.classList.contains('navbar-dark')) {
+        mainHeader.classList.add('navbar-light');
+        mainHeader.classList.remove('navbar-dark');
+      }
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  toggleSwitch.addEventListener('change', switchTheme, false);
+</script>
+<!-- /.sidebar-custom -->

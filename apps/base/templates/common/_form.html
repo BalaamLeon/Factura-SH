@@ -1,0 +1,31 @@
+<div class="card-body">
+    {% csrf_token %}
+    {% load crispy_forms_tags %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+    {% for field in form.visible_fields %}
+        {% if forloop.counter0|divisibleby:"2" or forloop.counter0 == 0 %}
+        <div class="row">
+        {% endif %}
+            <div class="col-sm-6">
+                <div class="form-group">
+
+                    {{ field|as_crispy_field }}
+                </div>
+                <!-- /.col -->
+            </div>
+            {% if forloop.counter|divisibleby:"2" %}
+        </div>
+        <!-- /.row -->
+        {% elif forloop.last %}
+        <div class="col-sm-6">
+            <div class="form-group">
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <!-- /.row -->
+    {% endif %}
+    {% endfor %}
+</div>

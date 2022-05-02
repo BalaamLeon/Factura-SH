@@ -1,0 +1,50 @@
+{% load custom_tags %}
+
+<div class="modal-header">
+    <h4 class="modal-title col-lg-11">{{ object.name }}</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-6">
+            {% if object.img %}
+            <img class="img img-responsive" border="1" name="image" src="{{ object.img.url }}"
+                 style="width: 90px; height: 90px;">
+            {% endif %}
+        </div>
+    </div>
+    <form>
+        <div class="form-row">
+            {% for field in fields %}
+            <div class="form-group col-sm-6">
+                <div class="row">
+                    <label for="{{field.field}}" class="col-3 col-form-label">{{field.string}}</label>
+                    <div class="col-9">
+                        <input type="text" readonly class="form-control-plaintext" id="{{field.field}}"
+                               value="{{ object|get_obj_attr:field.field }}"/>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+</div>
+
+{% block javascript %}
+<script>
+<!--    $('.btn-danger').click(function (event) {-->
+<!--        event.preventDefault();-->
+<!--        if (confirm('{{ _("Are you sure you want to delete the form?") }}')){-->
+<!--            window.location = $(this)[0].href;-->
+<!--        }-->
+<!--    });-->
+
+    $('.btn-warning').click(function (event) {
+        event.preventDefault();
+        if (confirm('{{ _("Are you sure you want to duplicate the form?") }}')){
+            window.location = $(this)[0].href;
+        }
+    });
+</script>
+{% endblock %}
+

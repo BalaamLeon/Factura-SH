@@ -1,0 +1,82 @@
+{% load static %}
+{% load i18n %}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Facturación | Sabores Hidalgo</title>
+
+    {% block stylesheet %}
+    {% include 'stylesheet.html' %}
+    {% endblock %}
+
+    {% include 'javascript_header.html' %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    {% load django_bootstrap_breadcrumbs %}
+
+    {% block breadcrumbs %}
+        {% clear_breadcrumbs %}
+        {% breadcrumb "Home" "base:dashboard" %}
+    {% endblock %}
+</head>
+
+<!--{% if user_pref.theme == 'default' %}-->
+<!--<body class="hold-transition skin-red sidebar-mini layout-fixed">-->
+<!--{% else %}-->
+<!--<body class="hold-transition skin-{{ user_pref.theme }} sidebar-mini layout-fixed">-->
+<!--{% endif %}-->
+<body class="hold-transition sidebar-mini layout-fixed">
+
+
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-dark">
+        {% include 'header.html' %}
+    </nav>
+    <!-- /.navbar -->
+
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar main-sidebar-custom sidebar-dark-primary elevation-4">
+        {% include 'sidebar.html' %}
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="height:auto;">
+        <!-- Content Header (Page header) -->
+        {% include 'content_header.html' %}
+        <!-- main-content -->
+        <section class="content">
+            <div class="container-fluid">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <footer class="main-footer">
+        {% include 'footer.html' %}
+    </footer>
+
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar control-sidebar-dark"></div>
+</div>
+<!-- ./wrapper -->
+
+{% block script %}
+{% include 'javascript_footer.html' %}
+{% endblock %}
+
+</body>
+</html>

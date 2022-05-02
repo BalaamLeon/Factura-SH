@@ -1,0 +1,61 @@
+{% load humanize %}
+{% load custom_tags %}
+<table id="list_table" class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="text-center" scope="col">#</th>
+        {% for field in fields %}
+        <th class="text-center" scope="col">{{ field.string }}</th>
+        {% endfor %}
+        <th class="text-center" scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+    {% if type %}
+    <tr data-row-location="{% url detail_url object.pk type %}" style="cursor: pointer;">
+        {% else %}
+    <tr data-row-location="{% url detail_url object.pk %}" style="cursor: pointer;">
+        {% endif %}
+        <th class="text-center" scope="row">{{ forloop.counter }}</th>
+        {% for field in fields %}
+        <td class="{{ field.align }}">
+            {% if field.humanize %}
+            {{ object|get_obj_attr:field.field|intcomma }}
+            {% else %}
+            {{ object|get_obj_attr:field.field }}
+            {% endif %}
+        </td>
+        {% endfor %}
+
+        <td class="text-center">
+            <!-- Read button -->
+            <button type="button" class="detail-btn btn btn-sm btn-primary"
+                    data-form-url="{% url detail_url object.pk %}"
+                    title="{{ title }} details" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                <span class="fa fa-eye"></span>
+            </button>
+            <!-- Update product buttons -->
+            {% if modal_add == True %}
+            <button type="button" class="update-btn btn btn-sm btn-primary"
+                    data-form-url="{% url update_url object.pk %}"
+                    title="Edit {{ title }}" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                <span class="fa fa-pencil-alt"></span>
+            </button>
+            {% else %}
+            <a title=" {{ _('Edit') }} {{ title }}" href="{% url update_url object.pk %}" class="btn btn-sm btn-primary"><i
+                    class="fa fa-pencil-alt"></i></a>
+            {% endif %}
+
+            <!-- Delete product buttons -->
+            <button type="button" class="delete-btn btn btn-sm btn-danger"
+                    data-form-url="{% url delete_url object.pk %}"
+                    title="Delete {{ title }}" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                <span class="fa fa-trash"></span>
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>

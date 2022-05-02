@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+{% include "common/_modal.html" %}
+{% include 'common/message.html' %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb page_title page_url %}
+{% endblock %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                {% if modal_add == True %}
+                <button type="button"
+                        class="btn btn-light"
+                        id="create-btn"
+                        data-form-url="{{ add_url }}"
+                        title="{{ _('Add new') }} {{ page_title }}" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                    <span class="fa fa-plus"></span>
+                </button>
+                {% else %}
+                <a title=" {{ _('Add new') }} {{ page_title }}" href="{{ add_url }}" class="btn btn-light"><i
+                        class="fa fa-plus"></i></a>
+                {% endif %}
+                {% if import_btn == True %}
+                <button type="button"
+                        class="btn btn-light"
+                        id="import-btn"
+                        data-form-url="{{ import_url }}"
+                        title="Import {{ page_title }}" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                    <span class="fa fa-file-excel"></span>
+                </button>
+                {% endif %}
+                {% if web_parameter.show_btn_export == 'True' %}
+                <a title=" {{ _('Download') }}" href="#" class="btn btn-light"><i class="fa fa-file-excel"></i></a>
+                {% endif %}
+                {% if web_parameter.show_btn_import == 'True' %}
+                <a title=" {{ _('Import') }}" href="#" class="btn btn-light"><i class="fas fa-upload"></i></i></a>
+                {% endif %}
+                {% if web_parameter.show_btn_mass == 'True' %}
+                <a title=" {{ _('Massive Edition') }}" href="#" class="btn btn-light"><i class="fa fa-exclamation"></i></a>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                {% include 'common/_table_list.html' %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="script-container">
+    {% block javascript %}
+    <script>
+    $(function () {
+        $("#list_table").DataTable({
+            "lengthMenu": [[50, 100, 200, -1], [ 50, 100, 200, "All"]]
+        });
+    });
+<!--    $('[data-row-location]').click(function () {-->
+<!--&lt;!&ndash;        window.location = $(this).data('rowLocation');&ndash;&gt;-->
+<!--        $(this).modalForm({formURL: $(this).data("rowLocation")});-->
+<!--    });-->
+
+    </script>
+    <script type="text/javascript" src="{% static 'dist/js/list_page.js' %}" data-object="{{ title }}"></script>
+    {% for js_file in js_files %}
+    <script type="text/javascript" src="{% static js_file %}"></script>
+    {% endfor %}
+    {% endblock %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% load static %}
+
+<!-- jQuery -->
+<script src="{% static 'vendor/admin-lte/plugins/jquery/jquery.min.js' %}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'vendor/admin-lte/plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+
+<!-- Select2 -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js"></script>
+
+<!-- Formset -->
+<script type="text/javascript" src="{% static 'vendor/jquery-formset/jquery.formset.js' %}"></script>

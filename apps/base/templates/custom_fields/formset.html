@@ -1,0 +1,19 @@
+{% load crispy_forms_tags %}
+<table>
+{{ formset.management_form|crispy }}
+
+    {% for form in formset.forms %}
+            <div class="row {% cycle 'row1' 'row2' %} formset_row-{{ formset.prefix }}">
+                {% crispy form %}
+            </div>
+    {% endfor %}
+
+</table>
+<br>
+<script type="text/javascript">
+    $('.formset_row-{{ formset.prefix }}').formset({
+        addText: 'add another product',
+        deleteText: 'remove',
+        prefix: '{{ formset.prefix }}',
+    });
+</script>
