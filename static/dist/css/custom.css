@@ -319,3 +319,19 @@ div.dataTables_wrapper div.dataTables_length select {
 
 .fa-building-columns:before {
   content: "\f19c"; }
+
+
+
+/* factura */
+.login-box,
+.register-box {
+  width: 640px;
+}
+
+@media (max-width: 576px) {
+    .login-box,
+    .register-box {
+        margin-top: .5rem;
+        width: 90%;
+    }
+}

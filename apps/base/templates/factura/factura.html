@@ -67,7 +67,7 @@
     </div>
 </div>
 
-<div class="register-box" style="width:640px">
+<div class="register-box">
     <div class="register-logo" style="height: 12rem;">
         <img src="{% static 'img/logo-sabores.png' %}" style="max-height: 100%;">
     </div>
@@ -82,8 +82,9 @@
                 {% csrf_token %}
                 {% load crispy_forms_tags %}
                 {% crispy form %}
+
                 <input type="button" name="btn" value="Submit" id="submitBtn" data-toggle="modal"
-                       data-target="#confirm-submit" class="btn btn-success"/>
+                       data-target="#confirm-submit" class="btn btn-success btn-block"/>
                 <!--                <button type="submit" class="btn btn-success btn-block" id="submitButton">Enviar</button>-->
             </form>
         </div>
