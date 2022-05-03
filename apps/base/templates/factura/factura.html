@@ -123,7 +123,7 @@ $('#submitBtn').click(function(event) {
         $('#ftotal').val($('#id_total').val());
         $('#fuso_cfdi').val($('#id_uso_cfdi').val() + " - " + $('#id_uso_cfdi option:selected').text());
         $('#fforma_pago').val($('#id_forma_pago').val() + " - " + $('#id_forma_pago option:selected').text());
-        $("#modal").modal('show');
+        $("#confirm-submit").modal('show');
     }
     $("factura_form").addClass('was-validated');
 
