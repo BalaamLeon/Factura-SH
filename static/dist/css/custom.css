@@ -335,3 +335,8 @@ div.dataTables_wrapper div.dataTables_length select {
         width: 90%;
     }
 }
+
+.invoice-detail {
+    border: 0;
+    background-color: transparent !important;
+}

@@ -149,6 +149,9 @@ class FacturaInvoiceCreateView(FatherCreateView):
     template_name = 'factura/factura.html'
     success_message = 'Success: User was created.'
     success_url = reverse_lazy('Factura:success')
+    extra_context = {'customer_fields': {'rfc': 'RFC', 'name': 'Razón Social', 'cp': 'CP', 'regimen': 'Régimen Fiscal'},
+                     'invoice_fields': {'meli_id': 'ID de Compra', 'total': 'Total', 'uso_cfdi': 'Uso de CFDI',
+                                        'forma_pago': 'Forma de pago'}}
 
     def get_initial(self):
         initial = super(FacturaInvoiceCreateView, self).get_initial()
@@ -156,6 +159,11 @@ class FacturaInvoiceCreateView(FatherCreateView):
         initial['uso_cfdi'] = 'G03'
         initial['forma_pago'] = '01'
         return initial
+
+    def get_context_data(self, **kwargs):
+        context = super(FacturaInvoiceCreateView, self).get_context_data(**kwargs)
+        context['customer'] = Customer.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 # ========================================================================== #
