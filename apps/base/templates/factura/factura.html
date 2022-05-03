@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta m_id="viewport" content="width=device-width, initial-scale=1">
     <title>Facturación | Sabores Hidalgo</title>
 
     <!-- Google Font: Source Sans Pro -->
@@ -33,11 +33,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                Confirm Submit
+                <h5>Por favor, confirme que los datos sean correctos.</h5>
             </div>
 
             <div class="modal-body">
-                Por favor, confirme que los datos sean correctos.
+
 
                 <!-- We display the details entered by the user here -->
                 <div class="form-row">
@@ -83,12 +83,12 @@
                 <h4>Ingresa los datos de tu compra</h4>
                 <h4>y las opciones para la factura.</h4>
             </div>
-            <form id="factura_form" method="POST" style="margin-top: 2rem;">
+            <form id="factura_form" method="POST" style="margin-top: 2rem;" class="needs-validation" >
                 {% csrf_token %}
                 {% load crispy_forms_tags %}
                 {% crispy form %}
 
-                <input type="button" name="btn" value="Submit" id="submitBtn" data-bs-toggle="modal"
+                <input type="button" name="btn" value="Submit" id="submitBtn"
                        data-bs-target="#confirm-submit" class="btn btn-success btn-block"/>
                 <!--                <button type="submit" class="btn btn-success btn-block" id="submitButton">Enviar</button>-->
             </form>
@@ -106,18 +106,34 @@
 <script src="{% static 'vendor/admin-lte/dist/js/adminlte.min.js' %}"></script>
 <!-- Factura Form -->
 <script type="text/javascript">
-$('#submitBtn').click(function() {
-     /* when the button in the form, display the entered values in the modal */
-     $('#fmeli_id').val($('#id_meli_id').val());
-     $('#ftotal').val($('#id_total').val());
-     $('#fuso_cfdi').val($('#id_uso_cfdi').val() + " - " + $('#id_uso_cfdi option:selected').text());
-     $('#fforma_pago').val($('#id_forma_pago').val() + " - " + $('#id_forma_pago option:selected').text());
+$('#submitBtn').click(function(event) {
+    var m_id=$('#id_meli_id').val();
+    var tot=$('#id_total').val();
+
+    if (m_id==null || m_id==""){
+        $("#id_meli_id").addClass("is-invalid");
+        $("#div_id_meli_id").append('<div class="invalid-feedback">Es necesario que ingreses el ID de tu compra.</div>');
+    } else if(tot==null || tot==""){
+        $("#id_total").addClass("is-invalid");
+        var div_total=$("#id_total");
+        div_total.parent().append('<div class="invalid-feedback">Es necesario que ingreses el monto total de tu compra.</div>');
+    } else {
+        /* when the button in the form, display the entered values in the modal */
+        $('#fmeli_id').val($('#id_meli_id').val());
+        $('#ftotal').val($('#id_total').val());
+        $('#fuso_cfdi').val($('#id_uso_cfdi').val() + " - " + $('#id_uso_cfdi option:selected').text());
+        $('#fforma_pago').val($('#id_forma_pago').val() + " - " + $('#id_forma_pago option:selected').text());
+        $("#modal").modal('show');
+    }
+    $("factura_form").addClass('was-validated');
+
 });
 
 $('#submit').click(function(){
      /* when the submit button in the modal is clicked, submit the form */
     $('#factura_form').submit();
 });
+
 
 
 

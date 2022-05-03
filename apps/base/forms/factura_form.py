@@ -81,8 +81,16 @@ class FacturaInvoiceForm(models.ModelForm):
         self.helper.layout = Layout(
             Row(FloatingField('customer', css_class='col-md-12')),
             Row(
-                Column(FloatingField('meli_id'), css_class='col-md-6'),
-                Column(PrependedText('total', '$'), css_class='col-md-6')
+                Column(FloatingField('meli_id'), css_class='col-md-5'),
+                Div(HTML('''{% load static %}
+                    <a class="img-tooltip">
+                        <i class="fa fa-question-circle"></i>
+                        <span>
+                            <img class="callout" src="{% static 'dist/img/avatar.png' %}" />
+                        </span>
+                    </a>
+                    '''), css_class='col-md-1'),
+                Column(FloatingField('total', '$'), css_class='col-md-6')
                 ),
             Row(
                 Column(FloatingField('uso_cfdi'), css_class='col-md-6'),
