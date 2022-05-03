@@ -3,7 +3,7 @@ from django.urls import path
 
 # Localfolder Library
 from apps.base.views.factura_views import FacturaDetailView, FacturaCustomerCreateView, FacturaCustomerUpdateView, \
-    FacturaCustomerDeleteView, search_rfc, search_rfc_view, SearchView, FacturaInvoiceCreateView, \
+    FacturaCustomerDeleteView, search_rfc_view, SearchView, FacturaInvoiceCreateView, \
     FacturaInvoiceSuccessView
 
 app_name = 'Factura'
@@ -18,5 +18,4 @@ urlpatterns = [
 
     path('invoice/<int:pk>/', FacturaInvoiceCreateView.as_view(), name='invoice'),
     path('success/', FacturaInvoiceSuccessView.as_view(), name='success'),
-    # path('search_rfc/', search_rfc, name='search_rfc'),
 ]

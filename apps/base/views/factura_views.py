@@ -66,7 +66,7 @@ class SearchView(FormView):
 # ========================================================================== #
 def search_rfc_view(request):
     if request.method == "GET":
-        query = request.GET.get('rfc')
+        query = request.GET.get('rfc').upper()
         if query == '':
             query = 'None'
         try:
@@ -94,24 +94,6 @@ class FacturaCustomerCreateView(FatherCreateView):
 
     def get_success_url(self):
         return reverse('Factura:invoice', args=(self.object.id,))
-
-
-# ========================================================================== #
-def search_rfc(request):
-    if request.is_ajax():
-        customer_rfc = request.GET['rfc']
-        try:
-            customer = Customer.objects.get(rfc=customer_rfc)
-            data = {'meli_username': customer.meli_username,
-                    'name': customer.name,
-                    'cp': customer.cp,
-                    'regimen': customer.regimen,
-                    'constancia': customer.constancia.name,
-                    }
-            return HttpResponse(json.dumps(data), content_type='application/json')
-        except Customer.DoesNotExist:
-            return HttpResponse(json.dumps({}), content_type='application/json')
-    return HttpResponse("/")
 
 
 # ========================================================================== #
