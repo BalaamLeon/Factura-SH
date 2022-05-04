@@ -90,7 +90,7 @@ class SearchView(FormView):
 # ========================================================================== #
 def search_rfc_view(request):
     if request.method == "GET":
-        query = request.GET.get('search-rfc').upper()
+        query = request.GET.get('rfc').upper()
         if query == '':
             query = 'None'
         try:
