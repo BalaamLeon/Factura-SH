@@ -2,8 +2,10 @@
 import json
 
 # Localfolder Library
+from django.core.files.storage import FileSystemStorage
 from django.views import generic
 from django.views.generic import TemplateView, FormView
+from formtools.wizard.views import SessionWizardView
 
 from apps.base.forms.customer_form import CustomerForm
 from apps.base.forms.factura_form import FacturaCustomerForm, SearchRFCForm, FacturaInvoiceForm
@@ -49,6 +51,28 @@ OBJECT_FORM_FIELDS = [
     'constancia',
 ]
 
+FORMS = [("search", SearchRFCForm),
+         ("customer", FacturaCustomerForm),
+         ("invoice", FacturaInvoiceForm)]
+
+TEMPLATES = {"search": "factura/search.html",
+             "customer": "factura/register.html",
+             "invoice": "factura/factura.html",}
+
+
+class Wizard(SessionWizardView):
+    file_storage = FileSystemStorage(location='constancias/')
+    form_list = FORMS
+
+    def get_template_names(self):
+        return [TEMPLATES[self.steps.current]]
+
+    def get_form_instance(self, step):
+        return self.instance_dict.get(step, None)
+
+    def done(self, form_list, **kwargs):
+        # What is the exact logic to be applied here to save the model forms concurrently?
+        return redirect('Factura:success')
 
 # ========================================================================== #
 class FacturaDetailView(FatherDetailView):
@@ -66,7 +90,7 @@ class SearchView(FormView):
 # ========================================================================== #
 def search_rfc_view(request):
     if request.method == "GET":
-        query = request.GET.get('rfc').upper()
+        query = request.GET.get('search-rfc').upper()
         if query == '':
             query = 'None'
         try:
@@ -90,6 +114,7 @@ class FacturaCustomerCreateView(FatherCreateView):
     def get_initial(self):
         initial = super(FacturaCustomerCreateView, self).get_initial()
         initial['rfc'] = self.kwargs['rfc']
+        initial['regimen'] = '621'
         return initial
 
     def get_success_url(self):
@@ -131,7 +156,7 @@ class FacturaInvoiceCreateView(FatherCreateView):
     template_name = 'factura/factura.html'
     success_message = 'Success: User was created.'
     success_url = reverse_lazy('Factura:success')
-    extra_context = {'customer_fields': {'rfc': 'RFC', 'name': 'Razón Social', 'cp': 'CP', 'regimen': 'Régimen Fiscal'},
+    extra_context = {'customer_fields': {'name': 'Razón Social', 'rfc': 'RFC', 'cp': 'CP', 'regimen': 'Régimen Fiscal'},
                      'invoice_fields': {'meli_id': 'ID de Compra', 'total': 'Total', 'uso_cfdi': 'Uso de CFDI',
                                         'forma_pago': 'Forma de pago'}}
 

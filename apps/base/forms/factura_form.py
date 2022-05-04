@@ -41,14 +41,36 @@ class FacturaCustomerForm(models.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column(FloatingField('rfc'), css_class='col-md-6'),
-                Column(FloatingField('meli_username'), css_class='col-md-6')
-                ),
+                Column(FloatingField('meli_username'),
+                       Div(HTML('''{% load static %}
+                                    <a class="img-tooltip">
+                                        <i class="fa fa-question-circle"></i>
+                                        <span>
+                                            Ingresa el nombre de usuario con el que inicias sesión en MercadoLibre
+                                        </span>
+                                    </a>
+                                    '''), css_class='help-tooltip'),
+                       css_class='col-md-6'),
+            ),
             Row(FloatingField('name', css_class='col-md-12')),
             Row(
                 Column(FloatingField('cp'), css_class='col-md-6'),
                 Column(FloatingField('regimen'), css_class='col-md-6')
-                ),
-            Row(Field('constancia', css_class='col-md-12')),
+            ),
+            Row(Field('constancia', css_class='col-md-12'),
+                Div(HTML('''{% load static %}
+                            <a class="img-tooltip">
+                                <i class="fa fa-question-circle"></i>
+                                <span>
+                                    Por disposición oficial y para cumplir con la versión 4.0 de facturación requerida
+                                    por el SAT, es necesario que nos proporciones tu Constancia de Situación Fiscal.
+                                    En caso contrario no podremos emitir tu factura.
+                                    <br>Solo se aceptan archivos PDF.
+
+</span>
+                            </a>
+                            '''), css_class='help-tooltip', style='top: -8.7rem; right: -15rem;'),
+                )
         )
 
     class Meta:
@@ -63,6 +85,7 @@ class FacturaCustomerForm(models.ModelForm):
             "constancia": "Constancia de Situación Fiscal",
         }
         widgets = {
+            'regimen': forms.Select(attrs={'class': 'form-control'}),
             'constancia': forms.ClearableFileInput(attrs={'accept': '.pdf'}),
         }
 
@@ -81,21 +104,34 @@ class FacturaInvoiceForm(models.ModelForm):
         self.helper.layout = Layout(
             Row(FloatingField('customer', css_class='col-md-12')),
             Row(
-                Column(FloatingField('meli_id'), css_class='col-md-5'),
-                Div(HTML('''{% load static %}
-                    <a class="img-tooltip">
-                        <i class="fa fa-question-circle"></i>
-                        <span>
-                            <img class="callout" src="{% static 'dist/img/avatar.png' %}" />
-                        </span>
-                    </a>
-                    '''), css_class='col-md-1'),
-                Column(FloatingField('total', '$'), css_class='col-md-6')
-                ),
+                Column(FloatingField('meli_id'),
+                       Div(HTML('''{% load static %}
+                <a class="img-tooltip">
+                    <i class="fa fa-question-circle"></i>
+                    <span>
+                        Es importante que el ID de la compra de Mercado Libre sea correcto, ya que será ahí donde adjuntaremos tu factura.
+                        <br>Lo puedes encontrar en la página del detalle de la compra.
+                        <img src="{% static 'img/id-compra-help.jpg' %}" />
+                    </span>
+                </a>
+                '''), css_class='help-tooltip'),
+                       css_class='col-md-6'),
+                Column(FloatingField('total', '$'), Div(HTML('''{% load static %}
+                <a class="img-tooltip">
+                    <i class="fa fa-question-circle"></i>
+                    <span>
+                        Ingresa el total de tu compra.<br>
+                        Incluyendo el envío.
+                        <img src="{% static 'img/total-help.jpg' %}" />
+                    </span>
+                </a>
+                '''), css_class='help-tooltip'),
+                       css_class='col-md-6')
+            ),
             Row(
                 Column(FloatingField('uso_cfdi'), css_class='col-md-6'),
                 Column(FloatingField('forma_pago'), css_class='col-md-6')
-                ),
+            ),
             Row(FloatingField('status', css_class='col-md-12')),
         )
 

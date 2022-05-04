@@ -23,6 +23,9 @@
     <!-- Custom style -->
     <link rel="stylesheet" href="{% static 'dist/css/custom.css' %}">
 
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+
 </head>
 <body class="hold-transition register-page" style="height: auto;">
 
@@ -70,10 +73,22 @@
 <script src="{% static 'vendor/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'vendor/admin-lte/dist/js/adminlte.min.js' %}"></script>
-
+<!-- PDFObject -->
 <script src="{% static 'vendor/PDFObject-master/pdfobject.js' %}"></script>
-
+<!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- Custom JS -->
 <script type="text/javascript">
+
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function() {
+        $('#id_regimen').select2();
+    });
+
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+    });
+
     var constancia_button = $("#div_id_constancia").find("a")[0];
     var file_src = constancia_button.href;
     var file_name = constancia_button.text;
@@ -90,6 +105,7 @@
             e.preventDefault();
             $("#modal").modal("show");
         };
+
 
 
 </script>

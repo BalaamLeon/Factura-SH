@@ -42,12 +42,12 @@ DEFAULT_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'crispy_forms',
     'bootstrap_modal_forms',
-    'django_cleanup',
-    'social_django',
+    'crispy_forms',
     'crispy_bootstrap5',
     'django_bootstrap5',
+    'django_cleanup',
+    'formtools',
 ]
 
 LOCAL_APPS = [

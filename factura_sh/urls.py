@@ -4,7 +4,7 @@ from django.urls import path, include
 from django.views.i18n import set_language
 
 urlpatterns = [
-    path('oauth/', include('social_django.urls', namespace='social')),  # <-- here
+    # path("select2/", include("django_select2.urls")),
     path('set_language/<language_id>/', set_language, 'set_language'),
     # Needed for locale change
     path('i18n/', include('django.conf.urls.i18n')),
