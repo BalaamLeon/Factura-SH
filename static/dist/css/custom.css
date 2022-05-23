@@ -320,6 +320,9 @@ div.dataTables_wrapper div.dataTables_length select {
 .fa-building-columns:before {
   content: "\f19c"; }
 
+.fa-paper-plane-top:before {
+  content: "\e20a"; }
+
 
 
 /* factura */
@@ -374,4 +377,34 @@ a.img-tooltip img {
     position: relative;
     top: -4.7rem;
     right: -17rem;
+}
+
+
+/* chat */
+.direct-chat-text {
+    max-width: 70%;
+    width: fit-content;
+}
+
+.btn-circle {
+    width: 45px;
+    height: 45px;
+    padding: 3px 0px;
+    border-radius: 32px !important;
+    font-size: 23px;
+    text-align: center;
+    margin-left: 10px;
+    position: absolute !important;
+    bottom: 8px;
+}
+
+
+/* send cfdi modal */
+#div_id_send_message {
+    margin-left: 1.25rem;
+    margin-bottom: 0;
+}
+
+#id_message {
+    height: 120px;
 }

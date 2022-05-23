@@ -38,7 +38,7 @@
                 <h1>¡Bienvenido!</h1>
                 <h4>Ingresa tu RFC para continuar</h4>
             </div>
-            <form action="{% url 'Factura:search' %}" method="get" style="margin-top: 2rem;">
+            <form action="{% url 'Factura:search' meli_sale %}" method="get" style="margin-top: 2rem;">
                 {% csrf_token %}
                 {% load crispy_forms_tags %}
                 {% crispy form %}

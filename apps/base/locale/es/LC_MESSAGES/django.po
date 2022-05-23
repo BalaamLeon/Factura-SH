@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-02 13:41-0500\n"
+"POT-Creation-Date: 2022-05-22 18:26-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\factura_sh\settings.py:146
+#: .\factura_sh\settings.py:145
 msgid "English"
 msgstr "Inglés"
 
-#: .\factura_sh\settings.py:147
+#: .\factura_sh\settings.py:146
 msgid "Spanish"
 msgstr "Español"
 
@@ -38,6 +38,7 @@ msgstr "Español"
 #: .\static\vendor\admin-lte\pages\UI\modals.html:1256
 #: .\static\vendor\admin-lte\pages\UI\modals.html:1279
 #: .\apps\base\templates\common\modal_form.html:16
+#: .\apps\base\templates\invoice\send_cfdi.html:12
 msgid "Close"
 msgstr "Cerrar"
 
@@ -70,7 +71,7 @@ msgstr "El equipo de %(site_name)s"
 msgid "Password reset on %(site_name)s"
 msgstr ""
 
-#: .\templates\sidebar.html:62 .\apps\base\models\customer.py:29
+#: .\templates\sidebar.html:62 .\apps\base\models\customer.py:50
 msgid "Customers"
 msgstr "Clientes"
 
@@ -87,12 +88,42 @@ msgid "Invoices"
 msgstr "Solicitudes"
 
 #: .\templates\sidebar.html:95
-msgid "Invoices List"
-msgstr "Lista de Solicitudes"
+msgid "With tracking"
+msgstr "En seguimiento"
 
 #: .\templates\sidebar.html:101
-msgid "New Invoice"
-msgstr "Nueva Solicitud"
+#, fuzzy
+#| msgid "Pending Invoices"
+msgid "Pending"
+msgstr "Solicitudes pendientes"
+
+#: .\templates\sidebar.html:107
+msgid "To Send"
+msgstr "Para enviar"
+
+#: .\templates\sidebar.html:113
+msgid "Sent"
+msgstr "Enviadas"
+
+#: .\templates\sidebar.html:119
+#, fuzzy
+#| msgid "Cancel"
+msgid "Cancelled"
+msgstr "Canceladas"
+
+#: .\templates\sidebar.html:125 .\templates\sidebar.html:150
+msgid "All"
+msgstr "Todas"
+
+#: .\templates\sidebar.html:136
+msgid "Sales"
+msgstr "Ventas"
+
+#: .\templates\sidebar.html:144
+#, fuzzy
+#| msgid "Messages"
+msgid "New messages"
+msgstr "Mensajes nuevos"
 
 #: .\venv\Lib\site-packages\crispy_forms\tests\test_form_helper.py:130
 #: .\venv\Lib\site-packages\crispy_forms\tests\test_form_helper.py:140
@@ -158,13 +189,17 @@ msgstr "Ingresa una dirección de correo electrónico válida."
 #: .\venv\Lib\site-packages\django\core\validators.py:233
 msgid ""
 "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
-msgstr "Ingresa un “slug” válido que contenga letras, números, guiones bajos o guiones."
+msgstr ""
+"Ingresa un “slug” válido que contenga letras, números, guiones bajos o "
+"guiones."
 
 #: .\venv\Lib\site-packages\django\core\validators.py:240
 msgid ""
 "Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
 "hyphens."
-msgstr "Ingresa un “slug” válido que contenga letras Unicode, números, guiones bajos o guiones."
+msgstr ""
+"Ingresa un “slug” válido que contenga letras Unicode, números, guiones bajos "
+"o guiones."
 
 #: .\venv\Lib\site-packages\django\core\validators.py:249
 #: .\venv\Lib\site-packages\django\core\validators.py:259
@@ -1297,6 +1332,24 @@ msgstr ""
 msgid "close"
 msgstr ""
 
+#: .\apps\base\forms\invoice_form.py:72
+msgid "Unsupported file extension. Only .pdf and .xml files allowed."
+msgstr ""
+
+#: .\apps\base\forms\invoice_form.py:76
+msgid "Select CFDI files."
+msgstr ""
+
+#: .\apps\base\forms\invoice_form.py:79
+msgid "Send message to buyer."
+msgstr ""
+
+#: .\apps\base\forms\invoice_form.py:80
+#, fuzzy
+#| msgid "Messages"
+msgid "Message"
+msgstr "Menajes"
+
 #: .\apps\base\models\base.py:23
 #, python-format
 msgid "'The %(obj_name)s was deleted successfully.'"
@@ -1309,13 +1362,13 @@ msgid ""
 "on this.'"
 msgstr "El %(obj_name)s no puede ser eliminado, depende de alguna información "
 
-#: .\apps\base\models\customer.py:28 .\apps\base\views\invoice_views.py:23
+#: .\apps\base\models\customer.py:49 .\apps\base\views\invoice_views.py:31
 msgid "Customer"
 msgstr "Cliente"
 
 #: .\apps\base\models\customuser.py:36 .\apps\base\views\customer_views.py:23
-#: .\apps\base\views\customer_views.py:32 .\apps\base\views\factura_views.py:26
-#: .\apps\base\views\factura_views.py:35 .\apps\base\views\invoice_views.py:41
+#: .\apps\base\views\customer_views.py:32 .\apps\base\views\factura_views.py:30
+#: .\apps\base\views\factura_views.py:39
 msgid "Username"
 msgstr "Nombre de usuario"
 
@@ -1341,6 +1394,22 @@ msgstr "Personas"
 msgid "Invoice"
 msgstr "Solicitud"
 
+#: .\apps\base\models\predefined_answers.py:17
+msgid "Predefined Answer"
+msgstr "Respuesta predefinida"
+
+#: .\apps\base\models\predefined_answers.py:18
+msgid "Predefined Answers"
+msgstr "Respuestas predefinidas"
+
+#: .\apps\base\models\sale.py:19
+msgid "Tracked sale"
+msgstr "Solicitud con seguimiento"
+
+#: .\apps\base\models\sale.py:20
+msgid "Tracked Sales"
+msgstr "Solicitudes con seguimiento"
+
 #: .\apps\base\templates\auth\login.html:3
 #: .\apps\base\templates\auth\signup.html:3
 msgid "Login page"
@@ -1359,7 +1428,9 @@ msgstr "Editar"
 msgid ""
 "If you wish to continue press <u>\"Delete\"</u>, keep in mind that this "
 "action is irreversible."
-msgstr "Si desea continuar presione <u>\"Eliminar\"</u>, tenga en cuenta que esta acción es irreversible."
+msgstr ""
+"Si desea continuar presione <u>\"Eliminar\"</u>, tenga en cuenta que esta "
+"acción es irreversible."
 
 #: .\apps\base\templates\common\delete.html:11
 msgid "Press <u>\"Cancel\"</u> to cancel the action."
@@ -1389,18 +1460,28 @@ msgstr "Guardar"
 
 #: .\apps\base\templates\common\list.html:26
 #: .\apps\base\templates\common\list.html:30
+#: .\apps\base\templates\invoice\list.html:26
+#: .\apps\base\templates\invoice\list.html:30
+#: .\apps\base\templates\sales\list.html:26
+#: .\apps\base\templates\sales\list.html:30
 msgid "Add new"
 msgstr "Agregar nuevo"
 
 #: .\apps\base\templates\common\list.html:43
+#: .\apps\base\templates\invoice\list.html:43
+#: .\apps\base\templates\sales\list.html:43
 msgid "Download"
 msgstr "Descargar"
 
 #: .\apps\base\templates\common\list.html:46
+#: .\apps\base\templates\invoice\list.html:46
+#: .\apps\base\templates\sales\list.html:46
 msgid "Import"
 msgstr "Importar"
 
 #: .\apps\base\templates\common\list.html:49
+#: .\apps\base\templates\invoice\list.html:49
+#: .\apps\base\templates\sales\list.html:49
 msgid "Massive Edition"
 msgstr "Edición masiva"
 
@@ -1408,17 +1489,37 @@ msgstr "Edición masiva"
 msgid "Create"
 msgstr "Crear"
 
+#: .\apps\base\templates\common\modal_update_form.html:16
+msgid "Update"
+msgstr "Actualizar"
+
+#: .\apps\base\templates\common\wizard.html:126
+msgid "prev step"
+msgstr "Paso anterior"
+
+#: .\apps\base\templates\common\wizard.html:129
+#, fuzzy
+#| msgid "Submit"
+msgid " submit"
+msgstr "Enviar"
+
 #: .\apps\base\templates\dashboard\dashboard.html:14
 msgid "Total Customers"
 msgstr "Clientes totales"
 
 #: .\apps\base\templates\dashboard\dashboard.html:30
+#: .\apps\base\views\invoice_views.py:86
 msgid "Pending Invoices"
 msgstr "Solicitudes pendientes"
 
 #: .\apps\base\templates\dashboard\dashboard.html:46
+#: .\apps\base\views\invoice_views.py:87
 msgid "Invoices to send"
 msgstr "Solicitudes para enviar"
+
+#: .\apps\base\templates\invoice\send_cfdi.html:13
+msgid "Send"
+msgstr "Enviar"
 
 #: .\apps\base\templates\usercustom\login.html:6
 #: .\apps\base\templates\usercustom\login.html:54
@@ -1452,7 +1553,10 @@ msgstr "Registrarse"
 msgid ""
 "Your account does not have the necessary privileges to access this section. "
 "To continue, log in with an account that has the necessary privileges."
-msgstr "Tu cuenta no tiene los privilegios necesarios para acceder a esta sección. Para continuar, inicia sesión con una cuenta que tenga los privilegios necesarios."
+msgstr ""
+"Tu cuenta no tiene los privilegios necesarios para acceder a esta sección. "
+"Para continuar, inicia sesión con una cuenta que tenga los privilegios "
+"necesarios."
 
 #: .\apps\base\templates\usercustom\login.html:120
 #: .\apps\base\templates\usercustom\profile.html:145
@@ -1513,7 +1617,9 @@ msgstr "Recuperar contraseña"
 msgid ""
 "Write the email with which you registered, validate the recaptcha and press "
 "the password recovery button."
-msgstr "Ingrese el correo con el que se registró, valide el reCAPTCHA y presione el botón de recuperación de contraseña."
+msgstr ""
+"Ingrese el correo con el que se registró, valide el reCAPTCHA y presione el "
+"botón de recuperación de contraseña."
 
 #: .\apps\base\templates\usercustom\profile.html:105
 msgid "Crop the image"
@@ -1524,35 +1630,43 @@ msgid "Crop"
 msgstr "Recortar"
 
 #: .\apps\base\views\customer_views.py:24
-#: .\apps\base\views\customer_views.py:33 .\apps\base\views\factura_views.py:27
-#: .\apps\base\views\factura_views.py:36 .\apps\base\views\invoice_views.py:32
-#: .\apps\base\views\invoice_views.py:42
+#: .\apps\base\views\customer_views.py:33 .\apps\base\views\factura_views.py:31
+#: .\apps\base\views\factura_views.py:40 .\apps\base\views\invoice_views.py:40
+#: .\apps\base\views\invoice_views.py:50
 msgid "RFC"
 msgstr "RFC"
 
 #: .\apps\base\views\customer_views.py:25
-#: .\apps\base\views\customer_views.py:34 .\apps\base\views\factura_views.py:28
-#: .\apps\base\views\factura_views.py:37 .\apps\base\views\invoice_views.py:43
+#: .\apps\base\views\customer_views.py:34 .\apps\base\views\factura_views.py:32
+#: .\apps\base\views\factura_views.py:41 .\apps\base\views\invoice_views.py:51
 msgid "Name"
 msgstr "Nombre o Razón Social"
 
 #: .\apps\base\views\customer_views.py:26
-#: .\apps\base\views\customer_views.py:35 .\apps\base\views\factura_views.py:29
-#: .\apps\base\views\factura_views.py:38 .\apps\base\views\invoice_views.py:44
+#: .\apps\base\views\customer_views.py:35 .\apps\base\views\factura_views.py:33
+#: .\apps\base\views\factura_views.py:42 .\apps\base\views\invoice_views.py:52
 msgid "CP"
 msgstr "CP"
 
 #: .\apps\base\views\customer_views.py:27
-#: .\apps\base\views\customer_views.py:36 .\apps\base\views\factura_views.py:30
-#: .\apps\base\views\factura_views.py:39
+#: .\apps\base\views\customer_views.py:36 .\apps\base\views\factura_views.py:34
+#: .\apps\base\views\factura_views.py:43
 msgid "Régimen"
 msgstr "Régimen fiscal"
 
 #: .\apps\base\views\customer_views.py:28
-#: .\apps\base\views\customer_views.py:37 .\apps\base\views\factura_views.py:31
-#: .\apps\base\views\factura_views.py:40
+#: .\apps\base\views\customer_views.py:37 .\apps\base\views\factura_views.py:35
+#: .\apps\base\views\factura_views.py:44
 msgid "Constancia"
 msgstr "Constancia de situación fiscal"
+
+#: .\apps\base\views\customuser_config.py:12
+msgid "Key"
+msgstr "Clave"
+
+#: .\apps\base\views\customuser_config.py:13
+msgid "Value"
+msgstr "Valor"
 
 #: .\apps\base\views\customuser_view.py:45
 msgid "Your account was created successfully."
@@ -1576,34 +1690,52 @@ msgstr "Eliminar %(obj_name)s"
 msgid "Are you sure to delete <strong>%(obj_name)s</strong>?"
 msgstr "Está seguro de eliminar <strong>%(obj_name)s</strong>?"
 
-#: .\apps\base\views\invoice_views.py:24
+#: .\apps\base\views\invoice_views.py:32
 msgid "Meli Id"
 msgstr "ID de compra en Mercado Libre"
 
-#: .\apps\base\views\invoice_views.py:25 .\apps\base\views\invoice_views.py:34
-#: .\apps\base\views\invoice_views.py:47
+#: .\apps\base\views\invoice_views.py:33 .\apps\base\views\invoice_views.py:42
+#: .\apps\base\views\invoice_views.py:57
 msgid "Total"
 msgstr "Total"
 
-#: .\apps\base\views\invoice_views.py:26 .\apps\base\views\invoice_views.py:35
-#: .\apps\base\views\invoice_views.py:48
+#: .\apps\base\views\invoice_views.py:34 .\apps\base\views\invoice_views.py:43
+#: .\apps\base\views\invoice_views.py:53
 msgid "Uso de CFDI"
 msgstr "Uso de CFDI"
 
-#: .\apps\base\views\invoice_views.py:27 .\apps\base\views\invoice_views.py:36
+#: .\apps\base\views\invoice_views.py:35 .\apps\base\views\invoice_views.py:44
 #: .\apps\base\views\invoice_views.py:49
 msgid "Forma de Pago"
 msgstr "Forma de Pago"
 
-#: .\apps\base\views\invoice_views.py:28 .\apps\base\views\invoice_views.py:37
-#: .\apps\base\views\invoice_views.py:50
+#: .\apps\base\views\invoice_views.py:36 .\apps\base\views\invoice_views.py:45
+#: .\apps\base\views\invoice_views.py:58
 msgid "Status"
 msgstr "Estatus"
 
-#: .\apps\base\views\invoice_views.py:33 .\apps\base\views\invoice_views.py:46
+#: .\apps\base\views\invoice_views.py:41 .\apps\base\views\invoice_views.py:56
 msgid "ID Venta"
 msgstr "ID Venta de Mercado Libre"
 
-#: .\apps\base\views\invoice_views.py:45
+#: .\apps\base\views\invoice_views.py:54
 msgid "Regimen"
 msgstr "Régimen fiscal"
+
+#: .\apps\base\views\invoice_views.py:88
+#, fuzzy
+#| msgid "Invoices"
+msgid "Sent Invoices"
+msgstr "Solicitudes"
+
+#: .\apps\base\views\invoice_views.py:89
+#, fuzzy
+#| msgid "Pending Invoices"
+msgid "Cancelled Invoices"
+msgstr "Solicitudes pendientes"
+
+#~ msgid "Invoices List"
+#~ msgstr "Lista de Solicitudes"
+
+#~ msgid "New Invoice"
+#~ msgstr "Nueva Solicitud"

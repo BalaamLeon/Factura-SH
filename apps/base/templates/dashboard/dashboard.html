@@ -32,7 +32,7 @@
             <div class="icon">
                 <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="{% url 'Invoice:list' %}" class="small-box-footer">More info <i
+            <a href="{% url 'Invoice:list' 'pending' %}" class="small-box-footer">More info <i
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
@@ -41,14 +41,14 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>{{ emited_invoice.count }}</h3>
+                <h3>{{ emitted_invoice.count }}</h3>
 
                 <p>{{ _('Invoices to send') }}</p>
             </div>
             <div class="icon">
                 <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="{% url 'Invoice:list' %}" class="small-box-footer">More info <i
+            <a href="{% url 'Invoice:list' 'emitted' %}" class="small-box-footer">More info <i
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>

@@ -26,7 +26,7 @@ SECRET_KEY = '!*ndp-(t$)0cgpl!q4bh^t^o%&*z8!=&g-*e+bocov1h#5zsux'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['saboreshidalgo.pythonanywhere.com', 'localhost']
+ALLOWED_HOSTS = ['saboreshidalgo.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
@@ -87,8 +87,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'social_django.context_processors.backends',  # <-- Here
-                'social_django.context_processors.login_redirect', # <-- Here
+                # 'social_django.context_processors.backends',  # <-- Here
+                # 'social_django.context_processors.login_redirect', # <-- Here
             ],
             'libraries': {
                 'custom_tags': 'apps.base.templatetags.custom_tags',
@@ -99,9 +99,9 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.facebook.FacebookOAuth2',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.github.GithubOAuth2',
+    # 'social_core.backends.facebook.FacebookOAuth2',
+    # 'social_core.backends.twitter.TwitterOAuth',
+    # 'social_core.backends.github.GithubOAuth2',
 
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -191,7 +191,7 @@ MESSAGE_TAGS = {
 }
 
 
-LOGIN_URL = 'base:login'
+LOGIN_URL = 'CustomUser:login'
 LOGIN_REDIRECT_URL = 'base:dashboard'
 LOGIN_REQUIRED_URLS = (
         r'/(.*)/crm/(.*)$',
@@ -200,3 +200,16 @@ LOGIN_REQUIRED_URLS_EXCEPTIONS = (
     r'/(.*)/crm/login(.*)$',
     r'/(.*)/crm/factura(.*)$',
 )
+
+
+# Meli App
+MELI_CLIENT_ID = '8367847789338992'
+MELI_CLIENT_SECRET = 'qhTLXZ37Rt9omHx3RllnYSnNKV9SPKsl'
+MELI_REDIRECT_URI = 'https://saboreshidalgo.com/exit.html'
+
+# Meli Api
+MELI_SDK_VERSION = 'MELI-PYTHON-SDK-2.0.0'
+MELI_API_ROOT_URL = 'https://api.mercadolibre.com'
+MELI_AUTH_URL = 'https://auth.mercadolibre.com.mx'
+MELI_OAUTH_URL = '/oauth/token'
+MELI_SSL_VERSION = 'PROTOCOL_TLSv1'

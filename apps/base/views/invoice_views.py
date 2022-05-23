@@ -1,10 +1,13 @@
 # Django Library
 import json
+from datetime import datetime
 
+import requests
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalDeleteView, BSModalUpdateView
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
@@ -13,11 +16,16 @@ from django.utils.translation import gettext_lazy as _
 # from dal import autocomplete
 
 # Localfolder Library
-from apps.base.forms.invoice_form import InvoiceForm
+from django.views.generic import TemplateView, FormView
+
+from apps.base.forms.invoice_form import InvoiceForm, SendCFDIForm, InvoiceStatusForm, InvoiceFromSaleForm
+from apps.base.models import Customer, UserConfig, Answer
 from apps.base.models.invoice import Invoice
 from apps.base.models.invoice import Invoice
+from apps.base.models.sale import TrackedSale
 from apps.base.views.father_view import FatherListView, FatherDetailView, FatherCreateView, FatherUpdateView, \
     FatherTableListView, FatherDeleteView
+from apps.meli import ApiClient, RestClientApi, ApiException
 
 OBJECT_FIELDS = [
     {'string': _("Customer"), 'field': 'customer'},
@@ -38,15 +46,15 @@ OBJECT_LIST_FIELDS = [
 ]
 
 OBJECT_DETAIL_FIELDS = [
-    {'string': _("Username"), 'field': 'customer_meli_username'},
+    {'string': _("Forma de Pago"), 'field': 'get_forma_pago_display'},
     {'string': _("RFC"), 'field': 'customer_rfc'},
     {'string': _("Name"), 'field': 'customer_name'},
     {'string': _("CP"), 'field': 'customer_cp'},
+    {'string': _("Uso de CFDI"), 'field': 'get_uso_cfdi_display'},
     {'string': _("Regimen"), 'field': 'customer_regimen'},
+    # {'string': _("Username"), 'field': 'customer_meli_username'},
     {'string': _("ID Venta"), 'field': 'meli_id'},
     {'string': _("Total"), 'field': 'total'},
-    {'string': _("Uso de CFDI"), 'field': 'get_uso_cfdi_display'},
-    {'string': _("Forma de Pago"), 'field': 'get_forma_pago_display'},
     {'string': _("Status"), 'field': 'get_status_display'},
 ]
 
@@ -60,21 +68,277 @@ OBJECT_FORM_FIELDS = [
 ]
 
 
+# # ========================================================================== #
+# class InvoiceListView(FatherListView):
+#     model = Invoice
+#     template_name = 'common/list.html'
+#     extra_context = {'fields': OBJECT_LIST_FIELDS,
+#                      'modal_add': True,
+#                      }
+
 # ========================================================================== #
-class InvoiceListView(FatherListView):
-    model = Invoice
-    template_name = 'common/list.html'
-    extra_context = {'fields': OBJECT_LIST_FIELDS,
-                     'modal_add': True,
-                     }
+class InvoiceListView(TemplateView):
+    template_name = 'invoice/list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.kwargs['query']
+        STATUS_CHOICES = {'pending': ('1', _('Pending Invoices')),
+                          'emitted': ('2', _('Invoices to send')),
+                          'sent': ('3', _('Sent Invoices')),
+                          'cancelled': ('4', _('Cancelled Invoices'))}
+        invoices = []
+
+        with ApiClient() as api_client:
+            api_instance = RestClientApi(api_client)
+            access_token = UserConfig.objects.get(key='access_token').value
+            my_id = UserConfig.objects.get(key='Meli_id').value
+
+            try:
+                if query == 'tracking':
+                    db_invoices = Invoice.objects.filter(invoice_tracking__tracking=True)
+                    context['page_title'] = 'Invoices with tracking'
+                elif query == 'all':
+                    db_invoices = Invoice.objects.all()
+                    context['page_title'] = 'Invoices'
+                else:
+                    db_invoices = Invoice.objects.filter(status=STATUS_CHOICES[query][0])
+                    context['page_title'] = STATUS_CHOICES[query][1]
+                for invoice in db_invoices:
+                    if TrackedSale.objects.filter(invoice=invoice).exists():
+                        tracked = TrackedSale.objects.get(invoice=invoice).tracking
+                    else:
+                        tracked = False
+                    pack_id = invoice.meli_id
+                    resource = 'packs/' + pack_id
+                    response = None
+                    messages_count = 0
+
+                    try:
+                        response = api_instance.resource_get(resource, access_token)
+                        resource = 'orders/' + str(response['orders'][0]['id'])
+                        response = api_instance.resource_get(resource, access_token)
+
+                    except ApiException as e:
+                        print('Exception in pack info')
+
+                        try:
+                            resource = 'orders/' + pack_id
+                            response = api_instance.resource_get(resource, access_token)
+
+                        except ApiException as e:
+                            print('Exception in order info')
+
+                    try:
+                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id + '?mark_as_read=false'
+                        msg_response = api_instance.resource_get(msg_resource, access_token)
+
+                        conversation_status = msg_response['conversation_status']['status']
+                        for msg in msg_response['messages']:
+                            if msg['message_date']['read'] is not None and msg["to"]["user_id"] == my_id:
+                                messages_count += 1
+                    except ApiException as e:
+                        print('Exception in messages')
+
+                    s = {
+                        'pk': invoice.pk,
+                        'status': invoice.status,
+                        'tracked': tracked,
+                        'pack_id': pack_id,
+                        'channel': response['context']['channel'],
+                        'id': response['id'],
+                        'date': datetime.fromisoformat(response['date_created']),
+                        'buyer_id': response['buyer']['id'],
+                        'buyer_name': response['buyer']['first_name'] + ' ' + response['buyer']['last_name'],
+                        'buyer_nickname': response['buyer']['nickname'],
+                        'products': response['order_items'],
+                        'product': {'image': None,
+                                    'id': response['order_items'][0]['item']['id'],
+                                    'title': response['order_items'][0]['item']['title'],
+                                    'unit_price': response['order_items'][0]['unit_price'],
+                                    'quantity': response['order_items'][0]['quantity'],
+                                    'seller_sku': response['order_items'][0]['item']['seller_sku'],
+                                    },
+                        'conversation_status': conversation_status,
+                        'messages_count': messages_count
+                    }
+
+                    resource = 'shipments/' + str(response['shipping']['id'])
+                    try:
+                        response = api_instance.resource_get(resource, access_token)
+                        s['shipping_status'] = response['status']
+                        s["logistic_type"] = response["logistic_type"]
+                        if response['status'] == 'delivered':
+                            s['date_delivered'] = datetime.fromisoformat(response['status_history']['date_delivered'])
+                        elif response['status'] == 'ready_to_ship' or response['status'] == 'shipped':
+                            s['date_delivered'] = datetime.fromisoformat(
+                                response['shipping_option']['estimated_delivery_final']['date'])
+
+                    except ApiException as e:
+                        print("Exception in shipping info")
+
+                    resource = 'items/' + str(s['product']['id'])
+                    try:
+                        response = api_instance.resource_get(resource, access_token)
+                        s['product']['image'] = response['thumbnail']
+                        s['product']['permalink'] = response['permalink']
+                    except ApiException as e:
+                        print("Exception in product info")
+
+                    invoices.append(s)
+
+            except ApiException as e:
+                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+
+        invoices.sort(key=lambda item: item['date'], reverse=True)
+        context['invoices'] = invoices
+        return context
 
 
 # ========================================================================== #
 class InvoiceDetailView(FatherDetailView):
     model = Invoice
-    template_name = 'invoice/detail.html'
-    extra_context = {'fields': OBJECT_DETAIL_FIELDS}
+    template_name = 'invoice/modal_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceDetailView, self).get_context_data(**kwargs)
+        pack_id = self.object.meli_id
+        products = []
+        shipping = 0
+        total = 0
+
+        with ApiClient() as api_client:
+            api_instance = RestClientApi(api_client)
+            access_token = UserConfig.objects.get(key='access_token').value
+            resource = 'packs/' + pack_id
+            try:
+                response = api_instance.resource_get(resource, access_token)
+                ship_id = response['shipment']['id']
+                for order in response['orders']:
+                    resource = 'orders/' + str(order['id'])
+                    response = api_instance.resource_get(resource, access_token)
+                    for item in response['order_items']:
+                        item['subtotal'] = item['quantity'] * item['unit_price']
+                        products.append(item)
+                        total += item['quantity'] * item['unit_price']
+            except ApiException as e:
+                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+                try:
+                    resource = 'orders/' + pack_id
+                    response = api_instance.resource_get(resource, access_token)
+                    ship_id = response['shipping']['id']
+                    for item in response['order_items']:
+                        item['subtotal'] = item['quantity'] * item['unit_price']
+                        products.append(item)
+                        total += item['subtotal']
+                except ApiException as e:
+                    print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+
+            resource = 'shipments/' + pack_id + '/costs'
+            try:
+                response = api_instance.resource_get(resource, access_token)
+                shipping = response['receiver']['cost']
+                total += shipping
+            except ApiException as e:
+                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+
+            context['factura'] = ''
+            context['factura_id'] = ''
+            factura_resource = 'packs/' + pack_id + '/fiscal_documents'
+            try:
+                factura_response = api_instance.resource_get(factura_resource, access_token)
+                context['factura'] = factura_response['fiscal_documents'][0]['filename']
+                context['factura_id'] = factura_response['fiscal_documents'][0]['id']
+
+            except ApiException as e:
+                pass
+
+        context['products'] = products
+        context['shipping'] = shipping
+        context['total'] = total
+        context['pack_id'] = pack_id
+
+        return context
+
+
+def set_tracking(request, id):
+    invoice = Invoice.objects.get(pk=id)
+    if request.is_ajax() and request.method == 'GET':
+        tracked, created = TrackedSale.objects.get_or_create(invoice=invoice)
+        if not created:
+            tracked.tracking = False if TrackedSale.objects.get(invoice=invoice).tracking else True
+            tracked.save()
+
+        data = {'status': 'success', 'pk': str(id), 'tracking': tracked.tracking}
+        return JsonResponse(data, status=200)
+    else:
+        data = {'status': 'error'}
+        return JsonResponse(data, status=400)
+
+
+def get_cfdi(request, pack_id, file_id):
+    if request.method == 'GET':
+        factura_resource = 'packs/' + str(pack_id) + '/fiscal_documents/' + file_id
+        # print(factura_resource)
+        factura_response = ''
+        with ApiClient() as api_client:
+            api_instance = RestClientApi(api_client)
+            access_token = UserConfig.objects.get(key='access_token').value
+            try:
+                factura_response = api_instance.resource_get_file(factura_resource, access_token)
+            except ApiException as e:
+                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+
+        with open(factura_response[0], 'rb') as pdf:
+            response = HttpResponse(pdf.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'inline;filename=' + factura_response[2]['x-original-filename']
+            return response
+
+
+class SendCFDI(FormView):
+    form_class = SendCFDIForm
+    template_name = 'invoice/send_cfdi.html'
+    success_url = reverse_lazy('Invoice:list', kwargs={'query': 'pending'})
+
+    def get_initial(self):
+        initial = super(SendCFDI, self).get_initial()
+        initial['send_message'] = True
+        initial['message'] = Answer.objects.get(key='Adjuntada').message
+        invoice = Invoice.objects.get(pk=self.kwargs['id'])
+        initial['pack_id'] = invoice.meli_id
+        initial['invoice_id'] = self.kwargs['id']
+        return initial
+
+    def form_valid(self, form):
+        files = self.request.FILES.getlist('files')
+        pack_id = form.cleaned_data['pack_id']
+        invoice = Invoice.objects.get(pk=form.cleaned_data['invoice_id'])
+        invoice.status = '3'
+        invoice.save()
+
+        with ApiClient() as api_client:
+            api_instance = RestClientApi(api_client)
+            access_token = UserConfig.objects.get(key='access_token').value
+            resource = 'packs/' + pack_id + '/fiscal_documents'
+            fiscal_docs = {}
+            for file in files:
+                fiscal_docs[file.name] = (file.name, file, file.content_type)
+            try:
+                # Resource path GET
+                api_response = api_instance.resource_post(resource, access_token, {'fiscal_document': fiscal_docs})
+                print(api_response)
+
+            except ApiException as e:
+                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+
+        # url = 'https://api.mercadolibre.com/packs/' + pack_id + '/fiscal_documents'
+        # headers = {"Authorization": "Bearer " + access_token}
+        # fiscal_docs = {}
+        # for file in files:
+        #     fiscal_docs[file.name] = (file.name, file, file.content_type)
+        # r = requests.post(url, data={'fiscal_document':fiscal_docs}, headers=headers)
+
+        return super(SendCFDI, self).form_valid(form)
 
 
 # ========================================================================== #
@@ -84,8 +348,90 @@ class InvoiceCreateView(BSModalCreateView, FatherCreateView):
     form_class = InvoiceForm
     template_name = 'common/modal_form.html'
     success_message = 'Success: Invoice was created.'
-    success_url = reverse_lazy('Invoice:list')
+    success_url = reverse_lazy('Invoice:list', kwargs={'query': 'pending'})
 
+
+# ========================================================================== #
+class InvoiceFromSaleCreateView(BSModalCreateView, FatherCreateView):
+    model = Invoice
+    # fields = OBJECT_FORM_FIELDS
+    form_class = InvoiceFromSaleForm
+    template_name = 'common/modal_form.html'
+    success_message = 'Success: Invoice was created.'
+    success_url = reverse_lazy('Invoice:list', kwargs={'query': 'pending'})
+
+    def get_initial(self):
+        initial = super(InvoiceFromSaleCreateView, self).get_initial()
+        pack_id = self.kwargs['id']
+        initial['meli_id'] = pack_id
+
+        with ApiClient() as api_client:
+            api_instance = RestClientApi(api_client)
+            access_token = UserConfig.objects.get(key='access_token').value
+
+            resource = 'packs/' + pack_id
+
+            try:
+                # Resource path GET
+                response = api_instance.resource_get(resource, access_token)
+                resource = 'orders/' + str(response['orders'][0]['id'])
+                response = api_instance.resource_get(resource, access_token)
+            except ApiException as e:
+                print('Exception in pack info')
+                try:
+                    resource = 'orders/' + pack_id
+                    response = api_instance.resource_get(resource, access_token)
+
+                except ApiException as e:
+                    print('Exception in order info')
+
+        initial['meli_username'] = response['buyer']['nickname']
+
+        total = response['paid_amount']
+        initial['total'] = total
+        initial['uso_cfdi'] = 'G03'
+
+        payment_type = response['payments'][0]['payment_type']
+        if payment_type == 'account_money':
+            initial['forma_pago'] = '06'
+        elif payment_type == 'ticket':
+            initial['forma_pago'] = '01'
+        elif payment_type == 'bank_transfer' or payment_type == 'atm':
+            initial['forma_pago'] = '03'
+        elif payment_type == 'credit_card':
+            initial['forma_pago'] = '04'
+        elif payment_type == 'debit_card':
+            initial['forma_pago'] = '28'
+        elif payment_type == 'prepaid_card':
+            initial['forma_pago'] = '05'
+        else:
+            initial['forma_pago'] = '01'
+        return initial
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        meli_username = form.cleaned_data['meli_username']
+        rfc = form.cleaned_data['rfc']
+        name = form.cleaned_data['name']
+        cp = form.cleaned_data['cp']
+        regimen = form.cleaned_data['regimen']
+
+        customer, created = Customer.objects.get_or_create(meli_username=meli_username,
+                                                           rfc=rfc,
+                                                           name=name,
+                                                           cp=cp,
+                                                           regimen=regimen)
+        print(customer)
+        print(self.object)
+        self.object.customer = customer
+        print(self.object)
+        self.object.save()
+        return super(InvoiceFromSaleCreateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        # Add action to invalid form phase
+        messages.success(self.request, 'An error occured while processing the payment')
+        return self.render_to_response(self.get_context_data(form=form))
 
 # # ========================================================================== #
 class InvoiceDeleteView(BSModalDeleteView, FatherDeleteView):
@@ -100,10 +446,10 @@ class ProductInvoiceCreateModalView(BSModalCreateView, FatherCreateView):
     success_url = reverse_lazy('Product:add')
 
 
-class InvoiceUpdateView(BSModalUpdateView, FatherUpdateView):
+class change_status(BSModalUpdateView, FatherUpdateView):
     model = Invoice
-    form_class = InvoiceForm
-    template_name = 'common/modal_form.html'
+    form_class = InvoiceStatusForm
+    template_name = 'common/modal_update_form.html'
     success_message = 'Success: Invoice was updated.'
 
 
@@ -117,9 +463,112 @@ def invoices(request):
         return HttpResponse(json.dumps(data), content_type='application/json')
 
 
-class InvoicesTable(FatherTableListView):
-    model = Invoice
-    fields = OBJECT_LIST_FIELDS
+class InvoicesTable(TemplateView):
+    template_name = 'invoice/_table_list.html'
+
+    def get(self, request, *args, **kwargs):
+        query = self.kwargs['query']
+        STATUS_CHOICES = {'pending': '1',
+                          'emitted': '2',
+                          'sent': '3',
+                          'cancelled': '4'}
+        invoices = []
+
+        with ApiClient() as api_client:
+            api_instance = RestClientApi(api_client)
+            access_token = UserConfig.objects.get(key='access_token').value
+            my_id = UserConfig.objects.get(key='Meli_id').value
+
+            try:
+                db_invoices = Invoice.objects.filter(status=STATUS_CHOICES[query])
+                for invoice in db_invoices:
+                    pack_id = invoice.meli_id
+                    resource = 'packs/' + pack_id
+                    response = None
+                    messages_count = 0
+
+                    try:
+                        response = api_instance.resource_get(resource, access_token)
+                        resource = 'orders/' + str(response['orders'][0]['id'])
+                        response = api_instance.resource_get(resource, access_token)
+
+                    except ApiException as e:
+                        print('Exception in pack info')
+
+                        try:
+                            resource = 'orders/' + pack_id
+                            response = api_instance.resource_get(resource, access_token)
+
+                        except ApiException as e:
+                            print('Exception in order info')
+
+                    try:
+                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id + '?mark_as_read=false'
+                        msg_response = api_instance.resource_get(msg_resource, access_token)
+
+                        conversation_status = msg_response['conversation_status']['status']
+                        for msg in msg_response['messages']:
+                            if msg['message_date']['read'] is not None and msg["to"]["user_id"] == my_id:
+                                messages_count += 1
+                    except ApiException as e:
+                        print('Exception in messages')
+
+                    s = {
+                        'pk': invoice.pk,
+                        'pack_id': pack_id,
+                        'channel': response['context']['channel'],
+                        'id': response['id'],
+                        'date': datetime.fromisoformat(response['date_created']),
+                        'buyer_id': response['buyer']['id'],
+                        'buyer_name': response['buyer']['first_name'] + ' ' + response['buyer']['last_name'],
+                        'buyer_nickname': response['buyer']['nickname'],
+                        'products': response['order_items'],
+                        'product': {'image': None,
+                                    'id': response['order_items'][0]['item']['id'],
+                                    'title': response['order_items'][0]['item']['title'],
+                                    'unit_price': response['order_items'][0]['unit_price'],
+                                    'quantity': response['order_items'][0]['quantity'],
+                                    'seller_sku': response['order_items'][0]['item']['seller_sku'],
+                                    },
+                        'conversation_status': conversation_status,
+                        'messages_count': messages_count
+                    }
+
+                    resource = 'shipments/' + str(response['shipping']['id'])
+                    try:
+                        response = api_instance.resource_get(resource, access_token)
+                        s['shipping_status'] = response['status']
+                        s["logistic_type"] = response["logistic_type"]
+                        if response['status'] == 'delivered':
+                            s['date_delivered'] = datetime.fromisoformat(response['status_history']['date_delivered'])
+                        elif response['status'] == 'ready_to_ship' or response['status'] == 'shipped':
+                            s['date_delivered'] = datetime.fromisoformat(
+                                response['shipping_option']['estimated_delivery_final']['date'])
+
+                    except ApiException as e:
+                        print("Exception in shipping info")
+
+                    resource = 'items/' + str(s['product']['id'])
+                    try:
+                        response = api_instance.resource_get(resource, access_token)
+                        s['product']['image'] = response['thumbnail']
+                        s['product']['permalink'] = response['permalink']
+                    except ApiException as e:
+                        print("Exception in product info")
+
+                    invoices.append(s)
+
+            except ApiException as e:
+                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+
+        invoices.sort(key=lambda item: item['date'], reverse=True)
+
+        data = dict()
+        data['table'] = render_to_string(
+            'invoice/_list_table.html',
+            {'invoices': invoices},
+        )
+        return JsonResponse(data, status=200, safe=False)
 
 
 def invoice_get_id(request):

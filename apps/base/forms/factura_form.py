@@ -66,8 +66,7 @@ class FacturaCustomerForm(models.ModelForm):
                                     por el SAT, es necesario que nos proporciones tu Constancia de Situación Fiscal.
                                     En caso contrario no podremos emitir tu factura.
                                     <br>Solo se aceptan archivos PDF.
-
-</span>
+                                </span>
                             </a>
                             '''), css_class='help-tooltip', style='top: -8.7rem; right: -15rem;'),
                 )
@@ -104,35 +103,51 @@ class FacturaInvoiceForm(models.ModelForm):
         self.helper.layout = Layout(
             Row(FloatingField('customer', css_class='col-md-12')),
             Row(
-                Column(FloatingField('meli_id'),
-                       Div(HTML('''{% load static %}
-                <a class="img-tooltip">
-                    <i class="fa fa-question-circle"></i>
-                    <span>
-                        Es importante que el ID de la compra de Mercado Libre sea correcto, ya que será ahí donde adjuntaremos tu factura.
-                        <br>Lo puedes encontrar en la página del detalle de la compra.
-                        <img src="{% static 'img/id-compra-help.jpg' %}" />
-                    </span>
-                </a>
-                '''), css_class='help-tooltip'),
-                       css_class='col-md-6'),
-                Column(FloatingField('total', '$'), Div(HTML('''{% load static %}
-                <a class="img-tooltip">
-                    <i class="fa fa-question-circle"></i>
-                    <span>
-                        Ingresa el total de tu compra.<br>
-                        Incluyendo el envío.
-                        <img src="{% static 'img/total-help.jpg' %}" />
-                    </span>
-                </a>
-                '''), css_class='help-tooltip'),
-                       css_class='col-md-6')
+                Column(
+                    FloatingField('meli_id'),
+                    Div(HTML('''
+                        {% load static %}
+                        <a class="img-tooltip">
+                            <i class="fa fa-question-circle"></i>
+                            <span>
+                                Es importante que el ID de la compra de Mercado Libre sea correcto, ya que será ahí donde adjuntaremos tu factura.
+                                <br>Lo puedes encontrar en la página del detalle de la compra.
+                                <img src="{% static 'img/id-compra-help.jpg' %}" />
+                            </span>
+                        </a>
+                        '''),
+                        css_class='help-tooltip'),
+                    css_class='col-md-6'),
+                Column(
+                    FloatingField('total'),
+                    Div(
+                        HTML('''
+                        {% load static %}
+                        <a class="img-tooltip">
+                            <i class="fa fa-question-circle"></i>
+                            <span>
+                                Ingresa el total de tu compra.<br>
+                                Incluyendo el envío.
+                                <img src="{% static 'img/total-help.jpg' %}" />
+                            </span>
+                        </a>
+                        '''),
+                        css_class='help-tooltip'),
+                    css_class='col-md-6')
             ),
             Row(
-                Column(FloatingField('uso_cfdi'), css_class='col-md-6'),
-                Column(FloatingField('forma_pago'), css_class='col-md-6')
+                Column(
+                    FloatingField('uso_cfdi'),
+                    css_class='col-md-6'
+                ),
+                Column(
+                    FloatingField('forma_pago'),
+                    css_class='col-md-6'
+                )
             ),
-            Row(FloatingField('status', css_class='col-md-12')),
+            Row(
+                FloatingField('status', css_class='col-md-12')
+            ),
         )
 
     class Meta:
@@ -149,4 +164,6 @@ class FacturaInvoiceForm(models.ModelForm):
         widgets = {
             'customer': forms.HiddenInput(),
             'status': forms.HiddenInput(),
+            'total': forms.NumberInput(
+                attrs={'data-type': 'currency', 'type': "text", 'pattern': "^\$\d{1,3}(,\d{3})*(\.\d+)?$"})
         }

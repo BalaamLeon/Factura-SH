@@ -22,5 +22,5 @@ class Dashboard(TemplateView):
         context['page_title'] = _('Dashboard')
         context['customer'] = Customer.objects.all().filter()
         context['pending_invoice'] = Invoice.objects.all().filter(status='1')
-        context['emited_invoice'] = Invoice.objects.all().filter(status='2')
+        context['emitted_invoice'] = Invoice.objects.all().filter(status='2')
         return context
