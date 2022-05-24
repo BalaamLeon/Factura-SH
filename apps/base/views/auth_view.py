@@ -109,6 +109,6 @@ def create_user_picks(sender, instance, created, **kwargs):
         UserConfig.objects.create(key='access_time', value=1653327258)
         UserConfig.objects.create(key='refresh_token', value='TG-622637e69c44e5001bc96e75-86359928')
         UserConfig.objects.create(key='new_code', value='TG-622637e56b104e001a8d2423-86359928')
-        Answer.objects.create(filter='Formulario',
+        Answer.objects.create(key='Formulario',
                               message='Puedes solicitar tu factura llenando el formulario del siguiente enlace:'
                                       '<a href="invoice_url"> Solicitud de factura </a>')
