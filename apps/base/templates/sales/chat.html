@@ -1,0 +1,51 @@
+{% load static %}
+{% load custom_tags %}
+
+<!-- Conversations are loaded here -->
+<div id="conversation" class="direct-chat-messages" style="display: flex; flex-direction: column-reverse;">
+
+    {% for message in messages %}
+    {% if message.from.user_id == my_id %}
+    <!-- Message to the right -->
+    <div class="direct-chat-msg right">
+        <!--        <div class="direct-chat-infos clearfix">-->
+        <!--            <span class="direct-chat-name float-right">Sabores Hidalgo</span>-->
+        <!--            <span class="direct-chat-timestamp float-right">{{ message.message_date.created|get_date_from_str }}</span>-->
+        <!--        </div>-->
+        <!-- /.direct-chat-infos -->
+        <img class="direct-chat-img" src="{% static 'img/logo.jpg' %}" alt="message user image">
+        <!-- /.direct-chat-img -->
+        <div class="direct-chat-text"
+             style="background-color: #007bff; border-color: #007bff; color: #fff; float: right; margin-right: 10px !important;">
+            {{ message.text}}
+        </div>
+        <div class="direct-chat-infos clearfix" style="padding: 0 50px 0 50px; clear: right;">
+            <span class="direct-chat-timestamp float-right">{{ message.message_date.created|get_date_from_str }}</span>
+        </div>
+        <!-- /.direct-chat-text -->
+    </div>
+    <!-- /.direct-chat-msg -->
+    {% else %}
+
+    <!-- Message. Default to the left -->
+    <div class="direct-chat-msg">
+        <!--        <div class="direct-chat-infos clearfix">-->
+        <!--            <span class="direct-chat-name float-left">{{ buyer_name }}</span>-->
+        <!--            <span class="direct-chat-timestamp float-left">  {{ message.message_date.created|get_date_from_str }}</span>-->
+        <!--        </div>-->
+        <!-- /.direct-chat-infos -->
+        <img class="direct-chat-img" src="{% static 'img/default-avatar.png' %}" alt="message user image">
+        <!-- /.direct-chat-img -->
+        <div class="direct-chat-text">
+            {{ message.text }}
+        </div>
+
+        <div class="direct-chat-infos clearfix" style="padding: 0 50px 0 50px;">
+            <span class="direct-chat-timestamp float-left">{{ message.message_date.created|get_date_from_str }}</span>
+        </div>
+        <!-- /.direct-chat-text -->
+    </div>
+    <!-- /.direct-chat-msg -->
+    {% endif %}
+    {% endfor %}
+</div>

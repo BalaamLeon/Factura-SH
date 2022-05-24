@@ -1,0 +1,50 @@
+{% load static %}
+<form method="post" action="" id="message-form" data-form-url="{% url 'Sale:send_message' %}" autocomplete="off"
+      class="needs-validation" novalidate>
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h5 class="modal-title">{{ buyer_name }} - Venta #{{ sale_id }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+    <div class="modal-body">
+        {% include 'sales/chat.html' %}
+    </div>
+
+
+    <div class="modal-footer">
+        <input id="pack_id" value="{{ sale_id }}" hidden>
+        <input id="buyer_id" value="{{ buyer_id }}" hidden>
+        <div class="input-group">
+            <div class="form-floating col-3" style="padding-right:0;">
+                <div class="form-floating" style="padding-right:0;">
+                    <select id="answers" class="form-select" aria-label="Default select example"
+                            data-form-url="{{ request.scheme }}://{{ request.get_host }}{% url 'Factura:list' sale_id %}">
+                        <option selected></option>
+                        {% for answer in answers %}
+                        <option value="{{ answer.message }}">{{ answer.key }}</option>
+                        {% endfor %}
+                        <option value="new">New</option>
+                    </select>
+                    <label for="answers">Predefined answers</label>
+                </div>
+                <input id="new_key" placeholder="New Key" style="width: 100%;display:none;">
+            </div>
+            <div class="form-floating col-8" style="padding-right:0;">
+                <textarea type="text" id="message" name="message" class="form-control" maxlength="350"></textarea>
+                <label for="message">Your message.</label>
+            </div>
+            <span class="input-group-append">
+                <button type="submit" class="btn btn-primary btn-circle"><span
+                        class="fa-solid fa-paper-plane"></span></button>
+            </span>
+        </div>
+        <div style="width: 100%;">
+            <small class="col-11 text-muted">No incluyas datos personales, lenguaje ofensivo, links a redes sociales o
+                Mercado
+                Pago.</small>
+            <small class="col-1 float-right text-muted" id="characters-left">25/350</small>
+        </div>
+    </div>
+</form>

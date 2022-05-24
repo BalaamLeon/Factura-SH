@@ -1,0 +1,237 @@
+{% load custom_tags %}
+<div class="sc-view-listing" id="invoices-list">
+    <div class="sc-rows">
+        {% for invoice in invoices %}
+        <div index="{{ forloop.counter }}" rowid="{{ invoice.id }}" class="card" id="row_{{ invoice.id }}">
+            <div class="card-header sc-row-identifier">
+                <div class="sc-active-channel">
+                    {% if invoice.channel == 'marketplace' %}
+                    <div class="andes-badge andes-badge--pill andes-badge--neutral andes-badge--standard sc-active-channel__pill marketplace-ML andes-badge--small">
+                        <p class="andes-badge__content">ML</p></div>
+                    {% else %}
+                    <div class="andes-badge andes-badge--pill andes-badge--neutral andes-badge--standard sc-active-channel__pill mshops-MS andes-badge--small">
+                        <p class="andes-badge__content">MS</p></div>
+                    {% endif %}
+                </div>
+                <span class="sc-row-identifier__text">#{{ invoice.id }}</span>
+                <span class="sc-row-identifier__text">{{ invoice.date|date:"j N" }} {{ invoice.date|time:"f" }} hs.</span>
+                {% if invoice.factura %}
+                <span class="sc-row-identifier__text">Factura: {{ invoice.factura }}</span>
+                {% else %}
+                <span class="sc-row-identifier__text">Sin factura</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <div class="sc-row-header">
+                    <div class="sc-row-checkbox">
+                        <div class="andes-checkbox andes-checkbox--default andes-checkbox--indeterminate andes-checkbox--disabled andes-checkbox--without-label">
+                            <input class="andes-checkbox__input" type="checkbox">
+                            <span class="andes-checkbox__background"></span></div>
+                    </div>
+                    <div class="sc-status ">
+                        <div class="sc-status__title-detail-container">
+                                        <span class="sc-status__title-content">
+                                            <a class="sc-status__title sc-status__title--low"
+                                               href="https://www.mercadolibre.com.mx/ventas/{{ invoice.id }}/detalle?callbackUrl=https%3A%2F%2Fwww.mercadolibre.com.mx%2Fventas%2Flistado%3Ffilters%3DC_FINISHED_WITH_UNREAD_MESSAGES%26sort%3D%26page%3D1%26search%3D">
+                                                <div class="sc-status__title">{{ invoice.shipping_status|get_sale_status }}</div>
+                                            </a>
+                                            {% if invoice.logistic_type == 'fulfillment' %}
+                                            <a class="sc-status__title-icon-container"
+                                               href="https://www.mercadolibre.com.mx/ventas/{{ invoice.id }}/detalle?callbackUrl=https%3A%2F%2Fwww.mercadolibre.com.mx%2Fventas%2Flistado%3Ffilters%3DC_FINISHED_WITH_UNREAD_MESSAGES%26sort%3D%26page%3D1%26search%3D">
+                                                <svg class="sc-status__title-icon" xmlns="http://www.w3.org/2000/svg"
+                                                     width="40"
+                                                     height="12" viewBox="0 0 40 12">
+                                                    <g fill="#00A650" fill-rule="evenodd">
+                                                    <path fill-rule="nonzero"
+                                                          d="M13.597 9h-1.892l1.617-7.337h5.379l-.363 1.65h-3.487l-.242 1.144h3.399l-.363 1.65h-3.41L13.597 9zm9.35.132c-2.255 0-3.366-1.078-3.366-2.618 0-.121.033-.374.055-.484l.968-4.367h1.925l-.957 4.323a1.62 1.62 0 0 0-.033.308c.011.605.473 1.188 1.408 1.188 1.012 0 1.529-.638 1.716-1.496l.957-4.323h1.914l-.957 4.356c-.396 1.782-1.364 3.113-3.63 3.113zM32.924 9h-4.84l1.617-7.337h1.892L30.35 7.35h2.937L32.924 9zm6.655 0h-4.84l1.617-7.337h1.892L37.005 7.35h2.937L39.579 9z"></path><path
+                                                            d="M2.455 0L0 6.857h4.09L2.456 12 9 4.286H4.91L7.363 0z"></path>
+                                                    </g>
+                                                </svg>
+                                            </a>
+                                            {% endif %}
+                                        </span>
+                        </div>
+                        <div class="sc-status__subtitle"><a
+                                href="https://www.mercadolibre.com.mx/ventas/{{ invoice.id }}/detalle?callbackUrl=https%3A%2F%2Fwww.mercadolibre.com.mx%2Fventas%2Flistado%3Ffilters%3DC_FINISHED_WITH_UNREAD_MESSAGES%26sort%3D%26page%3D1%26search%3D">
+                            <div class="sc-ui-render-markdown">
+                                {% if invoice.shipping_status == 'delivered' %}
+                                Llegó
+                                {% else %}
+                                Llega
+                                {% endif %}
+                                el {{ invoice.date_delivered|date:"j" }} de {{ invoice.date_delivered|date:"F" }}
+                            </div>
+                        </a></div>
+                    </div>
+                    <div class="sc-actions">
+                        {% if invoice.status == '1' %}
+                        <button type="button"
+                                class="detail-btn btn btn-sm btn-info"
+                                style="min-width: 190px; height: 36px;"
+                                data-form-url="{% url 'Invoice:detail' invoice.pk %}"
+                                title="Ver detalle" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            Pendiente
+                        </button>
+                        {% elif invoice.status == '2' %}
+                        <button type="button"
+                                class="detail-btn btn btn-sm btn-warning"
+                                style="min-width: 190px; height: 36px;"
+                                data-form-url="{% url 'Invoice:detail' invoice.pk %}"
+                                title="Ver detalle" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            Emitida
+                        </button>
+                        {% elif invoice.status == '3' %}
+                        <button type="button"
+                                class="detail-btn btn btn-sm btn-success"
+                                style="min-width: 190px; height: 36px;"
+                                data-form-url="{% url 'Invoice:detail' invoice.pk %}"
+                                title="Ver detalle" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            Enviada
+                        </button>
+                        {% elif invoice.status == '1' %}
+                        <button type="button"
+                                class="detail-btn btn btn-sm btn-warning"
+                                style="min-width: 190px; height: 36px;"
+                                data-form-url="{% url 'Invoice:detail' invoice.pk %}"
+                                title="Ver detalle" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            Cancelada
+                        </button>
+                        {% endif %}
+                        <div data-testid="buyer-component" class="sc-buyer ">
+                            <div data-testid="picture-component" class="sc-buyer__picture">
+                                <span class="sc-buyer__picture-initials ">EFL</span>
+                            </div>
+                            <div class="sc-buyer__content ">
+                                <div>
+                                    <div data-testid="buyer-info" class="sc-buyer__content__buyerInfo">
+                                        <div class="sc-title-subtitle-action sc-title-subtitle-action--default">
+                                            <div class="sc-title-subtitle-action__container-label-tooltip">
+                                                <div class="sc-title-subtitle-action__label">
+                                                    {{ invoice.buyer_name }}
+                                                </div>
+                                            </div>
+                                            <div class="sc-title-subtitle-action__container">
+                                                <div class="sc-title-subtitle-action__sublabel">
+                                                    {{ invoice.buyer_nickname }}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="sc-title-subtitle-action sc-title-subtitle-action--default">
+                                        <div class="sc-title-subtitle-action__container-label-tooltip"></div>
+                                        <div class="sc-title-subtitle-action__container">
+                                            {% if invoice.conversation_status == 'active' %}
+                                            <button type="button" class="chat-btn btn btn-sm btn-outline-info"
+                                                    data-form-url="{% url 'Sale:chat' invoice.pack_id invoice.buyer_name invoice.buyer_id %}"
+                                                    title="{{ title }} details" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom">
+                                                <i class="fa fa-message"></i>
+                                                {% if invoice.messages_count == 0 %}
+                                                Ver conversación
+                                                {% elif invoice.messages_count == 1 %}
+                                                {{ invoice.messages_count }} mensaje nuevo
+                                                {% else %}
+                                                {{ invoice.messages_count }} mensajes nuevos
+                                                {% endif %}
+                                            </button>
+                                            {% elif invoice.conversation_status == 'blocked' %}
+                                            <button type="button"
+                                                    class="andes-button sc-action-button andes-button--medium andes-button--transparent andes-button--disabled"
+                                                    disabled="">
+                                                <span class="andes-button__content">Conversación deshabilitada</span>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sc-ui-trigger-content">
+                            <div class="sc-ui-trigger-content__trigger sc-ui-trigger-content__trigger--non-triggered"
+                                 role="button" tabindex="0">
+                                <button class="sc-ui-hover-button sc-ui-hover-button--circle" type="button">
+                                    <svg class="sc-ui-hover-button__icon" xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 8 35">
+                                        <g fill="#333" fill-rule="evenodd">
+                                            <path d="M4 7.838c2.21 0 4-1.754 4-3.919C8 1.755 6.21 0 4 0S0 1.755 0 3.92c0 2.164 1.79 3.918 4 3.918z"></path>
+                                            <ellipse cx="4" cy="17.458" rx="4" ry="3.919"></ellipse>
+                                            <ellipse cx="4" cy="30.998" rx="4" ry="3.919"></ellipse>
+                                        </g>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="sc-ui-trigger-content__content sc-ui-trigger-content__content--bottomRight sc-ui-trigger-content__content--hidden"
+                                 role="button" tabindex="0">
+                                <ul class="andes-list sc-secondary-actions andes-list--dropdown andes-list--selectable"
+                                    aria-label="dropdown" aria-labelledby="">
+                                    <li style="display:flex;" tabindex="0">
+                                        <button class="toggle_tracking btn btn-light"
+                                                id="{{ invoice.pk }}_toggle_tracking_btn"
+                                                data-form-url="{% url 'Invoice:set_tracking' invoice.pk %}">
+
+                                            {% if invoice.tracked %}
+                                            <i class="fa fa-eye-slash"></i> Quitar seguimiento
+                                            {% else %}
+                                            <i class="fa fa-eye"></i> Dar seguimiento
+                                            {% endif %}
+                                        </button>
+                                    </li>
+
+                                    <li style="display:flex;" tabindex="0">
+                                        <button class="change_status btn btn-light"
+                                                id="{{ invoice.pk }}_change_status_btn"
+                                                data-form-url="{% url 'Invoice:change_status' invoice.pk %}">
+                                            <i class="fa fa-pen_to_square"></i> Cambiar estado
+                                        </button>
+                                    </li>
+
+                                    <li style="display:flex;" tabindex="0">
+                                        <button class="delete-btn btn btn-light"
+                                                id="{{ invoice.pk }}_delete_btn"
+                                                data-form-url="{% url 'Invoice:delete' invoice.pk %}">
+                                            <i class="fa fa-pen_to_square"></i> Eliminar solicitud
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sc-row-content">
+                    <div class="sc-cart-product">
+                        <div class="sc-product-picture sc-product-picture__single-item">
+                            <img src="{{ invoice.product.image }}" alt="">
+                        </div>
+                        <div class="sc-title">
+                            <a href="{{ invoice.product.permalink }}">
+                                <div class="sc-title-subtitle-action sc-title-subtitle-action--default">
+                                    <div class="sc-title-subtitle-action__container-label-tooltip">
+                                        <div class="sc-title-subtitle-action__label">
+                                            {{ invoice.product.title }}
+                                        </div>
+                                    </div>
+                                    <div class="sc-title-subtitle-action__container"></div>
+                                </div>
+                            </a>
+                            <div class="sc-title-subtitle-action sc-title-subtitle-action--default">
+                                <div class="sc-title-subtitle-action__container-label-tooltip"></div>
+                                <div class="sc-title-subtitle-action__container"></div>
+                            </div>
+                        </div>
+                        <div class="sc-price"><span
+                                class="sc-price__label">$ {{ invoice.product.unit_price}}</span></div>
+                        <div class="sc-quantity sc-quantity__unique">
+                            <span>{{ invoice.product.quantity }} u.</span></div>
+                        {% if invoice.product.seller_sku != None %}
+                        <div class="sc-description"><p class="sc-description__sublabel">
+                            {{ invoice.product.seller_sku }}</p></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

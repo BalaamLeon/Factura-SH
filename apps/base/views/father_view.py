@@ -235,7 +235,10 @@ class FatherDeleteView(DeleteView):
         context = super().get_context_data(**kwargs)
         object_name = self.model._meta.object_name
         verbose_name = self.model._meta.verbose_name
-        name = self.get_object().name
+        if callable(self.get_object().name):
+            name = self.get_object().name()
+        else:
+            name = self.get_object().name
         context['title'] = _("Delete %(obj_name)s") % {"obj_name": verbose_name}
         context['delete_message'] = _("Are you sure to delete <strong>%(obj_name)s</strong>?") % {"obj_name": name}
         context['action_url'] = '{}:delete'.format(object_name)

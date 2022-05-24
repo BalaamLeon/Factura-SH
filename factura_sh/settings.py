@@ -154,7 +154,7 @@ USE_TZ = True
 
 
 LOCALE_PATHS = (
-    BASE_DIR + '/apps/base/locale', )
+    BASE_DIR + '/locale', )
 
 
 # Static files (CSS, JavaScript, Images)

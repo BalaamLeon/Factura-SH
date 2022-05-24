@@ -1,0 +1,24 @@
+<form method="post" action="" class="needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">{{ pack_id }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        {% load crispy_forms_tags %}
+        {% crispy form %}
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal">{% translate 'Close' %}</button>
+        <button type="submit" class="btn btn-primary">{% translate 'Send' %}</button>
+    </div>
+    <script>
+        $("#id_send_message").click(function () {
+            if ($(this).is(":checked")) {
+                $("#id_message").removeAttr("disabled");
+            } else {
+                $("#id_message").attr("disabled", "disabled");
+            }
+        });
+    </script>
+</form>

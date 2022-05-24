@@ -1,0 +1,156 @@
+<div class="modal-header">
+    <h5>Detalles de la solicitud</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <!--    <p>Por favor, confirme que los datos sean correctos, ya que una vez emitida la factura no se podrán-->
+    <!--        realizar cancelaciones o re facturaciones de CFDI sin una causa justificada</p>-->
+    <!-- We display the details entered by the user here -->
+    <div class="form-row">
+
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input type="text" class="textinput textInput form-control invoice-detail" id="forma_pago"
+                       value="{{ object.forma_pago }} - {{ object.get_forma_pago_display }}" readonly>
+                <label for="forma_pago">Forma de pago</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input type="text" class="textinput textInput form-control invoice-detail" id="rfc"
+                       value="{{ object.customer.rfc }}" readonly>
+                <label for="rfc">RFC</label>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-floating">
+                <input type="text" class="textinput textInput form-control invoice-detail" id="name"
+                       value="{{ object.customer.name }}" readonly>
+                <label for="name">Razón Social</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input type="text" class="textinput textInput form-control invoice-detail" id="cp"
+                       value="{{ object.customer.cp }}" readonly>
+                <label for="cp">Código Postal</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <input type="text" class="textinput textInput form-control invoice-detail" id="cp"
+                       value="{{ object.uso_cfdi }} - {{ object.get_uso_cfdi_display }}" readonly>
+                <label for="cp">Uso de Factura</label>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-floating">
+                            <textarea class="textinput textInput form-control invoice-detail" id="regimen"
+                                      style="height: 80px; resize:none; overflow:hidden;"
+                                      readonly>{{ object.customer.regimen }} - {{ object.customer.get_regimen_display }}
+                            </textarea>
+                <label for="regimen">Régimen Fiscal</label>
+            </div>
+        </div>
+
+        {% if factura == '' %}
+
+        <div class="col-md-12">
+            <table id="product_table" class="table table-bordered table-striped table-hover">
+
+                <tr>
+                    <th>Cant.</th>
+                    <th>Product</th>
+                    <th>Costo U.</th>
+                    <th>Subtotal</th>
+                </tr>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.item.title }}</td>
+                    <td>$ {{ product.unit_price }}</td>
+                    <td>$ {{ product.subtotal }}</td>
+                </tr>
+                {% endfor %}
+                {% if shipping > 0 %}
+                <tr>
+                    <td></td>
+                    <td>Envío</td>
+                    <td></td>
+                    <td>$ {{ shipping }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+                    <td>$ {{ total }}</td>
+                </tr>
+            </table>
+        </div>
+        {% else %}
+
+        <!--        <div class="col-md-12">-->
+        <!--            <table id="factura_table" class="table table-bordered table-striped table-hover">-->
+        <!--                <tr>-->
+        <!--                    <th>Factura</th>-->
+        <!--                    <th></th>-->
+        <!--                    <th></th>-->
+        <!--                </tr>-->
+        <!--                <tr>-->
+
+        <!--                    <td>{{ factura }}</td>-->
+        <!--                    <td>-->
+        <!--                        <a href="{% url 'Invoice:get_cfdi' object.meli_id factura_id %}"-->
+        <!--                           class="btn btn-light" style="width:100%;" target="_blank">Ver PDF</a>-->
+
+        <!--                    </td>-->
+        <!--                    <td>-->
+        <!--                        <button class="btn btn-warning form-control" id="edit_factura">-->
+        <!--                            Cambiar factura-->
+        <!--                        </button>-->
+        <!--                    </td>-->
+        <!--                </tr>-->
+        <!--            </table>-->
+        <!--        </div>-->
+
+        <div class="col-md-12 row">
+            <div class="form-floating col-2">
+                <input type="text" class="textinput textInput form-control invoice-detail" id="factura"
+                       value="{{ factura }}" readonly>
+                <!--                <button class="btn btn-light form-control" id="factura">{{ factura }}</button>-->
+                <label for="factura">Factura</label>
+            </div>
+            <div class="col-3">
+                <a href="{% url 'Invoice:get_cfdi' object.meli_id factura_id %}" class="btn btn-success"
+                   style="margin-top: .8rem; width:100%;" target="_blank">Ver PDF</a>
+            </div>
+            <div class="col-3">
+                <button class="btn btn-warning" id="change_factura"style="margin-top: .8rem;" >Cambiar Factura</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+    {% if factura == '' %}
+    <button type="button" class="btn btn-info" id="send_cfdi_btn"
+            data-bs-formurl="{% url 'Invoice:send_cfdi' object.id %}">Enviar Factura
+    </button>
+    {% endif %}
+</div>
+<script>
+     $(function () {
+        $("#product_table").DataTable({
+            "lengthMenu": [[50, 100, 200, -1], [ 50, 100, 200, "All"]]
+        });
+        $("#factura_table").DataTable({
+            "lengthMenu": [[50, 100, 200, -1], [ 50, 100, 200, "All"]]
+        });
+    });
+
+
+
+
+</script>

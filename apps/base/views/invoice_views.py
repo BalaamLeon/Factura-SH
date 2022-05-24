@@ -92,7 +92,7 @@ class InvoiceListView(TemplateView):
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
-            my_id = UserConfig.objects.get(key='Meli_id').value
+            my_id = UserConfig.objects.get(key='meli_user_id').value
 
             try:
                 if query == 'tracking':
@@ -123,7 +123,7 @@ class InvoiceListView(TemplateView):
                         print('Exception in pack info')
 
                         try:
-                            resource = 'orders/' + pack_id
+                            resource = 'orders/' + str(pack_id)
                             response = api_instance.resource_get(resource, access_token)
 
                         except ApiException as e:
@@ -176,6 +176,15 @@ class InvoiceListView(TemplateView):
 
                     except ApiException as e:
                         print("Exception in shipping info")
+
+                    factura_resource = 'packs/' + str(pack_id) + '/fiscal_documents'
+                    try:
+                        factura_response = api_instance.resource_get(factura_resource, access_token)
+                        s['factura'] = factura_response['fiscal_documents'][0]['filename']
+                        s['factura_id'] = factura_response['fiscal_documents'][0]['id']
+
+                    except ApiException as e:
+                        pass
 
                     resource = 'items/' + str(s['product']['id'])
                     try:
@@ -433,6 +442,7 @@ class InvoiceFromSaleCreateView(BSModalCreateView, FatherCreateView):
         messages.success(self.request, 'An error occured while processing the payment')
         return self.render_to_response(self.get_context_data(form=form))
 
+
 # # ========================================================================== #
 class InvoiceDeleteView(BSModalDeleteView, FatherDeleteView):
     model = Invoice
@@ -477,7 +487,7 @@ class InvoicesTable(TemplateView):
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
-            my_id = UserConfig.objects.get(key='Meli_id').value
+            my_id = UserConfig.objects.get(key='meli_user_id').value
 
             try:
                 db_invoices = Invoice.objects.filter(status=STATUS_CHOICES[query])

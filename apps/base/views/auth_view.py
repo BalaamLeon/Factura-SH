@@ -1,15 +1,15 @@
 from time import time
 
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.contrib.auth import login, logout, authenticate
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.shortcuts import resolve_url, render
-from django.views import View
 from django.shortcuts import redirect
+from django.shortcuts import resolve_url
+from django.views import View
 
 from apps.base.forms.login_form import LoginForm
+from apps.base.models import CustomUser, Answer
 from apps.base.models.customuser_config import UserConfig
 from apps.meli import ApiClient, OAuth20Api, ApiException
 
@@ -51,9 +51,6 @@ class UserLoginView(LoginView):
         if remember_me:
             self.request.session.set_expiry(1209600)
 
-        ma = UserConfig.objects.get(key='Meli_id')
-
-
         now = int(time())
         expires_in = UserConfig.objects.get(key='expires_in').value
         access_time = UserConfig.objects.get(key='access_time').value
@@ -89,11 +86,6 @@ class UserLoginView(LoginView):
                 t.value = entities[i]  # change field
                 t.save()  # this will update only
 
-        # meli_accounts = sql_get('meliusers', 'user_id', '1')
-        # for ma in meli_accounts:
-        #     print(ma)
-        #     SetMeliUser(ma[0], ma[1], ma[2], ma[3], ma[4], ma[5], ma[6], ma[7])
-
         return super(UserLoginView, self).form_valid(form)
 
 
@@ -102,3 +94,21 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('User:login')
+
+
+@receiver(post_save, sender=CustomUser)
+def create_user_picks(sender, instance, created, **kwargs):
+    if created:
+        UserConfig.objects.create(key='meli_user_id', value='86359928')
+        UserConfig.objects.create(key='site_id', value='MLM')
+        UserConfig.objects.create(key='user_name', value='Itzel Angelina Delgadillo León')
+        UserConfig.objects.create(key='code', value='TG-622637e56b104e001a8d2423-86359928')
+        UserConfig.objects.create(key='access_token',
+                                  value='APP_USR-8367847789338992-052313-c44c1d0a433d6f4329a9ffc781b5c1d4-86359928')
+        UserConfig.objects.create(key='expires_in', value=21600)
+        UserConfig.objects.create(key='access_time', value=1653327258)
+        UserConfig.objects.create(key='refresh_token', value='TG-622637e69c44e5001bc96e75-86359928')
+        UserConfig.objects.create(key='new_code', value='TG-622637e56b104e001a8d2423-86359928')
+        Answer.objects.create(filter='Formulario',
+                              message='Puedes solicitar tu factura llenando el formulario del siguiente enlace:'
+                                      '<a href="invoice_url"> Solicitud de factura </a>')

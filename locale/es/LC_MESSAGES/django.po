@@ -1,0 +1,526 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-23 18:49-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\apps\base\forms\invoice_form.py:72
+msgid "Unsupported file extension. Only .pdf and .xml files allowed."
+msgstr "Extensión de archivo no soportada. Solo se permiten archivos .pdf y .xml."
+
+#: .\apps\base\forms\invoice_form.py:76
+msgid "Select CFDI files."
+msgstr "Selecciona los archivos de CFDI."
+
+#: .\apps\base\forms\invoice_form.py:79
+msgid "Send message to buyer."
+msgstr "Enviar mensaje al comprador."
+
+#: .\apps\base\forms\invoice_form.py:80
+msgid "Message"
+msgstr "Mensaje"
+
+#: .\apps\base\models\base.py:23
+#, python-format
+msgid "'The %(obj_name)s was deleted successfully.'"
+msgstr "El %(obj_name)s fue eliminado correctamente."
+
+#: .\apps\base\models\base.py:26
+#, python-format
+msgid ""
+"'The %(obj_name)s cannot be deleted, certain information on system depends "
+"on this.'"
+msgstr ""
+"El %(obj_name)s no puede ser eliminado, existe información que depende de "
+"este."
+
+#: .\apps\base\models\customer.py:49 .\apps\base\views\invoice_views.py:31
+msgid "Customer"
+msgstr "Cliente"
+
+#: .\apps\base\models\customer.py:50 .\templates\sidebar.html:62
+msgid "Customers"
+msgstr "Clientes"
+
+#: .\apps\base\models\customuser.py:36 .\apps\base\views\customer_views.py:23
+#: .\apps\base\views\customer_views.py:32 .\apps\base\views\factura_views.py:30
+#: .\apps\base\views\factura_views.py:39
+msgid "Username"
+msgstr "Usuario"
+
+#: .\apps\base\models\customuser.py:37
+#: .\apps\base\templates\usercustom\login.html:67
+msgid "Password"
+msgstr "Contraseña"
+
+#: .\apps\base\models\customuser.py:38
+#: .\apps\base\templates\usercustom\login.html:61
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: .\apps\base\models\customuser.py:44
+msgid "Person"
+msgstr "Persona"
+
+#: .\apps\base\models\customuser.py:45
+msgid "People"
+msgstr "Gente"
+
+#: .\apps\base\models\invoice.py:80
+msgid "Invoice"
+msgstr "Solicitud"
+
+#: .\apps\base\models\invoice.py:81 .\templates\sidebar.html:87
+msgid "Invoices"
+msgstr "Solicitudes"
+
+#: .\apps\base\models\predefined_answers.py:17
+msgid "Predefined Answer"
+msgstr "Respuesta predefinida"
+
+#: .\apps\base\models\predefined_answers.py:18
+msgid "Predefined Answers"
+msgstr "Respuestas predefinidas"
+
+#: .\apps\base\models\sale.py:19
+msgid "Tracked sale"
+msgstr "Venta con seguiimiento"
+
+#: .\apps\base\models\sale.py:20
+msgid "Tracked Sales"
+msgstr "Ventas con seguimiento"
+
+#: .\apps\base\templates\auth\login.html:3
+#: .\apps\base\templates\auth\signup.html:3
+msgid "Login page"
+msgstr "Página de inicio de sesión"
+
+#: .\apps\base\templates\auth\login.html:9
+#: .\apps\base\templates\auth\signup.html:8
+msgid "Sign in to start your session"
+msgstr "Inicia sesión para comenzar"
+
+#: .\apps\base\templates\common\_table_list.html:46
+msgid "Edit"
+msgstr "Editar"
+
+#: .\apps\base\templates\common\delete.html:10
+msgid ""
+"If you wish to continue press <u>\"Delete\"</u>, keep in mind that this "
+"action is irreversible."
+msgstr ""
+"Si deseas continuar presiona <u>\"Eliminar\"</u>, ten en cuenta que esta "
+"acción es irreversible."
+
+#: .\apps\base\templates\common\delete.html:11
+msgid "Press <u>\"Cancel\"</u> to cancel the action."
+msgstr "Presiona <u>\"Cancelar\"</u> para cancelar la acción."
+
+#: .\apps\base\templates\common\delete.html:17
+msgid "Delete"
+msgstr "Eliminar"
+
+#: .\apps\base\templates\common\detail.html:37
+#: .\apps\base\templates\invoice\detail.html:29
+msgid "Are you sure you want to delete the form?"
+msgstr "Estás seguro que deseas eliminar el formulario?"
+
+#: .\apps\base\templates\common\detail.html:44
+#: .\apps\base\templates\invoice\detail.html:36
+msgid "Are you sure you want to duplicate the form?"
+msgstr "Estás seguro que deseas duplicar el formulario?"
+
+#: .\apps\base\templates\common\form.html:23
+#: .\apps\base\templates\usercustom\login.html:81
+#: .\apps\base\templates\usercustom\password_reset_form.html:92
+msgid "Back"
+msgstr "Atrás"
+
+#: .\apps\base\templates\common\form.html:24
+#: .\apps\base\templates\common\form.html:36
+#: .\apps\base\templates\usercustom\profile.html:92
+msgid "Save"
+msgstr "Guardar"
+
+#: .\apps\base\templates\common\list.html:26
+#: .\apps\base\templates\common\list.html:30
+#: .\apps\base\templates\invoice\list.html:26
+#: .\apps\base\templates\invoice\list.html:30
+#: .\apps\base\templates\sales\list.html:26
+#: .\apps\base\templates\sales\list.html:30
+msgid "Add new"
+msgstr "Nuevo"
+
+#: .\apps\base\templates\common\list.html:43
+#: .\apps\base\templates\invoice\list.html:43
+#: .\apps\base\templates\sales\list.html:43
+msgid "Download"
+msgstr "Descargar"
+
+#: .\apps\base\templates\common\list.html:46
+#: .\apps\base\templates\invoice\list.html:46
+#: .\apps\base\templates\sales\list.html:46
+msgid "Import"
+msgstr "Importar"
+
+#: .\apps\base\templates\common\list.html:49
+#: .\apps\base\templates\invoice\list.html:49
+#: .\apps\base\templates\sales\list.html:49
+msgid "Massive Edition"
+msgstr "Edición masiva"
+
+#: .\apps\base\templates\common\modal_form.html:16
+#: .\apps\base\templates\invoice\send_cfdi.html:12
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1046
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1072
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1095
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1118
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1141
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1164
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1187
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1210
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1233
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1256
+#: .\static\vendor\admin-lte\pages\UI\modals.html:1279
+msgid "Close"
+msgstr "Cerrar"
+
+#: .\apps\base\templates\common\modal_form.html:17
+msgid "Create"
+msgstr "Crear"
+
+#: .\apps\base\templates\common\modal_update_form.html:16
+msgid "Update"
+msgstr "Actualizar"
+
+#: .\apps\base\templates\common\wizard.html:126
+msgid "prev step"
+msgstr "Paso anterior"
+
+#: .\apps\base\templates\common\wizard.html:129
+msgid " submit"
+msgstr " enviar"
+
+#: .\apps\base\templates\dashboard\dashboard.html:14
+msgid "Total Customers"
+msgstr "Clientes totales"
+
+#: .\apps\base\templates\dashboard\dashboard.html:30
+#: .\apps\base\views\invoice_views.py:86
+msgid "Pending Invoices"
+msgstr "Solicitudes pendientes"
+
+#: .\apps\base\templates\dashboard\dashboard.html:46
+#: .\apps\base\views\invoice_views.py:87
+msgid "Invoices to send"
+msgstr "Solicitudes a enviar"
+
+#: .\apps\base\templates\invoice\send_cfdi.html:13
+msgid "Send"
+msgstr "Enviar"
+
+#: .\apps\base\templates\usercustom\login.html:6
+#: .\apps\base\templates\usercustom\login.html:54
+#: .\apps\base\templates\usercustom\login.html:74
+#: .\apps\base\templates\usercustom\password_reset_form.html:93
+msgid "Login"
+msgstr "Iniciar sesión"
+
+#: .\apps\base\templates\usercustom\login.html:42
+#: .\apps\base\templates\usercustom\password_reset_form.html:45
+msgid "Language"
+msgstr "Idioma"
+
+#: .\apps\base\templates\usercustom\login.html:46
+#: .\apps\base\templates\usercustom\password_reset_form.html:49
+msgid "Change to"
+msgstr "Cambiar a"
+
+#: .\apps\base\templates\usercustom\login.html:82
+#: .\apps\base\templates\usercustom\password_reset_form.html:86
+msgid "Password recovery"
+msgstr "Recuperar de contraseña"
+
+#: .\apps\base\templates\usercustom\login.html:83
+#: .\apps\base\templates\usercustom\password_reset_form.html:94
+msgid "Signup"
+msgstr "Registrarse"
+
+#: .\apps\base\templates\usercustom\login.html:118
+#: .\apps\base\templates\usercustom\profile.html:143
+msgid ""
+"Your account does not have the necessary privileges to access this section. "
+"To continue, log in with an account that has the necessary privileges."
+msgstr ""
+"Su cuenta no tiene los privilegios necesarios para acceder a esta sección. "
+"Para continuar, inicie sesión con una cuenta que tenga los privilegios necesarios."
+
+#: .\apps\base\templates\usercustom\login.html:120
+#: .\apps\base\templates\usercustom\profile.html:145
+msgid "Please login to visit this page."
+msgstr "Por favor inicie sesión para visitar esta página."
+
+#: .\apps\base\templates\usercustom\logoutmodal.html:5
+msgid "Are you sure you want to logout?"
+msgstr "Está seguro de querer salir?"
+
+#: .\apps\base\templates\usercustom\logoutmodal.html:10
+msgid "Select logout if you want to leave the session."
+msgstr "Seleccione salir si desea dejar la sesión."
+
+#: .\apps\base\templates\usercustom\logoutmodal.html:12
+#: .\apps\base\templates\usercustom\profile.html:113
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: .\apps\base\templates\usercustom\logoutmodal.html:13
+msgid "Logout"
+msgstr "Salir"
+
+#: .\apps\base\templates\usercustom\password_change_form.html:14
+msgid "Actual Password"
+msgstr "Contraseña actual"
+
+#: .\apps\base\templates\usercustom\password_change_form.html:16
+msgid "Enter the actual password"
+msgstr "Introduzca la contraseña actual"
+
+#: .\apps\base\templates\usercustom\password_change_form.html:23
+msgid "New Password"
+msgstr "Nueva contraseña"
+
+#: .\apps\base\templates\usercustom\password_change_form.html:25
+msgid "Enter the new password"
+msgstr "Introduzca la nueva contraseña"
+
+#: .\apps\base\templates\usercustom\password_change_form.html:32
+#: .\apps\base\templates\usercustom\password_change_form.html:34
+msgid "Retype the new password"
+msgstr "Repita la nueva contraseña"
+
+#: .\apps\base\templates\usercustom\password_change_form.html:42
+msgid "Submit"
+msgstr "Enviar"
+
+#: .\apps\base\templates\usercustom\password_reset_form.html:7
+msgid "Sign up"
+msgstr "Registrarse"
+
+#: .\apps\base\templates\usercustom\password_reset_form.html:57
+msgid "Password Recovery"
+msgstr "Recuperar contraseña"
+
+#: .\apps\base\templates\usercustom\password_reset_form.html:58
+msgid ""
+"Write the email with which you registered, validate the recaptcha and press "
+"the password recovery button."
+msgstr ""
+"Escriba el correo con el que se registró, valide el reCAPTCHA y presione el "
+"botón de recuperación de contraseña."
+
+#: .\apps\base\templates\usercustom\profile.html:105
+msgid "Crop the image"
+msgstr "Recortar la imagen"
+
+#: .\apps\base\templates\usercustom\profile.html:114
+msgid "Crop"
+msgstr "Recortar"
+
+#: .\apps\base\views\customer_views.py:24
+#: .\apps\base\views\customer_views.py:33 .\apps\base\views\factura_views.py:31
+#: .\apps\base\views\factura_views.py:40 .\apps\base\views\invoice_views.py:40
+#: .\apps\base\views\invoice_views.py:50
+msgid "RFC"
+msgstr "RFC"
+
+#: .\apps\base\views\customer_views.py:25
+#: .\apps\base\views\customer_views.py:34 .\apps\base\views\factura_views.py:32
+#: .\apps\base\views\factura_views.py:41 .\apps\base\views\invoice_views.py:51
+msgid "Name"
+msgstr "Nombre"
+
+#: .\apps\base\views\customer_views.py:26
+#: .\apps\base\views\customer_views.py:35 .\apps\base\views\factura_views.py:33
+#: .\apps\base\views\factura_views.py:42 .\apps\base\views\invoice_views.py:52
+msgid "CP"
+msgstr "CP"
+
+#: .\apps\base\views\customer_views.py:27
+#: .\apps\base\views\customer_views.py:36 .\apps\base\views\factura_views.py:34
+#: .\apps\base\views\factura_views.py:43
+msgid "Régimen"
+msgstr "Régimen Fiscal"
+
+#: .\apps\base\views\customer_views.py:28
+#: .\apps\base\views\customer_views.py:37 .\apps\base\views\factura_views.py:35
+#: .\apps\base\views\factura_views.py:44
+msgid "Constancia"
+msgstr "Constancia de situación fiscal"
+
+#: .\apps\base\views\customuser_config.py:12
+msgid "Key"
+msgstr "Clave"
+
+#: .\apps\base\views\customuser_config.py:13
+msgid "Value"
+msgstr "Valor"
+
+#: .\apps\base\views\customuser_view.py:45
+msgid "Your account was created successfully."
+msgstr "Tu cuenta fue creada con éxito."
+
+#: .\apps\base\views\customuser_view.py:68
+msgid "Invalid reCAPTCHA"
+msgstr "reCAPTCHA inválido"
+
+#: .\apps\base\views\dashboard_view.py:22
+msgid "Dashboard"
+msgstr "Escritorio"
+
+#: .\apps\base\views\father_view.py:129
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr "No se encontró %(verbose_name)s que coincida con la consulta"
+
+#: .\apps\base\views\father_view.py:239
+#, python-format
+msgid "Delete %(obj_name)s"
+msgstr "Eliminar %(obj_name)s"
+
+#: .\apps\base\views\father_view.py:240
+#, python-format
+msgid "Are you sure to delete <strong>%(obj_name)s</strong>?"
+msgstr "Estás seguro de querer eliminar <strong>%(obj_name)s</strong>?"
+
+#: .\apps\base\views\invoice_views.py:32
+msgid "Meli Id"
+msgstr "ID de Mercado Libre"
+
+#: .\apps\base\views\invoice_views.py:33 .\apps\base\views\invoice_views.py:42
+#: .\apps\base\views\invoice_views.py:57
+msgid "Total"
+msgstr "Total"
+
+#: .\apps\base\views\invoice_views.py:34 .\apps\base\views\invoice_views.py:43
+#: .\apps\base\views\invoice_views.py:53
+msgid "Uso de CFDI"
+msgstr "Uso de CFDI"
+
+#: .\apps\base\views\invoice_views.py:35 .\apps\base\views\invoice_views.py:44
+#: .\apps\base\views\invoice_views.py:49
+msgid "Forma de Pago"
+msgstr "Forma de Pago"
+
+#: .\apps\base\views\invoice_views.py:36 .\apps\base\views\invoice_views.py:45
+#: .\apps\base\views\invoice_views.py:58
+msgid "Status"
+msgstr "Estatus"
+
+#: .\apps\base\views\invoice_views.py:41 .\apps\base\views\invoice_views.py:56
+msgid "ID Venta"
+msgstr "ID de Venta"
+
+#: .\apps\base\views\invoice_views.py:54
+msgid "Regimen"
+msgstr "Régimen Fiscal"
+
+#: .\apps\base\views\invoice_views.py:88
+msgid "Sent Invoices"
+msgstr "Facturas Enviadas"
+
+#: .\apps\base\views\invoice_views.py:89
+msgid "Cancelled Invoices"
+msgstr "Solicitudes canceladas"
+
+#: .\factura_sh\settings.py:145
+msgid "English"
+msgstr "Inglés"
+
+#: .\factura_sh\settings.py:146
+msgid "Spanish"
+msgstr "Español"
+
+#: .\templates\common\password-reset\password_reset_email.html:2
+#, python-format
+msgid ""
+"Hey, You're receiving this email because you requested a password reset for "
+"your user account at %(site_name)s."
+msgstr ""
+"Hola, estás recibiendo este correo porque solicitaste un restablecimiento de "
+"contraseña para tu cuenta de usuario en %(site_name)s."
+
+#: .\templates\common\password-reset\password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr "Por favor, ve a la siguiente página y elige una nueva contraseña:"
+
+#: .\templates\common\password-reset\password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr "Tu nombre de usuario, en caso de que hayas olvidado:"
+
+#: .\templates\common\password-reset\password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr "Gracias por usar nuestro sitio!"
+
+#: .\templates\common\password-reset\password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "El equipo de %(site_name)s"
+
+#: .\templates\common\password-reset\password_reset_subject.txt:2
+#, python-format
+msgid "Password reset on %(site_name)s"
+msgstr "Restablecimiento de contraseña en %(site_name)s"
+
+#: .\templates\sidebar.html:70
+msgid "Customer List"
+msgstr "Lista de Clientes"
+
+#: .\templates\sidebar.html:76
+msgid "New Customer"
+msgstr "Cliente Nuevo"
+
+#: .\templates\sidebar.html:95
+msgid "With tracking"
+msgstr "Con seguimiento"
+
+#: .\templates\sidebar.html:101
+msgid "Pending"
+msgstr "Pendientes"
+
+#: .\templates\sidebar.html:107
+msgid "To Send"
+msgstr "Para Enviar"
+
+#: .\templates\sidebar.html:113
+msgid "Sent"
+msgstr "Enviadas"
+
+#: .\templates\sidebar.html:119
+msgid "Cancelled"
+msgstr "Canceladas"
+
+#: .\templates\sidebar.html:125 .\templates\sidebar.html:150
+msgid "All"
+msgstr "Todas"
+
+#: .\templates\sidebar.html:136
+msgid "Sales"
+msgstr "Ventas"
+
+#: .\templates\sidebar.html:144
+msgid "New messages"
+msgstr "Mensajes nuevos"

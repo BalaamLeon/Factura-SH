@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+{% include "common/_modal.html" %}
+{% include 'common/message.html' %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb page_title page_url %}
+{% endblock %}
+
+<div class="row">
+    <div class="col-12">
+        {% include 'invoice/_list_table.html' %}
+    </div>
+</div>
+<!--    </div>-->
+<!--</div>-->
+
+<div id="script-container">
+    {% block javascript %}
+    <script type="text/javascript" src="{% static 'dist/js/invoice_list_page.js' %}" data-object="{{ title }}"></script>
+    {% for js_file in js_files %}
+    <script type="text/javascript" src="{% static js_file %}"></script>
+    {% endfor %}
+    {% endblock %}
+</div>
+
+
+{% endblock %}
