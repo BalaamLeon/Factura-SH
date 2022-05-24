@@ -17,7 +17,7 @@ import re  # noqa: F401
 # python 2 and python 3 compatibility library
 import six
 
-from meli.api_client import ApiClient
+from apps.meli.api_client import ApiClient
 from apps.meli.exceptions import (  # noqa: F401
     ApiTypeError,
     ApiValueError
