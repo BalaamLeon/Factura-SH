@@ -42,6 +42,8 @@ class Customer(models.Model):
     constancia = models.FileField(storage=OverwriteStorage(), upload_to='constancias/',
                                   validators=[FileExtensionValidator(['pdf'])])
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.rfc
 
