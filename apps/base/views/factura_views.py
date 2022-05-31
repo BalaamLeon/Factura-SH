@@ -120,7 +120,7 @@ class FacturaCustomerCreateView(FatherCreateView):
         return initial
 
     def get_success_url(self):
-        return reverse('Factura:invoice', args=(self.object.pk,))
+        return reverse('Factura:invoice', args=(self.kwargs['meli_sale'], self.object.pk))
 
 
 # ========================================================================== #
