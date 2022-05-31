@@ -3,8 +3,6 @@ from django.db.models import ProtectedError
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from factura_sh import settings
-
 
 class BaseEntity(models.Model):
     fc = models.DateTimeField(auto_now_add=True, blank=True, null=True)

@@ -23,7 +23,7 @@
                             data-form-url="{{ request.scheme }}://{{ request.get_host }}{% url 'Factura:list' sale_id %}">
                         <option selected></option>
                         {% for answer in answers %}
-                        <option value="{{ answer.message }}">{{ answer.key }}</option>
+                        <option value="{{ answer.message }}">{{ answer.name }}</option>
                         {% endfor %}
                         <option value="new">New</option>
                     </select>

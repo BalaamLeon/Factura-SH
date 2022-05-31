@@ -23,16 +23,11 @@
     {% load django_bootstrap_breadcrumbs %}
 
     {% block breadcrumbs %}
-        {% clear_breadcrumbs %}
-        {% breadcrumb "Home" "base:dashboard" %}
+    {% clear_breadcrumbs %}
+    {% breadcrumb "Home" "base:dashboard" %}
     {% endblock %}
 </head>
 
-<!--{% if user_pref.theme == 'default' %}-->
-<!--<body class="hold-transition skin-red sidebar-mini layout-fixed">-->
-<!--{% else %}-->
-<!--<body class="hold-transition skin-{{ user_pref.theme }} sidebar-mini layout-fixed">-->
-<!--{% endif %}-->
 <body class="hold-transition sidebar-mini layout-fixed">
 
 

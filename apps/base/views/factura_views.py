@@ -1,39 +1,23 @@
 # Django Library
-import json
-
-# Localfolder Library
 from django.core.files.storage import FileSystemStorage
-from django.views import generic
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, FormView
 from formtools.wizard.views import SessionWizardView
 
-from apps.base.forms.customer_form import CustomerForm
+# Local folder Library
 from apps.base.forms.factura_form import FacturaCustomerForm, SearchRFCForm, FacturaInvoiceForm
-from bootstrap_modal_forms.generic import BSModalCreateView, BSModalDeleteView, BSModalUpdateView
-from django.http import JsonResponse, HttpResponse, FileResponse, Http404
-from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
-from django.urls import reverse_lazy, reverse
-from django.utils.translation import gettext_lazy as _
-
 from apps.base.models.customer import Customer
 from apps.base.models.customuser_config import UserConfig
 from apps.base.models.invoice import Invoice
-from apps.base.views.father_view import FatherListView, FatherDetailView, FatherCreateView, FatherUpdateView, \
-    FatherTableListView, FatherDeleteView
-
-# Thirdparty Library
-# from dal import autocomplete
+from apps.base.views.auth_view import check_meli_session
+from apps.base.views.father_view import FatherDetailView, FatherCreateView, FatherUpdateView, \
+    FatherDeleteView
 from apps.meli import ApiClient, RestClientApi, ApiException
 
-OBJECT_FIELDS = [
-    {'string': _("Username"), 'field': 'meli_username'},
-    {'string': _("RFC"), 'field': 'rfc'},
-    {'string': _("Name"), 'field': 'name'},
-    {'string': _("CP"), 'field': 'cp'},
-    {'string': _("Régimen"), 'field': 'regimen'},
-    {'string': _("Constancia"), 'field': 'constancia'},
-]
+# Third party Library
+from bootstrap_modal_forms.generic import BSModalDeleteView, BSModalUpdateView
 
 OBJECT_LIST_FIELDS = [
     {'string': _("Username"), 'field': 'meli_username'},
@@ -42,15 +26,6 @@ OBJECT_LIST_FIELDS = [
     {'string': _("CP"), 'field': 'cp'},
     {'string': _("Régimen"), 'field': 'regimen'},
     {'string': _("Constancia"), 'field': 'constancia'},
-]
-
-OBJECT_FORM_FIELDS = [
-    'meli_username',
-    'rfc',
-    'name',
-    'cp',
-    'regimen',
-    'constancia',
 ]
 
 FORMS = [("search", SearchRFCForm),
@@ -89,6 +64,13 @@ class SearchView(FormView):
     form_class = SearchRFCForm
     template_name = 'factura/search.html'
 
+    def get(self, request, *args, **kwargs):
+        print(self.kwargs)
+        if Invoice.objects.filter(meli_id=self.kwargs['meli_sale']).exists():
+            return redirect('Factura:error', meli_sale=self.kwargs['meli_sale'])
+        else:
+            return super(SearchView, self).get(request)
+
     def get_context_data(self, **kwargs):
         context = super(SearchView, self).get_context_data(**kwargs)
         context['meli_sale'] = self.kwargs['meli_sale']
@@ -112,16 +94,13 @@ def search_rfc_view(request, meli_sale):
 # ========================================================================== #
 class FacturaCustomerCreateView(FatherCreateView):
     model = Customer
-    # fields = OBJECT_FORM_FIELDS
     form_class = FacturaCustomerForm
     template_name = 'factura/register.html'
     success_message = 'Success: User was created.'
 
-    # success_url = reverse_lazy('Factura:invoice')
-
     def get_initial(self):
         initial = super(FacturaCustomerCreateView, self).get_initial()
-
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -134,8 +113,7 @@ class FacturaCustomerCreateView(FatherCreateView):
                 username = api_response['buyer']['nickname']
                 initial['meli_username'] = username
             except ApiException as e:
-                print("Exception when calling Rtion when calling RestClientApi->resource_get: %s\n" % e)
-
+                print("Exception when calling RestClientApi->resource_get: %s\n" % e)
 
         initial['rfc'] = self.kwargs['rfc']
         initial['regimen'] = '621'
@@ -157,6 +135,10 @@ class FacturaCustomerUpdateView(BSModalUpdateView, FatherUpdateView):
     template_name = 'factura/register.html'
     success_message = 'Success: Factura was updated.'
 
+    def __init__(self):
+        super(FacturaCustomerUpdateView, self).__init__()
+        self.object = None
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         file = self.request.FILES.get('constancia')
@@ -175,7 +157,6 @@ class FacturaCustomerUpdateView(BSModalUpdateView, FatherUpdateView):
 # ========================================================================== #
 class FacturaInvoiceCreateView(FatherCreateView):
     model = Invoice
-    # fields = OBJECT_FORM_FIELDS
     form_class = FacturaInvoiceForm
     template_name = 'factura/factura.html'
     success_message = 'Success: User was created.'
@@ -185,6 +166,7 @@ class FacturaInvoiceCreateView(FatherCreateView):
 
     def get_initial(self):
         initial = super(FacturaInvoiceCreateView, self).get_initial()
+        check_meli_session()
 
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
@@ -197,13 +179,13 @@ class FacturaInvoiceCreateView(FatherCreateView):
                 response = api_instance.resource_get(resource, access_token)
                 resource = 'orders/' + str(response['orders'][0]['id'])
                 response = api_instance.resource_get(resource, access_token)
-            except ApiException as e:
+            except ApiException:
                 print('Exception in pack info')
                 try:
                     resource = 'orders/' + str(self.kwargs['meli_sale'])
                     response = api_instance.resource_get(resource, access_token)
 
-                except ApiException as e:
+                except ApiException:
                     print('Exception in order info')
 
         total = response['paid_amount']
@@ -238,7 +220,14 @@ class FacturaInvoiceCreateView(FatherCreateView):
     def get_success_url(self):
         return reverse_lazy('Factura:success', kwargs={'meli_sale': self.kwargs['meli_sale']})
 
+
 # ========================================================================== #
 class FacturaInvoiceSuccessView(TemplateView):
     template_name = 'factura/success.html'
     form_class = FacturaInvoiceForm
+
+
+# ========================================================================== #
+class FacturaInvoiceErrorView(TemplateView):
+    template_name = 'factura/error.html'
+    # form_class = FacturaInvoiceForm

@@ -10,7 +10,6 @@ app_name = 'base'
 
 urlpatterns = [
     path('', UserLoginView.as_view(), name='home'),
-
     path('dashboard/', Dashboard.as_view(), name='dashboard'),
 
 ]

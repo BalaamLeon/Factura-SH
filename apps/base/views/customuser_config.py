@@ -20,7 +20,7 @@ class ParameterListView(FatherListView):
     model = UserConfig
     template_name = 'common/list.html'
     extra_context = {'fields': OBJECT_LIST_FIELDS,
-                     'modal_add': True,}
+                     'modal_add': True}
 
 
 class ParameterDetailView(FatherDetailView):

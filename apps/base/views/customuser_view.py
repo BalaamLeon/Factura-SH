@@ -7,12 +7,6 @@ Vistas de la aplicación globales
 import requests
 # Django Library
 from django.conf import settings
-from django.contrib import messages
-from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
@@ -49,7 +43,6 @@ class SignUpView(FatherCreateView):
         Handle POST requests: instantiate a form instance with the passed
         POST variables and then check if it's valid.
         """
-        self.object = None
         form = self.get_form()
         recaptcha_response = request.POST.get('g-recaptcha-response')
         url = 'https://www.google.com/recaptcha/api/siteverify'

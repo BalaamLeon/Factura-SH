@@ -16,40 +16,6 @@
 
 <div class="row">
     <div class="col-12">
-        <!--        <div class="card">-->
-        <!--            <div class="card-header">-->
-        <!--                {% if modal_add == True %}-->
-        <!--                <button type="button"-->
-        <!--                        class="btn btn-light"-->
-        <!--                        id="create-btn"-->
-        <!--                        data-form-url="{{ add_url }}"-->
-        <!--                        title="{{ _('Add new') }} {{ page_title }}" data-bs-toggle="tooltip" data-bs-placement="bottom">-->
-        <!--                    <span class="fa fa-plus"></span>-->
-        <!--                </button>-->
-        <!--                {% else %}-->
-        <!--                <a title=" {{ _('Add new') }} {{ page_title }}" href="{{ add_url }}" class="btn btn-light"><i-->
-        <!--                        class="fa fa-plus"></i></a>-->
-        <!--                {% endif %}-->
-        <!--                {% if import_btn == True %}-->
-        <!--                <button type="button"-->
-        <!--                        class="btn btn-light"-->
-        <!--                        id="import-btn"-->
-        <!--                        data-form-url="{{ import_url }}"-->
-        <!--                        title="Import {{ page_title }}" data-bs-toggle="tooltip" data-bs-placement="bottom">-->
-        <!--                    <span class="fa fa-file-excel"></span>-->
-        <!--                </button>-->
-        <!--                {% endif %}-->
-        <!--                {% if web_parameter.show_btn_export == 'True' %}-->
-        <!--                <a title=" {{ _('Download') }}" href="#" class="btn btn-light"><i class="fa fa-file-excel"></i></a>-->
-        <!--                {% endif %}-->
-        <!--                {% if web_parameter.show_btn_import == 'True' %}-->
-        <!--                <a title=" {{ _('Import') }}" href="#" class="btn btn-light"><i class="fas fa-upload"></i></i></a>-->
-        <!--                {% endif %}-->
-        <!--                {% if web_parameter.show_btn_mass == 'True' %}-->
-        <!--                <a title=" {{ _('Massive Edition') }}" href="#" class="btn btn-light"><i class="fa fa-exclamation"></i></a>-->
-        <!--                {% endif %}-->
-        <!--            </div>-->
-        <!--            <div class="card-body">-->
         <div class="sc-view-listing">
             <div class="sc-rows">
 
@@ -271,6 +237,15 @@
         var js = document.createElement("script");
         js.type = "text/javascript";
         js.src = '{% static 'dist/js/chat.js' %}';
+        document.body.appendChild(js);
+
+        var me = document.querySelector('script[src="{% static 'dist/js/invoice_from_sale.js' %}"]');
+        if(me !== null){
+            me.remove();
+        }
+        var js = document.createElement("script");
+        js.type = "text/javascript";
+        js.src = '{% static 'dist/js/invoice_from_sale.js' %}';
         document.body.appendChild(js);
     });
 

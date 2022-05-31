@@ -3,6 +3,7 @@ from crispy_bootstrap5.bootstrap5 import FloatingField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Field, Column
 from django import forms
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from apps.base.models import Customer
@@ -124,7 +125,7 @@ class InvoiceFromSaleForm(BSModalModelForm):
             Row(
                 Column(
                     Row(FloatingField('meli_username', css_class='col-md-12')),
-                    Row(FloatingField('rfc', css_class='col-md-12')),
+                    Row(FloatingField('rfc', css_class='col-md-12', data_url=reverse('Customer:get_info'))),
                     Row(FloatingField('name', css_class='col-md-12')),
                     Row(FloatingField('cp', css_class='col-md-12')),
                     Row(FloatingField('regimen', css_class='col-md-12')),

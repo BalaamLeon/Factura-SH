@@ -1,18 +1,19 @@
 # Django Library
 
+# Thirdparty Library
+from datetime import datetime
+
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 
-# Localfolder Library
-
 from apps.base.models import Answer, Invoice
 from apps.base.models.customuser_config import UserConfig
-from apps.base.models.sale import TrackedSale
+from apps.base.views.auth_view import check_meli_session
 from apps.meli import ApiException, RestClientApi, ApiClient
 from factura_sh.settings import MELI_CLIENT_ID
 
-# Thirdparty Library
-from datetime import datetime
+
+# Localfolder Library
 
 
 # ========================================================================== #
@@ -24,6 +25,7 @@ class SaleListView(TemplateView):
         query = self.kwargs['query']
         sales = []
 
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -154,6 +156,7 @@ class SaleChatView(TemplateView):
         my_id = UserConfig.objects.get(key='meli_user_id').value
         context['my_id'] = int(my_id)
 
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -181,6 +184,7 @@ def send_message(request):
         pack_id = request.POST.get('pack_id')
         message = request.POST.get('message')
 
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -216,7 +220,7 @@ def predefined_answer(request):
     response_data = {}
     if request.POST.get('action') == 'get':
         key = request.POST.get('key')
-        message = Answer.objects.get(key=key).message
+        message = Answer.objects.get(name=key).message
         response_data['message'] = message
         return JsonResponse(response_data)
 
@@ -224,7 +228,7 @@ def predefined_answer(request):
         key = request.POST.get('key')
         message = request.POST.get('message')
         m, created = Answer.objects.get_or_create(
-            key=key,
+            name=key,
             message=message
         )
         if created:

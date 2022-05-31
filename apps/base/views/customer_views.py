@@ -2,22 +2,20 @@
 import json
 
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalDeleteView, BSModalUpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
 
-# Thirdparty Library
-# from dal import autocomplete
-
 # Localfolder Library
 from apps.base.forms.customer_form import CustomerForm
 from apps.base.models.customer import Customer
-from apps.base.models.invoice import Invoice
 from apps.base.views.father_view import FatherListView, FatherDetailView, FatherCreateView, FatherUpdateView, \
     FatherTableListView, FatherDeleteView
+
+# Thirdparty Library
+# from dal import autocomplete
 
 OBJECT_FIELDS = [
     {'string': _("Username"), 'field': 'meli_username'},
@@ -96,9 +94,9 @@ class CustomerUpdateView(BSModalUpdateView, FatherUpdateView):
 
 def customers(request):
     if request.method == 'GET':
-        customers = Customer.objects.all()
+        customers_objects = Customer.objects.all()
         data = {}
-        for customer in customers:
+        for customer in customers_objects:
             data[customer.pk] = customer.name
             data['last'] = Customer.objects.latest('id').id
         return HttpResponse(json.dumps(data), content_type='application/json')
@@ -128,24 +126,35 @@ def get_customer_name(request):
     return HttpResponse("/")
 
 
+def get_customer_info(request):
+    if request.is_ajax():
+        customer_rfc = request.GET['rfc']
+        customer = Customer.objects.filter(rfc=customer_rfc).first()
+        if customer is not None:
+            data = {'response': 'ok', 'name': customer.name, 'cp': customer.cp, 'regimen': customer.regimen,}
+        else:
+            data = {'response': 'no', }
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    return HttpResponse("/")
+
+
 # Customer Invoice Views #
 def customer_invoice_list(request, s_pk):
-    customer = Customer.objects.get(pk=s_pk)
-    # customer_invoices = CustomerInvoice.objects.filter(customer_id=customer)
-    customer_invoices = Invoice.objects.filter(customer_invoice__customer_id=customer)
+    customer = Customer.objects.get(pk=s_pk).invoices.all()
+    # customer_invoices = Invoice.objects.filter(customer_invoice__customer_id=customer)
 
     return render(request, 'customer/customer_invoice_list.html',
-                  {'customer': s_pk, 'customer_name': customer.name, 'customer_invoices': customer_invoices})
+                  {'customer': s_pk, 'customer_name': customer.name, 'customer_invoices': customer.invoices.all()})
 
 
 def customer_invoices(request, s_pk):
     data = dict()
     if request.method == 'GET':
         customer = Customer.objects.get(pk=s_pk)
-        customer_invoices = Invoice.objects.filter(customer_invoice__customer_id=customer)
+        # customer_invoices = Invoice.objects.filter(customer_invoice__customer_id=customer)
         data['table'] = render_to_string(
             'customer/_customer_invoice_table.html',
-            {'customer': s_pk, 'customer_name': customer.name, 'customer_invoices': customer_invoices},
+            {'customer': s_pk, 'customer_name': customer.name, 'customer_invoices': customer.invoices.all()},
             request=request
         )
         return JsonResponse(data)

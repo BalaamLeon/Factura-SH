@@ -1,11 +1,9 @@
-from bootstrap_modal_forms.forms import BSModalModelForm
 from crispy_bootstrap5.bootstrap5 import FloatingField
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Div, HTML, Submit, Column, Field
+from crispy_forms.layout import Layout, Row, Div, HTML, Column, Field
 from django import forms
 from django.forms import models
 
-from apps.base.forms.custom_fields import PrependedText
 from apps.base.models.customer import Customer
 from apps.base.models.invoice import Invoice
 
@@ -110,7 +108,8 @@ class FacturaInvoiceForm(models.ModelForm):
                         <a class="img-tooltip">
                             <i class="fa fa-question-circle"></i>
                             <span>
-                                Es importante que el ID de la compra de Mercado Libre sea correcto, ya que será ahí donde adjuntaremos tu factura.
+                                Es importante que el ID de la compra de Mercado Libre sea correcto, 
+                                ya que será ahí donde adjuntaremos tu factura.
                                 <br>Lo puedes encontrar en la página del detalle de la compra.
                                 <img src="{% static 'img/id-compra-help.jpg' %}" />
                             </span>

@@ -14,7 +14,41 @@ from apps.base.models.customuser_config import UserConfig
 from apps.meli import ApiClient, OAuth20Api, ApiException
 
 
-def meli_auth(client_id, client_secret, refresh_token, access_token):
+def check_meli_session():
+    now = int(time())
+    expires_in = UserConfig.objects.get(key='expires_in').value
+    access_time = UserConfig.objects.get(key='access_time').value
+    expire_time = int(expires_in) + int(access_time)
+
+    if now > expire_time:
+        # MELI_APP = MeliApp()
+        client_id = '8367847789338992'
+        client_secret = 'qhTLXZ37Rt9omHx3RllnYSnNKV9SPKsl'
+        refresh_token = UserConfig.objects.get(key='refresh_token').value
+
+        # response = meli.get_refresh_token()
+        response = meli_auth(client_id, client_secret, refresh_token)
+        access_token = response['access_token']
+        refresh_token = response['refresh_token']
+        expires_in = response['expires_in']
+
+        access_time = int(time())
+        print(access_time)
+        keys = ("access_token",
+                "expires_in",
+                "access_time",
+                "refresh_token")
+        entities = (access_token,
+                    expires_in,
+                    access_time,
+                    refresh_token)
+        for i, k in enumerate(keys):
+            t = UserConfig.objects.get(key=k)
+            t.value = entities[i]  # change field
+            t.save()  # this will update only
+
+
+def meli_auth(client_id, client_secret, refresh_token):
     with ApiClient() as api_client:
         # Create an instance of the API class
         api_instance = OAuth20Api(api_client)
@@ -51,47 +85,15 @@ class UserLoginView(LoginView):
         if remember_me:
             self.request.session.set_expiry(1209600)
 
-        now = int(time())
-        expires_in = UserConfig.objects.get(key='expires_in').value
-        access_time = UserConfig.objects.get(key='access_time').value
-        expire_time = int(expires_in) + int(access_time)
-
-        if now > expire_time:
-            # MELI_APP = MeliApp()
-            CLIENT_ID = '8367847789338992'
-            CLIENT_SECRET = 'qhTLXZ37Rt9omHx3RllnYSnNKV9SPKsl'
-            REFRESH_TOKEN = UserConfig.objects.get(key='refresh_token').value
-            ACCESS_TOKEN = UserConfig.objects.get(key='access_token').value
-            # meli = Meli(CLIENT_ID, CLIENT_SECRET, refresh_token=REFRESH_TOKEN)
-            print("expired")
-
-            # response = meli.get_refresh_token()
-            response = meli_auth(CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, ACCESS_TOKEN)
-            access_token = response['access_token']
-            refresh_token = response['refresh_token']
-            expires_in = response['expires_in']
-
-            access_time = int(time())
-            print(access_time)
-            keys = ("access_token",
-                    "expires_in",
-                    "access_time",
-                    "refresh_token")
-            entities = (access_token,
-                        expires_in,
-                        access_time,
-                        refresh_token)
-            for i, k in enumerate(keys):
-                t = UserConfig.objects.get(key=k)
-                t.value = entities[i]  # change field
-                t.save()  # this will update only
+        check_meli_session()
 
         return super(UserLoginView, self).form_valid(form)
 
 
 # Logout view
 class LogoutView(View):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         logout(request)
         return redirect('User:login')
 
@@ -109,6 +111,6 @@ def create_user_picks(sender, instance, created, **kwargs):
         UserConfig.objects.create(key='access_time', value=1653327258)
         UserConfig.objects.create(key='refresh_token', value='TG-622637e69c44e5001bc96e75-86359928')
         UserConfig.objects.create(key='new_code', value='TG-622637e56b104e001a8d2423-86359928')
-        Answer.objects.create(key='Formulario',
+        Answer.objects.create(name='Formulario',
                               message='Puedes solicitar tu factura llenando el formulario del siguiente enlace:'
                                       '<a href="invoice_url"> Solicitud de factura </a>')

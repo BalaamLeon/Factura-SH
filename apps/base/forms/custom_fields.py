@@ -1,5 +1,3 @@
-import json
-
 from crispy_forms.layout import Field
 from crispy_forms.utils import TEMPLATE_PACK, render_field
 from django.utils.html import conditional_escape
@@ -91,6 +89,7 @@ class CustomFloatingFieldWithIcon(Field):
     template = "custom_fields/floating_field_with_icon_custom.html"
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields = list(args)
 
         if not hasattr(self, "attrs"):
@@ -133,4 +132,3 @@ class CustomFloatingFieldWithIcon(Field):
             extra_context=extra_context,
             **kwargs,
         )
-

@@ -1,43 +1,15 @@
 # Django Library
-from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DeleteView, DetailView, ListView, TemplateView
+from django.views.generic import DeleteView, DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
-
-# Thirdparty Library
-# from apps.sale.models import *
-
-# Localfolder Library
-
-
-# ========================================================================== #
-# class FatherTemplateView(TemplateView):
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['web_parameter'] = _web_parameter()
-#         context['parameter'] = _parameter()
-#         context['meta'] = _web_meta()
-#         context['count_plugin'] = _count_plugin
-#         context['company'] = Company.objects.filter(active=True)
-#         return context
-#
-#     class Meta:
-#         abstract = True
 
 
 # ========================================================================== #
 class FatherListView(ListView):
     template_name = 'base/list.html'
-    # EXLUDE_FROM_FILTER = (
-    #     'Company',
-    #     'Country',
-    #     'Courrency',
-    #     'Plugin',
-    #     'Sequence'
-    # )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -45,11 +17,6 @@ class FatherListView(ListView):
         verbose_name = self.model._meta.verbose_name
         verbose_name_plural = self.model._meta.verbose_name_plural
         context['page_title'] = '{}'.format(verbose_name_plural)
-        # context['web_parameter'] = _web_parameter()
-        # context['parameter'] = _parameter()
-        # context['meta'] = _web_meta()
-        # context['count_plugin'] = _count_plugin
-        # context['company'] = Company.objects.filter(active=True)
         context['title'] = '{}'.format(verbose_name)
         context['add_url'] = reverse_lazy('{}:add'.format(object_name))
         context['detail_url'] = '{}:detail'.format(object_name)
@@ -171,6 +138,10 @@ class FatherCreateView(CreateView):
 
 # ========================================================================== #
 class FatherUpdateView(UpdateView):
+    def __init__(self):
+        super(FatherUpdateView, self).__init__()
+        self.object = None
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         object_name = self.model._meta.object_name
@@ -214,6 +185,7 @@ class FatherUpdateView(UpdateView):
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
+
         if form.is_valid():
             self.object = form.save(commit=False)
             self.object.save()
@@ -230,6 +202,10 @@ class FatherUpdateView(UpdateView):
 class FatherDeleteView(DeleteView):
     template_name = 'common/delete.html'
     success_message = ''
+
+    def __init__(self):
+        super().__init__()
+        self.object = None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -259,6 +235,10 @@ class FatherDeleteView(DeleteView):
 
 # ========================================================================== #
 class FatherModalCreateView(CreateView):
+    def __init__(self):
+        super().__init__()
+        self.object = None
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         object_name = self.model._meta.object_name

@@ -2,79 +2,25 @@
 import json
 from datetime import datetime
 
-import requests
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalDeleteView, BSModalUpdateView
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
-
-# Thirdparty Library
-# from dal import autocomplete
-
-# Localfolder Library
+# Local folder Library
 from django.views.generic import TemplateView, FormView
 
 from apps.base.forms.invoice_form import InvoiceForm, SendCFDIForm, InvoiceStatusForm, InvoiceFromSaleForm
 from apps.base.models import Customer, UserConfig, Answer
 from apps.base.models.invoice import Invoice
-from apps.base.models.invoice import Invoice
 from apps.base.models.sale import TrackedSale
-from apps.base.views.father_view import FatherListView, FatherDetailView, FatherCreateView, FatherUpdateView, \
-    FatherTableListView, FatherDeleteView
+from apps.base.views.auth_view import check_meli_session
+from apps.base.views.father_view import FatherDetailView, FatherCreateView, FatherUpdateView, \
+    FatherDeleteView
 from apps.meli import ApiClient, RestClientApi, ApiException
 
-OBJECT_FIELDS = [
-    {'string': _("Customer"), 'field': 'customer'},
-    {'string': _("Meli Id"), 'field': 'meli_id'},
-    {'string': _("Total"), 'field': 'total'},
-    {'string': _("Uso de CFDI"), 'field': 'uso_cfdi'},
-    {'string': _("Forma de Pago"), 'field': 'forma_pago'},
-    {'string': _("Status"), 'field': 'status'},
-]
-
-OBJECT_LIST_FIELDS = [
-    {'string': _("RFC"), 'field': 'customer_rfc'},
-    {'string': _("ID Venta"), 'field': 'meli_id'},
-    {'string': _("Total"), 'field': 'total'},
-    {'string': _("Uso de CFDI"), 'field': 'get_uso_cfdi_display'},
-    {'string': _("Forma de Pago"), 'field': 'get_forma_pago_display'},
-    {'string': _("Status"), 'field': 'get_status_display'},
-]
-
-OBJECT_DETAIL_FIELDS = [
-    {'string': _("Forma de Pago"), 'field': 'get_forma_pago_display'},
-    {'string': _("RFC"), 'field': 'customer_rfc'},
-    {'string': _("Name"), 'field': 'customer_name'},
-    {'string': _("CP"), 'field': 'customer_cp'},
-    {'string': _("Uso de CFDI"), 'field': 'get_uso_cfdi_display'},
-    {'string': _("Regimen"), 'field': 'customer_regimen'},
-    # {'string': _("Username"), 'field': 'customer_meli_username'},
-    {'string': _("ID Venta"), 'field': 'meli_id'},
-    {'string': _("Total"), 'field': 'total'},
-    {'string': _("Status"), 'field': 'get_status_display'},
-]
-
-OBJECT_FORM_FIELDS = [
-    'customer',
-    'meli_id',
-    'total',
-    'uso_cfdi',
-    'forma_pago',
-    'status',
-]
-
-
-# # ========================================================================== #
-# class InvoiceListView(FatherListView):
-#     model = Invoice
-#     template_name = 'common/list.html'
-#     extra_context = {'fields': OBJECT_LIST_FIELDS,
-#                      'modal_add': True,
-#                      }
 
 # ========================================================================== #
 class InvoiceListView(TemplateView):
@@ -89,6 +35,7 @@ class InvoiceListView(TemplateView):
                           'cancelled': ('4', _('Cancelled Invoices'))}
         invoices = []
 
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -96,19 +43,21 @@ class InvoiceListView(TemplateView):
 
             try:
                 if query == 'tracking':
-                    db_invoices = Invoice.objects.filter(invoice_tracking__tracking=True)
-                    context['page_title'] = 'Invoices with tracking'
+                    db_invoices = Invoice.objects.filter(tracking__tracking=True)
+                    context['page_title'] = _('Invoices with tracking')
                 elif query == 'all':
                     db_invoices = Invoice.objects.all()
-                    context['page_title'] = 'Invoices'
+                    context['page_title'] = _('Invoices')
                 else:
                     db_invoices = Invoice.objects.filter(status=STATUS_CHOICES[query][0])
                     context['page_title'] = STATUS_CHOICES[query][1]
                 for invoice in db_invoices:
-                    if TrackedSale.objects.filter(invoice=invoice).exists():
-                        tracked = TrackedSale.objects.get(invoice=invoice).tracking
+                    tracked_sale = invoice.tracking.first()
+                    if tracked_sale is not None:
+                        tracked = tracked_sale.tracking
                     else:
                         tracked = False
+
                     pack_id = invoice.meli_id
                     resource = 'packs/' + pack_id
                     response = None
@@ -216,6 +165,7 @@ class InvoiceDetailView(FatherDetailView):
         shipping = 0
         total = 0
 
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -290,6 +240,7 @@ def get_cfdi(request, pack_id, file_id):
         factura_resource = 'packs/' + str(pack_id) + '/fiscal_documents/' + file_id
         # print(factura_resource)
         factura_response = ''
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -312,7 +263,7 @@ class SendCFDI(FormView):
     def get_initial(self):
         initial = super(SendCFDI, self).get_initial()
         initial['send_message'] = True
-        initial['message'] = Answer.objects.get(key='Adjuntada').message
+        initial['message'] = Answer.objects.get(name='Adjuntada').message
         invoice = Invoice.objects.get(pk=self.kwargs['id'])
         initial['pack_id'] = invoice.meli_id
         initial['invoice_id'] = self.kwargs['id']
@@ -325,6 +276,7 @@ class SendCFDI(FormView):
         invoice.status = '3'
         invoice.save()
 
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -353,7 +305,6 @@ class SendCFDI(FormView):
 # ========================================================================== #
 class InvoiceCreateView(BSModalCreateView, FatherCreateView):
     model = Invoice
-    # fields = OBJECT_FORM_FIELDS
     form_class = InvoiceForm
     template_name = 'common/modal_form.html'
     success_message = 'Success: Invoice was created.'
@@ -363,17 +314,18 @@ class InvoiceCreateView(BSModalCreateView, FatherCreateView):
 # ========================================================================== #
 class InvoiceFromSaleCreateView(BSModalCreateView, FatherCreateView):
     model = Invoice
-    # fields = OBJECT_FORM_FIELDS
     form_class = InvoiceFromSaleForm
     template_name = 'common/modal_form.html'
     success_message = 'Success: Invoice was created.'
     success_url = reverse_lazy('Invoice:list', kwargs={'query': 'pending'})
+    extra_context = {'js_files': ['dist/js/invoice_from_sale.js']}
 
     def get_initial(self):
         initial = super(InvoiceFromSaleCreateView, self).get_initial()
         pack_id = self.kwargs['id']
         initial['meli_id'] = pack_id
 
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
@@ -415,6 +367,14 @@ class InvoiceFromSaleCreateView(BSModalCreateView, FatherCreateView):
             initial['forma_pago'] = '05'
         else:
             initial['forma_pago'] = '01'
+
+        customer = Customer.objects.filter(meli_username=response['buyer']['nickname']).first()
+        if customer is not None:
+            initial['rfc'] = customer.rfc
+            initial['name'] = customer.name
+            initial['cp'] = customer.cp
+            initial['regimen'] = customer.regimen
+
         return initial
 
     def form_valid(self, form):
@@ -425,15 +385,14 @@ class InvoiceFromSaleCreateView(BSModalCreateView, FatherCreateView):
         cp = form.cleaned_data['cp']
         regimen = form.cleaned_data['regimen']
 
-        customer, created = Customer.objects.get_or_create(meli_username=meli_username,
-                                                           rfc=rfc,
-                                                           name=name,
-                                                           cp=cp,
-                                                           regimen=regimen)
-        print(customer)
-        print(self.object)
+        customer, created = Customer.objects.get_or_create(rfc=rfc)
+        customer.meli_username = meli_username
+        customer.rfc = rfc
+        customer.name = name
+        customer.cp = cp
+        customer.regimen = regimen
+        customer.save()
         self.object.customer = customer
-        print(self.object)
         self.object.save()
         return super(InvoiceFromSaleCreateView, self).form_valid(form)
 
@@ -484,6 +443,7 @@ class InvoicesTable(TemplateView):
                           'cancelled': '4'}
         invoices = []
 
+        check_meli_session()
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value

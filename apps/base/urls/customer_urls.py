@@ -4,7 +4,7 @@ from django.urls import path
 # Localfolder Library
 from apps.base.views.customer_views import CustomerListView, CustomerDetailView, CustomerCreateView, CustomerUpdateView, \
     CustomerDeleteView, customer_get_id, get_customer_name, customers, \
-    customer_invoice_list, customer_invoices, CustomersTable
+    customer_invoice_list, customer_invoices, CustomersTable, get_customer_info
 
 app_name = 'Customer'
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('delete/<int:pk>/', CustomerDeleteView.as_view(), name='delete'),
     path('get_id', customer_get_id, name='customer_get_id'),
     path('get_name', get_customer_name, name='get_customer_name'),
+    path('get_info', get_customer_info, name='get_info'),
     path('list_table/', CustomersTable.as_view(), name='customers_list_table'),
     path('all_data', customers, name='customers'),
 

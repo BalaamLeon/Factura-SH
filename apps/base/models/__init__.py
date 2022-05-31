@@ -4,6 +4,7 @@ from .customuser import CustomUser
 from .customuser_config import UserConfig
 from .invoice import Invoice
 from .predefined_answers import Answer
+from .sale import TrackedSale
 
 __author__ = 'Balaam'
 
@@ -13,7 +14,9 @@ __all__ = [
     'CustomUser',
     'Invoice',
     'Answer',
-    'UserConfig'
+    'UserConfig',
+    'TrackedSale'
 ]
+
 
 

@@ -46,35 +46,20 @@ class Invoice(BaseEntity):
         ('4', 'Cancelado'),
     )
 
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='invoices')
     meli_id = models.CharField(max_length=20, unique=True)
     total = models.FloatField()
     uso_cfdi = models.CharField(max_length=3, choices=USO_CFDI_CHOICES)
     forma_pago = models.CharField(max_length=2, choices=FORMA_PAGO_CHOICES)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='1')
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.meli_id
 
     def name(self):
         return self.meli_id
-
-    def customer_meli_username(self):
-        return self.customer.meli_username
-
-    def customer_rfc(self):
-        return self.customer.rfc
-
-    def customer_name(self):
-        return self.customer.name
-
-    def customer_cp(self):
-        return self.customer.cp
-
-    def customer_regimen(self):
-        return self.customer.regimen
-
-
 
     class Meta:
         verbose_name = _("Invoice")
