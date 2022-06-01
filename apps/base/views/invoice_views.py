@@ -150,6 +150,7 @@ class InvoiceListView(TemplateView):
 
         invoices.sort(key=lambda item: item['date'], reverse=True)
         context['invoices'] = invoices
+        context['query'] = query
         return context
 
 
@@ -405,6 +406,9 @@ class InvoiceFromSaleCreateView(BSModalCreateView, FatherCreateView):
 # # ========================================================================== #
 class InvoiceDeleteView(BSModalDeleteView, FatherDeleteView):
     model = Invoice
+
+    def get_success_url(self):
+        return reverse_lazy('Invoice:list', kwargs={'query': self.kwargs['query']})
 
 
 class ProductInvoiceCreateModalView(BSModalCreateView, FatherCreateView):

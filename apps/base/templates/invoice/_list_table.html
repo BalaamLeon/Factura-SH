@@ -190,7 +190,7 @@
                                     <li style="display:flex;" tabindex="0">
                                         <button class="delete-btn btn btn-light"
                                                 id="{{ invoice.pk }}_delete_btn"
-                                                data-form-url="{% url 'Invoice:delete' invoice.pk %}">
+                                                data-form-url="{% url 'Invoice:delete' query invoice.pk %}">
                                             <i class="fa fa-pen_to_square"></i> Eliminar solicitud
                                         </button>
                                     </li>

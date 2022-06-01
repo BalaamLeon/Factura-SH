@@ -5,22 +5,24 @@
 <div id="conversation" class="direct-chat-messages" style="display: flex; flex-direction: column-reverse;">
 
     {% for message in messages %}
-    {% if message.from.user_id == my_id %}
+    {% if message.from == my_id %}
     <!-- Message to the right -->
     <div class="direct-chat-msg right">
-        <!--        <div class="direct-chat-infos clearfix">-->
-        <!--            <span class="direct-chat-name float-right">Sabores Hidalgo</span>-->
-        <!--            <span class="direct-chat-timestamp float-right">{{ message.message_date.created|get_date_from_str }}</span>-->
-        <!--        </div>-->
-        <!-- /.direct-chat-infos -->
         <img class="direct-chat-img" src="{% static 'img/logo.jpg' %}" alt="message user image">
         <!-- /.direct-chat-img -->
         <div class="direct-chat-text"
              style="background-color: #007bff; border-color: #007bff; color: #fff; float: right; margin-right: 10px !important;">
-            {{ message.text}}
+            {{ message.text }}
+            {% if message.attachment %}
+            {% if message.attachment.type|slice:":5" == 'image' %}
+            <img src="{{ message.attachment.url }}" style="max-width: 100%; max-height: 100%;">
+            {% else %}
+            <a href="{{ message.attachment.url }}" target="_blank">{{ message.attachment.filename }}</a>
+            {% endif %}
+            {% endif %}
         </div>
         <div class="direct-chat-infos clearfix" style="padding: 0 50px 0 50px; clear: right;">
-            <span class="direct-chat-timestamp float-right">{{ message.message_date.created|get_date_from_str }}</span>
+            <span class="direct-chat-timestamp float-right">{{ message.date|get_date_from_str }}</span>
         </div>
         <!-- /.direct-chat-text -->
     </div>
@@ -29,19 +31,21 @@
 
     <!-- Message. Default to the left -->
     <div class="direct-chat-msg">
-        <!--        <div class="direct-chat-infos clearfix">-->
-        <!--            <span class="direct-chat-name float-left">{{ buyer_name }}</span>-->
-        <!--            <span class="direct-chat-timestamp float-left">  {{ message.message_date.created|get_date_from_str }}</span>-->
-        <!--        </div>-->
-        <!-- /.direct-chat-infos -->
         <img class="direct-chat-img" src="{% static 'img/default-avatar.png' %}" alt="message user image">
         <!-- /.direct-chat-img -->
         <div class="direct-chat-text">
             {{ message.text }}
+            {% if message.attachment %}
+            {% if message.attachment.type|slice:":5" == 'image' %}
+            <img src="{{ message.attachment.url }}" style="max-width: 100%; max-height: 100%;">
+            {% else %}
+            <a href="{{ message.attachment.url }}" target="_blank">{{ message.attachment.filename }}</a>
+            {% endif %}
+            {% endif %}
         </div>
 
         <div class="direct-chat-infos clearfix" style="padding: 0 50px 0 50px;">
-            <span class="direct-chat-timestamp float-left">{{ message.message_date.created|get_date_from_str }}</span>
+            <span class="direct-chat-timestamp float-left">{{ message.date|get_date_from_str }}</span>
         </div>
         <!-- /.direct-chat-text -->
     </div>

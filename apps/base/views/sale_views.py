@@ -155,6 +155,7 @@ class SaleChatView(TemplateView):
         context['answers'] = Answer.objects.all()
         my_id = UserConfig.objects.get(key='meli_user_id').value
         context['my_id'] = int(my_id)
+        messages = []
 
         check_meli_session()
         with ApiClient() as api_client:
@@ -164,9 +165,28 @@ class SaleChatView(TemplateView):
             try:
                 # Resource path GET
                 api_response = api_instance.resource_get(resource, access_token)
-                messages = api_response['messages']
-                # messages.reverse()
-                messages.sort(key=lambda item: item['message_date']['created'], reverse=True)
+                msgs = api_response['messages']
+                msgs.sort(key=lambda item: item['message_date']['created'], reverse=True)
+                for msg in msgs:
+                    m = {
+                        'from': msg['from']['user_id'],
+                        'text': msg['text'],
+                        'date': msg['message_date']['created'],
+                    }
+                    if msg['message_attachments']:
+                        try:
+                            attachment_resource = 'messages/attachments/' + msg['message_attachments'][0]['filename'] \
+                                                  + '?tag=post_sale'
+                            attachment_response = api_instance.resource_get_file(attachment_resource, access_token)
+                            m['attachment'] = {'url': attachment_response[0],
+                                               'type': attachment_response[2].get('Content-Type'),
+                                               'filename': attachment_response[2].get('x-original-filename')
+                                               }
+                            print(m['attachment'])
+                        except ApiException as e:
+                            print("Exception in attachment info: \n" + e)
+                    messages.append(m)
+
                 context['messages'] = messages
                 context['sale_id'] = sale_id
                 context['buyer_name'] = self.kwargs['buyer']

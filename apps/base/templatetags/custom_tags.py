@@ -42,7 +42,7 @@ def page_header(title):
 def get_date_from_str(value):
     months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun',
               'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
-    return value[8:10] + ' de ' + months[int(value[5:7]) + 1] + ' - ' + value[11:16]
+    return value[8:10] + ' de ' + months[int(value[5:7]) - 1] + ' - ' + value[11:16]
 
 
 @register.filter
