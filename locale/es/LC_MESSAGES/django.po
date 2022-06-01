@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:33-0500\n"
+"POT-Creation-Date: 2022-06-01 13:34-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,8 +117,16 @@ msgid "Sign in to start your session"
 msgstr "Inicia sesión para comenzar"
 
 #: .\apps\base\templates\auth\login.html:22
+#: .\apps\base\templates\auth\signup.html:21
 msgid "Remember me"
 msgstr "Recordarme"
+
+#: .\apps\base\templates\auth\login.html:28
+#: .\apps\base\templates\auth\signup.html:27
+#, fuzzy
+#| msgid "Sign up"
+msgid "Sign In"
+msgstr "Registrarse"
 
 #: .\apps\base\templates\common\_table_list.html:46
 msgid "Edit"
@@ -234,6 +242,34 @@ msgstr "Solicitudes a enviar"
 #: .\apps\base\templates\invoice\send_cfdi.html:13
 msgid "Send"
 msgstr "Enviar"
+
+#: .\apps\base\templates\sales\modal_chat.html:7
+msgid "Sale"
+msgstr "Venta"
+
+#: .\apps\base\templates\sales\modal_chat.html:28
+msgid "New"
+msgstr "Nuevo"
+
+#: .\apps\base\templates\sales\modal_chat.html:30
+msgid "Predefined answers"
+msgstr "Respuestas rápidas"
+
+#: .\apps\base\templates\sales\modal_chat.html:32
+msgid "New Key"
+msgstr "Nueva clave"
+
+#: .\apps\base\templates\sales\modal_chat.html:36
+msgid "Your message"
+msgstr "Tu mensaje"
+
+#: .\apps\base\templates\sales\modal_chat.html:45
+msgid ""
+"Do not include personal info, offensive language, links to social networks "
+"or Mercado Pago."
+msgstr ""
+"No incluyas datos personales, lenguaje ofensivo, links a redes sociales o "
+"Mercado Pago."
 
 #: .\apps\base\templates\usercustom\login.html:6
 #: .\apps\base\templates\usercustom\login.html:54

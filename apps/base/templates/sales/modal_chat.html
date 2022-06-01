@@ -4,7 +4,7 @@
     {% csrf_token %}
 
     <div class="modal-header">
-        <h5 class="modal-title">{{ buyer_name }} - Venta #{{ sale_id }}</h5>
+        <h5 class="modal-title">{{ buyer_name }} - {% translate 'Sale' %} #{{ sale_id }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
 
@@ -25,15 +25,15 @@
                         {% for answer in answers %}
                         <option value="{{ answer.message }}">{{ answer.name }}</option>
                         {% endfor %}
-                        <option value="new">New</option>
+                        <option value="new">{% translate 'New' %}</option>
                     </select>
-                    <label for="answers">Predefined answers</label>
+                    <label for="answers">{% translate 'Predefined answers' %}</label>
                 </div>
-                <input id="new_key" placeholder="New Key" style="width: 100%;display:none;">
+                <input id="new_key" placeholder="{% translate 'New Key' %}" style="width: 100%;display:none;">
             </div>
             <div class="form-floating col-8" style="padding-right:0;">
                 <textarea type="text" id="message" name="message" class="form-control" maxlength="350"></textarea>
-                <label for="message">Your message.</label>
+                <label for="message">{% translate 'Your message' %}</label>
             </div>
             <span class="input-group-append">
                 <button type="submit" class="btn btn-primary btn-circle"><span
@@ -41,10 +41,10 @@
             </span>
         </div>
         <div style="width: 100%;">
-            <small class="col-11 text-muted">No incluyas datos personales, lenguaje ofensivo, links a redes sociales o
-                Mercado
-                Pago.</small>
-            <small class="col-1 float-right text-muted" id="characters-left">25/350</small>
+            <small class="col-11 text-muted">
+                {% translate 'Do not include personal info, offensive language, links to social networks or Mercado Pago.' %}
+                </small>
+            <small class="col-1 float-right text-muted" id="characters-left">0/350</small>
         </div>
     </div>
 </form>

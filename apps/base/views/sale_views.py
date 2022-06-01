@@ -3,7 +3,7 @@
 # Thirdparty Library
 from datetime import datetime
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.generic import TemplateView
 
 from apps.base.models import Answer, Invoice
@@ -169,22 +169,14 @@ class SaleChatView(TemplateView):
                 msgs.sort(key=lambda item: item['message_date']['created'], reverse=True)
                 for msg in msgs:
                     m = {
+                        'id': msg['id'],
                         'from': msg['from']['user_id'],
                         'text': msg['text'],
                         'date': msg['message_date']['created'],
                     }
                     if msg['message_attachments']:
-                        try:
-                            attachment_resource = 'messages/attachments/' + msg['message_attachments'][0]['filename'] \
-                                                  + '?tag=post_sale'
-                            attachment_response = api_instance.resource_get_file(attachment_resource, access_token)
-                            m['attachment'] = {'url': attachment_response[0],
-                                               'type': attachment_response[2].get('Content-Type'),
-                                               'filename': attachment_response[2].get('x-original-filename')
-                                               }
-                            print(m['attachment'])
-                        except ApiException as e:
-                            print("Exception in attachment info: \n" + e)
+                        m['attachment'] = {'file': msg['message_attachments'][0]['filename'],
+                                           'type': msg['message_attachments'][0]['type']}
                     messages.append(m)
 
                 context['messages'] = messages
@@ -195,6 +187,22 @@ class SaleChatView(TemplateView):
                 print("Exception when calling OAuth20Api->get_token: %s\n" % e)
 
         return context
+
+
+def get_msg_attachment(request, id):
+    with ApiClient() as api_client:
+        api_instance = RestClientApi(api_client)
+        access_token = UserConfig.objects.get(key='access_token').value
+        try:
+            attachment_resource = 'messages/attachments/' + id + '?tag=post_sale'
+            attachment_response = api_instance.resource_get_file(attachment_resource, access_token)
+            with open(attachment_response[0], 'rb') as file:
+                response = HttpResponse(file.read(),
+                                        content_type=attachment_response[2].get('Content-Type').split()[0])
+                response['Content-Disposition'] = 'inline;filename=' + attachment_response[2]['x-original-filename']
+            return response
+        except ApiException as e:
+            print("Exception in attachment info: \n" + e)
 
 
 def send_message(request):
