@@ -5,6 +5,7 @@ from datetime import datetime
 
 from django.http import JsonResponse, HttpResponse
 from django.views.generic import TemplateView
+from django.utils.translation import ugettext_lazy as _
 
 from apps.base.models import Answer, Invoice
 from apps.base.models.customuser_config import UserConfig
@@ -34,6 +35,7 @@ class SaleListView(TemplateView):
             meli_sales = []
             try:
                 if query == 'new_messages':
+                    context['page_title'] = _('Sales with new messages')
                     resource = 'messages/unread?tag=post_sale&role=seller'
                     api_response = api_instance.resource_get(resource, access_token)
                     for sale in api_response['results']:
@@ -41,6 +43,7 @@ class SaleListView(TemplateView):
                             pack_id = sale['resource'].split('/')[2]
                             meli_sales.append(str(pack_id))
                 elif query == 'all':
+                    context['page_title'] = _('Recent sales')
                     resource = 'orders/search/recent?seller=' + my_id + '&limit=10&sort=date_desc'
                     api_response = api_instance.resource_get(resource, access_token)
                     for sale in api_response['results']:

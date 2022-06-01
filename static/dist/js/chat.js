@@ -36,6 +36,7 @@ answer_select.addEventListener("change", function(){
             } else {
                 message_input.value = answer_select.value;
             }
+            OnInput();
             new_answer_key.style.display = "none";
     }
 })

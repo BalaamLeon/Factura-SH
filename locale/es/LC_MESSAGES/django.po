@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-01 13:34-0500\n"
+"POT-Creation-Date: 2022-06-01 13:48-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,15 +92,15 @@ msgstr "Solicitudes"
 
 #: .\apps\base\models\predefined_answers.py:19
 msgid "Predefined Answer"
-msgstr "Respuesta predefinida"
+msgstr "Respuesta rápida"
 
 #: .\apps\base\models\predefined_answers.py:20 .\templates\sidebar.html:161
 msgid "Predefined Answers"
-msgstr "Respuestas predefinidas"
+msgstr "Respuestas rápidas"
 
 #: .\apps\base\models\sale.py:17
 msgid "Tracked sale"
-msgstr "Venta con seguiimiento"
+msgstr "Venta con seguimiento"
 
 #: .\apps\base\models\sale.py:18
 msgid "Tracked Sales"
@@ -448,6 +448,14 @@ msgstr "Solicitudes canceladas"
 #| msgid "With tracking"
 msgid "Invoices with tracking"
 msgstr "Con seguimiento"
+
+#: .\apps\base\views\sale_views.py:38
+msgid "Sales with new messages"
+msgstr "Ventas con mensajes nuevos"
+
+#: .\apps\base\views\sale_views.py:46
+msgid "Recent sales"
+msgstr "Ventas recientes"
 
 #: .\factura_sh\settings.py:145
 msgid "English"
