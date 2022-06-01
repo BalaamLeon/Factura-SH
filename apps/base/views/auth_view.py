@@ -114,3 +114,7 @@ def create_user_picks(sender, instance, created, **kwargs):
         Answer.objects.create(name='Formulario',
                               message='Puedes solicitar tu factura llenando el formulario del siguiente enlace:'
                                       '<a href="invoice_url"> Solicitud de factura </a>')
+        Answer.objects.create(name='Adjuntada',
+                              message='¡Hola!\\n'
+                                      'Ya adjuntamos tu factura. La puedes encontrar en la página del detalle '
+                                      'de tu compra.\\nQuedamos al pendiente para cualquier aclaración. Saludos.')

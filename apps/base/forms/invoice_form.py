@@ -93,7 +93,7 @@ class SendCFDIForm(forms.Form):
         # self.helper.include_media = False
         self.helper.layout = Layout(
             Row(FloatingField('files', css_class='col-md-12')),
-            Field('send_message', css_class='col-md-12'),
+            Field('send_message'),
             Row(FloatingField('message', css_class='col-md-12'), css_class='send_cfdi_message'),
             Row(FloatingField('pack_id', css_class='col-md-12')),
             Row(FloatingField('invoice_id', css_class='col-md-12')),
