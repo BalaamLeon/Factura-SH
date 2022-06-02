@@ -263,7 +263,7 @@ def mark_as_read(request):
             api_instance = RestClientApi(api_client)
             my_id = UserConfig.objects.get(key='meli_user_id').value
             access_token = UserConfig.objects.get(key='access_token').value
-            resource = 'messages/packs/' + str(s_id) + '/sellers/' + my_id + '?tag=post_sale'
+            resource = 'messages/packs/' + str(s_id) + '/sellers/' + my_id + '?tag=post_sale&mark_as_read=true'
             try:
                 # Resource path GET
                 api_response = api_instance.resource_get_with_http_info(resource, access_token)
