@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-01 13:48-0500\n"
+"POT-Creation-Date: 2022-06-02 18:23-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -247,29 +247,21 @@ msgstr "Enviar"
 msgid "Sale"
 msgstr "Venta"
 
-#: .\apps\base\templates\sales\modal_chat.html:28
+#: .\apps\base\templates\sales\modal_chat.html:35
 msgid "New"
 msgstr "Nuevo"
 
-#: .\apps\base\templates\sales\modal_chat.html:30
+#: .\apps\base\templates\sales\modal_chat.html:37
 msgid "Predefined answers"
 msgstr "Respuestas rápidas"
 
-#: .\apps\base\templates\sales\modal_chat.html:32
+#: .\apps\base\templates\sales\modal_chat.html:39
 msgid "New Key"
 msgstr "Nueva clave"
 
-#: .\apps\base\templates\sales\modal_chat.html:36
+#: .\apps\base\templates\sales\modal_chat.html:43
 msgid "Your message"
 msgstr "Tu mensaje"
-
-#: .\apps\base\templates\sales\modal_chat.html:45
-msgid ""
-"Do not include personal info, offensive language, links to social networks "
-"or Mercado Pago."
-msgstr ""
-"No incluyas datos personales, lenguaje ofensivo, links a redes sociales o "
-"Mercado Pago."
 
 #: .\apps\base\templates\usercustom\login.html:6
 #: .\apps\base\templates\usercustom\login.html:54
@@ -449,13 +441,21 @@ msgstr "Solicitudes canceladas"
 msgid "Invoices with tracking"
 msgstr "Con seguimiento"
 
-#: .\apps\base\views\sale_views.py:38
+#: .\apps\base\views\sale_views.py:41
 msgid "Sales with new messages"
 msgstr "Ventas con mensajes nuevos"
 
-#: .\apps\base\views\sale_views.py:46
+#: .\apps\base\views\sale_views.py:49
 msgid "Recent sales"
 msgstr "Ventas recientes"
+
+#: .\apps\base\views\sale_views.py:272
+msgid "Marked as read"
+msgstr "Marcar como leído"
+
+#: .\apps\base\views\sale_views.py:276
+msgid "Something went wrong"
+msgstr "Algo salió mal"
 
 #: .\factura_sh\settings.py:145
 msgid "English"
@@ -535,3 +535,10 @@ msgstr "Ventas"
 #: .\templates\sidebar.html:144
 msgid "New messages"
 msgstr "Mensajes nuevos"
+
+#~ msgid ""
+#~ "Do not include personal info, offensive language, links to social "
+#~ "networks or Mercado Pago."
+#~ msgstr ""
+#~ "No incluyas datos personales, lenguaje ofensivo, links a redes sociales o "
+#~ "Mercado Pago."

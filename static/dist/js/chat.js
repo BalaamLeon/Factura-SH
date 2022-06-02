@@ -74,7 +74,7 @@ $('#mark_as_read').click(function(){
         success:function(json){
             if(json.status == 200){ // meaning that everyhting went ok
                 toastr.success(json.message);
-                window.location.assign(json.url);
+                document.location.reload(true);
              }
              else{
                 toastr.error(json.message);
