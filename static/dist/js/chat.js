@@ -61,6 +61,31 @@ function save_answer(key, message){
     });
 }
 
+$('#mark_as_read').click(function(){
+    var url = $(this).data('form-url');
+    $.ajax({
+        type:'POST',
+        url:url,
+        data:{
+            s_id: $('#pack_id').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success:function(json){
+            if(json.status == 200){ // meaning that everyhting went ok
+                toastr.success(json.message);
+                window.location.assign(json.url);
+             }
+             else{
+                toastr.error(json.message);
+             }
+        },
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+});
+
 
 $('#message-form').on("submit", function (event) {
     event.preventDefault();

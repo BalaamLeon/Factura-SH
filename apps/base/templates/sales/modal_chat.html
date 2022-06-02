@@ -5,7 +5,14 @@
 
     <div class="modal-header">
         <h5 class="modal-title">{{ buyer_name }} - {% translate 'Sale' %} #{{ sale_id }}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-end">
+            <button type="button" id="mark_as_read" class="btn btn-light" data-bs-dismiss="modal"
+                    data-form-url="{% url 'Sale:mark_as_read' %}"
+                    aria-label="Mark as read">
+                <i class="fas fa-envelope-open-text"></i> Mark as read
+            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
     </div>
 
     <div class="modal-body">
@@ -42,8 +49,9 @@
         </div>
         <div style="width: 100%;">
             <small class="col-11 text-muted">
-                {% translate 'Do not include personal info, offensive language, links to social networks or Mercado Pago.' %}
-                </small>
+                {% translate 'Do not include personal info, offensive language, links to social networks or Mercado
+                Pago.' %}
+            </small>
             <small class="col-1 float-right text-muted" id="characters-left">0/350</small>
         </div>
     </div>

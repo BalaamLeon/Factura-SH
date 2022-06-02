@@ -1,9 +1,12 @@
 # Django Library
 
 # Thirdparty Library
+import json
 from datetime import datetime
 
 from django.http import JsonResponse, HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
 
@@ -51,6 +54,7 @@ class SaleListView(TemplateView):
                         meli_sales.append(str(pack_id))
 
                 for pack_id in meli_sales:
+
                     try:
                         invoice = Invoice.objects.get(meli_id=pack_id)
                     except Invoice.DoesNotExist:
@@ -62,21 +66,23 @@ class SaleListView(TemplateView):
 
                     try:
                         response = api_instance.resource_get(resource, access_token)
-                        resource = 'orders/' + str(response['orders'][0]['id'])
+                        order_id = str(response['orders'][0]['id'])
+                        resource = 'orders/' + order_id
                         response = api_instance.resource_get(resource, access_token)
-
                     except ApiException as e:
                         print('Exception in pack info')
-
                         try:
-                            resource = 'orders/' + pack_id
+                            order_id = pack_id
+                            resource = 'orders/' + order_id
                             response = api_instance.resource_get(resource, access_token)
+                            pack_id = str(response['pack_id'])
 
                         except ApiException as e:
                             print('Exception in order info')
 
                     try:
-                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id + '?mark_as_read=false'
+                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/'\
+                                       + my_id + '?tag=post_sale&mark_as_read=false'
                         msg_response = api_instance.resource_get(msg_resource, access_token)
 
                         conversation_status = msg_response['conversation_status']['status']
@@ -88,6 +94,7 @@ class SaleListView(TemplateView):
 
                     s = {
                         'pack_id': pack_id,
+                        'order_id': order_id,
                         'channel': response['context']['channel'],
                         'id': response['id'],
                         'date': datetime.fromisoformat(response['date_created']),
@@ -164,7 +171,7 @@ class SaleChatView(TemplateView):
         with ApiClient() as api_client:
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
-            resource = 'messages/packs/' + str(sale_id) + '/sellers/' + my_id + '?mark_as_read=false'
+            resource = 'messages/packs/' + str(sale_id) + '/sellers/' + my_id + '?tag=post_sale&mark_as_read=false'
             try:
                 # Resource path GET
                 api_response = api_instance.resource_get(resource, access_token)
@@ -245,6 +252,34 @@ def send_message(request):
         response_data['time'] = now.strftime("%d de %b - %H:%M")
 
         return JsonResponse(response_data)
+
+
+def mark_as_read(request):
+    response_data = {}
+    if request.POST.get('action') == 'post':
+        s_id = request.POST.get('s_id')
+        check_meli_session()
+        with ApiClient() as api_client:
+            api_instance = RestClientApi(api_client)
+            my_id = UserConfig.objects.get(key='meli_user_id').value
+            access_token = UserConfig.objects.get(key='access_token').value
+            resource = 'messages/packs/' + str(s_id) + '/sellers/' + my_id + '?tag=post_sale'
+            try:
+                # Resource path GET
+                api_response = api_instance.resource_get_with_http_info(resource, access_token)
+                if api_response[1] == 200:
+                    response_data = {'status': 200,
+                                     'message': str(_("Marked as read")),
+                                     'url': str(reverse_lazy('Sale:list', kwargs={'query': 'new_messages'}))}
+                else:
+                    response_data = {'status': 300,
+                                     'message': str(_("Something went wrong")),
+                                     'url': str(reverse_lazy('Sale:list', kwargs={'query': 'new_messages'}))}
+            except ApiException as e:
+                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+
+        return HttpResponse(json.dumps(response_data), content_type='application/json')
+
 
 
 def predefined_answer(request):
