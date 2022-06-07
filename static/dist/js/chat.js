@@ -112,15 +112,13 @@ $('#message-form').on("submit", function (event) {
                 if(json.response === 201){
                     document.getElementById("message-form").reset();
                     $(".direct-chat-messages").prepend('<div class="direct-chat-msg right">'+
-                        '<div class="direct-chat-infos clearfix">'+
-                            '<span class="direct-chat-name float-right">  Sabores Hidalgo</span>'+
-                            '<span class="direct-chat-timestamp float-right">' + json.time + '</span>'+
-                        '</div>'+
-
-                        '<img class="direct-chat-img" src="/static/img/logo.jpg" alt="message user image">'+
-                        '<div class="direct-chat-text" style="background-color: #007bff; border-color: #007bff; color: #fff; float: right; margin-right: auto;">'+
+                        '<img class="direct-chat-img" src="{% static 'img/logo.jpg' %}" alt="message user image">' +
+                        '<div class="direct-chat-text" style="background-color: #007bff; border-color: #007bff; color: #fff; float: right; margin-right: 10px !important;">' +
                             json.message +
-                        '</div>'+
+                        '</div>' +
+                        '<div class="direct-chat-infos clearfix" style="padding: 0 50px 0 50px; clear: right;">' +
+                            '<span class="direct-chat-timestamp float-right">' + json.time + '</span>' +
+                        '</div>' +
                     '</div>'
                     )
                 } else {
