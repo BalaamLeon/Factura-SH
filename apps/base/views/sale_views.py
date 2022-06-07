@@ -14,7 +14,6 @@ from apps.base.models import Answer, Invoice
 from apps.base.models.customuser_config import UserConfig
 from apps.base.views.auth_view import check_meli_session
 from apps.meli import ApiException, RestClientApi, ApiClient
-from factura_sh.settings import MELI_CLIENT_ID
 
 
 # Localfolder Library
@@ -81,7 +80,7 @@ class SaleListView(TemplateView):
                             print('Exception in order info')
 
                     try:
-                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/'\
+                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' \
                                        + my_id + '?tag=post_sale&mark_as_read=false'
                         msg_response = api_instance.resource_get(msg_resource, access_token)
 
@@ -228,7 +227,7 @@ def send_message(request):
             access_token = UserConfig.objects.get(key='access_token').value
             my_id = UserConfig.objects.get(key='meli_user_id').value
             resource = 'messages/packs/' + str(pack_id) + '/sellers/' + str(
-                my_id) + '?application_id=' + MELI_CLIENT_ID
+                my_id) + '?tag=post_sale'
             body = {
                 "from": {
                     "user_id": str(my_id),
@@ -279,7 +278,6 @@ def mark_as_read(request):
                 print("Exception when calling OAuth20Api->get_token: %s\n" % e)
 
         return HttpResponse(json.dumps(response_data), content_type='application/json')
-
 
 
 def predefined_answer(request):
