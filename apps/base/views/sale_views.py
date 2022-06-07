@@ -226,8 +226,7 @@ def send_message(request):
             api_instance = RestClientApi(api_client)
             access_token = UserConfig.objects.get(key='access_token').value
             my_id = UserConfig.objects.get(key='meli_user_id').value
-            resource = 'messages/packs/' + str(pack_id) + '/sellers/' + str(
-                my_id) + '?tag=post_sale'
+            resource = 'messages/packs/' + str(pack_id) + '/sellers/' + str(my_id) + '?tag=post_sale'
             body = {
                 "from": {
                     "user_id": str(my_id),

@@ -77,9 +77,10 @@ class InvoiceListView(TemplateView):
 
                         except ApiException as e:
                             print('Exception in order info')
-
+                    conversation_status = ''
                     try:
-                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id + '?mark_as_read=false'
+                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id\
+                                       + '?tag=post_sale&mark_as_read=false'
                         msg_response = api_instance.resource_get(msg_resource, access_token)
 
                         conversation_status = msg_response['conversation_status']['status']
@@ -477,7 +478,7 @@ class InvoicesTable(TemplateView):
                             print('Exception in order info')
 
                     try:
-                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id + '?mark_as_read=false'
+                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id + '?tag=post_sale&mark_as_read=false'
                         msg_response = api_instance.resource_get(msg_resource, access_token)
 
                         conversation_status = msg_response['conversation_status']['status']
