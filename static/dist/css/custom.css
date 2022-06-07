@@ -398,6 +398,11 @@ a.img-tooltip img {
     bottom: 8px;
 }
 
+.direct-chat-text a {
+    color: white;
+    text-decoration: underline;
+}
+
 
 /* send cfdi modal */
 #div_id_send_message {
