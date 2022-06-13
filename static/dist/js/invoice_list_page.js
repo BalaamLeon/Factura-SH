@@ -6,8 +6,8 @@ $(document).ready(function(){
     function chatModal() {
         $(".chat-btn").each(function () {
             $(this).on("click", function(){
-                $('#modal-lg').find('.modal-content').load($(this).data("form-url"), function () {
-                    $('#modal-lg').modal("show");
+                $('#modal-chat').find('.modal-content').load($(this).data("form-url"), function () {
+                    $('#modal-chat').modal("show");
                 });
 
             });
@@ -15,7 +15,7 @@ $(document).ready(function(){
     }
     chatModal();
 
-    $( "#modal-lg" ).on('shown.bs.modal', function(){
+    $( "#modal-chat" ).on('shown.bs.modal', function(){
         var me = document.querySelector('script[src="/static/dist/js/chat.js"]');
         if(me !== null){
             me.remove();
