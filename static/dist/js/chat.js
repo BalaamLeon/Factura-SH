@@ -112,7 +112,7 @@ $('#message-form').on("submit", function (event) {
                 if(json.response === 201){
                     document.getElementById("message-form").reset();
                     $(".direct-chat-messages").prepend('<div class="direct-chat-msg right">'+
-                        '<img class="direct-chat-img" src="{% static 'img/logo.jpg' %}" alt="message user image">' +
+                        '<img class="direct-chat-img" src="{% static "img/logo.jpg" %}" alt="message user image">' +
                         '<div class="direct-chat-text" style="background-color: #007bff; border-color: #007bff; color: #fff; float: right; margin-right: 10px !important;">' +
                             json.message +
                         '</div>' +

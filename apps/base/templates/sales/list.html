@@ -25,8 +25,8 @@
     function chatModal() {
         $(".chat-btn").each(function () {
             $(this).on("click", function(){
-                $('#modal-lg').find('.modal-content').load($(this).data("form-url"), function () {
-                    $('#modal-lg').modal("show");
+                $('#modal-chat').find('.modal-content').load($(this).data("form-url"), function () {
+                    $('#modal-chat').modal("show");
                 });
 
             });
@@ -34,7 +34,7 @@
     }
     chatModal();
 
-    $( "#modal-lg" ).on('shown.bs.modal', function(){
+    $( "#modal-chat" ).on('shown.bs.modal', function(){
         var me = document.querySelector('script[src="{% static 'dist/js/chat.js' %}"]');
         if(me !== null){
             me.remove();
@@ -42,15 +42,6 @@
         var js = document.createElement("script");
         js.type = "text/javascript";
         js.src = '{% static 'dist/js/chat.js' %}';
-        document.body.appendChild(js);
-
-        var me = document.querySelector('script[src="{% static 'dist/js/invoice_from_sale.js' %}"]');
-        if(me !== null){
-            me.remove();
-        }
-        var js = document.createElement("script");
-        js.type = "text/javascript";
-        js.src = '{% static 'dist/js/invoice_from_sale.js' %}';
         document.body.appendChild(js);
     });
 
@@ -104,7 +95,7 @@ $(document).ready(function(){
     function createInvoiceModalForm() {
         $(".add_invoice_btn").each(function () {
             $(this).modalForm({
-                modalID: "#modal-lg",
+                modalID: "#modal-invoice",
                 formURL: $(this).data("form-url"),
                 errorClass: ".invalid-feedback",
             });
@@ -112,6 +103,17 @@ $(document).ready(function(){
     }
 
     createInvoiceModalForm();
+
+    $( "#modal-invoice" ).on('shown.bs.modal', function(){
+        var me = document.querySelector('script[src="{% static 'dist/js/invoice_from_sale.js' %}"]');
+        if(me !== null){
+            me.remove();
+        }
+        var js = document.createElement("script");
+        js.type = "text/javascript";
+        js.src = '{% static 'dist/js/invoice_from_sale.js' %}';
+        document.body.appendChild(js);
+    });
 
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function() {

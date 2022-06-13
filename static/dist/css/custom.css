@@ -251,7 +251,7 @@ div.dataTables_wrapper div.dataTables_length select {
 
 /* Sidebar */
 .main-sidebar, .main-sidebar::before {
-    width: 200;
+    width: 200px;
 }
 
 .nav-link {
