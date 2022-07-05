@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-06 20:32-0500\n"
+"POT-Creation-Date: 2022-07-05 11:10-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -247,6 +247,13 @@ msgstr "Enviar"
 msgid "Sale"
 msgstr "Venta"
 
+#: .\apps\base\templates\sales\modal_chat.html:11
+#: .\apps\base\templates\sales\modal_chat.html:12
+#, fuzzy
+#| msgid "Marked as read"
+msgid "Mark as read"
+msgstr "Marcar como leído"
+
 #: .\apps\base\templates\sales\modal_chat.html:35
 msgid "New"
 msgstr "Nuevo"
@@ -268,7 +275,8 @@ msgid ""
 "Do not include personal info, offensive language, links to social networks "
 "or Mercado Pago."
 msgstr ""
-"No incluyas datos personales, lenguaje ofensivo, links a redes sociales o Mercado Pago."
+"No incluyas datos personales, lenguaje ofensivo, links a redes sociales o "
+"Mercado Pago."
 
 #: .\apps\base\templates\usercustom\login.html:6
 #: .\apps\base\templates\usercustom\login.html:54
@@ -456,11 +464,11 @@ msgstr "Ventas con mensajes nuevos"
 msgid "Recent sales"
 msgstr "Ventas recientes"
 
-#: .\apps\base\views\sale_views.py:271
+#: .\apps\base\views\sale_views.py:272
 msgid "Marked as read"
-msgstr "Marcar como leído"
+msgstr "Marcado como leído"
 
-#: .\apps\base\views\sale_views.py:275
+#: .\apps\base\views\sale_views.py:276
 msgid "Something went wrong"
 msgstr "Algo salió mal"
 

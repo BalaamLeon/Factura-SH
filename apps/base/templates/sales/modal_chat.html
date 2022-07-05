@@ -8,8 +8,8 @@
         <div class="text-end">
             <button type="button" id="mark_as_read" class="btn btn-light" data-bs-dismiss="modal"
                     data-form-url="{% url 'Sale:mark_as_read' %}"
-                    aria-label="Mark as read">
-                <i class="fas fa-envelope-open-text"></i> Mark as read
+                    aria-label="{{ _('Mark as read') }}">
+                <i class="fas fa-envelope-open-text"></i> {{ _('Mark as read') }}
             </button>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
