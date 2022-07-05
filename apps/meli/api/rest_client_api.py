@@ -484,6 +484,7 @@ class RestClientApi(object):
         body_params = None
         if 'body' in local_var_params:
             body_params = local_var_params['body']
+
         # HTTP header `Accept`
         header_params['Accept'] = self.api_client.select_header_accept(
             ['application/json'])  # noqa: E501
@@ -494,6 +495,11 @@ class RestClientApi(object):
 
         # Authentication setting
         auth_settings = []  # noqa: E501
+
+        if 'fiscal_document' in body_params:
+            header_params['Content-Type'] = 'multipart/form-data'
+            local_var_files['fiscal_document'] = body_params['fiscal_document']
+            del body_params['fiscal_document']
 
         return self.api_client.call_api(
             '/{resource}', 'POST',

@@ -130,8 +130,10 @@ class InvoiceListView(TemplateView):
                     factura_resource = 'packs/' + str(pack_id) + '/fiscal_documents'
                     try:
                         factura_response = api_instance.resource_get(factura_resource, access_token)
-                        s['factura'] = factura_response['fiscal_documents'][0]['filename']
-                        s['factura_id'] = factura_response['fiscal_documents'][0]['id']
+                        for file in factura_response['fiscal_documents']:
+                            if file['file_type'] == 'application/pdf':
+                                s['factura'] = file['filename'][:-4].upper()
+                                s['factura_id'] = file['id']
 
                     except ApiException as e:
                         pass
@@ -173,12 +175,13 @@ class InvoiceDetailView(FatherDetailView):
             access_token = UserConfig.objects.get(key='access_token').value
             resource = 'packs/' + pack_id
             try:
-                response = api_instance.resource_get(resource, access_token)
-                ship_id = response['shipment']['id']
-                for order in response['orders']:
+                pack_response = api_instance.resource_get(resource, access_token)
+                buyer_id = pack_response['buyer']['id']
+                ship_id = pack_response['shipment']['id']
+                for order in pack_response['orders']:
                     resource = 'orders/' + str(order['id'])
-                    response = api_instance.resource_get(resource, access_token)
-                    for item in response['order_items']:
+                    order_response = api_instance.resource_get(resource, access_token)
+                    for item in order_response['order_items']:
                         item['subtotal'] = item['quantity'] * item['unit_price']
                         products.append(item)
                         total += item['quantity'] * item['unit_price']
@@ -186,9 +189,10 @@ class InvoiceDetailView(FatherDetailView):
                 print("Exception when calling OAuth20Api->get_token: %s\n" % e)
                 try:
                     resource = 'orders/' + pack_id
-                    response = api_instance.resource_get(resource, access_token)
-                    ship_id = response['shipping']['id']
-                    for item in response['order_items']:
+                    order_response = api_instance.resource_get(resource, access_token)
+                    buyer_id = order_response['buyer']['id']
+                    ship_id = order_response['shipping']['id']
+                    for item in order_response['order_items']:
                         item['subtotal'] = item['quantity'] * item['unit_price']
                         products.append(item)
                         total += item['subtotal']
@@ -197,8 +201,8 @@ class InvoiceDetailView(FatherDetailView):
 
             resource = 'shipments/' + pack_id + '/costs'
             try:
-                response = api_instance.resource_get(resource, access_token)
-                shipping = response['receiver']['cost']
+                shipment_response = api_instance.resource_get(resource, access_token)
+                shipping = shipment_response['receiver']['cost']
                 total += shipping
             except ApiException as e:
                 print("Exception when calling OAuth20Api->get_token: %s\n" % e)
@@ -208,8 +212,10 @@ class InvoiceDetailView(FatherDetailView):
             factura_resource = 'packs/' + pack_id + '/fiscal_documents'
             try:
                 factura_response = api_instance.resource_get(factura_resource, access_token)
-                context['factura'] = factura_response['fiscal_documents'][0]['filename']
-                context['factura_id'] = factura_response['fiscal_documents'][0]['id']
+                for file in factura_response['fiscal_documents']:
+                    if file['file_type'] == 'application/pdf':
+                        context['factura'] = file['filename'][:-4].upper()
+                        context['factura_id'] = file['id']
 
             except ApiException as e:
                 pass
@@ -218,6 +224,7 @@ class InvoiceDetailView(FatherDetailView):
         context['shipping'] = shipping
         context['total'] = total
         context['pack_id'] = pack_id
+        context['buyer_id'] = buyer_id
 
         return context
 
@@ -294,12 +301,29 @@ class SendCFDI(FormView):
             except ApiException as e:
                 print("Exception when calling OAuth20Api->get_token: %s\n" % e)
 
-        # url = 'https://api.mercadolibre.com/packs/' + pack_id + '/fiscal_documents'
-        # headers = {"Authorization": "Bearer " + access_token}
-        # fiscal_docs = {}
-        # for file in files:
-        #     fiscal_docs[file.name] = (file.name, file, file.content_type)
-        # r = requests.post(url, data={'fiscal_document':fiscal_docs}, headers=headers)
+            if form.cleaned_data['send_message']:
+                message = form.cleaned_data['message']
+                if message:
+                    my_id = UserConfig.objects.get(key='meli_user_id').value
+                    buyer_id = self.kwargs['buyer_id']
+                    resource = 'messages/packs/' + str(pack_id) + '/sellers/' + str(my_id) + '?tag=post_sale'
+                    body = {
+                        "from": {
+                            "user_id": str(my_id),
+                        },
+                        "to": {
+                            "user_id": str(buyer_id),
+                        },
+                        "text": message,
+                    }
+
+                    try:
+                        # Resource path GET
+                        msg_response = api_instance.resource_post_with_http_info(resource, access_token, body)
+                        print(msg_response)
+                    except ApiException as e:
+                        print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+
 
         return super(SendCFDI, self).form_valid(form)
 

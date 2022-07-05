@@ -130,8 +130,10 @@ class SaleListView(TemplateView):
                     factura_resource = 'packs/' + str(pack_id) + '/fiscal_documents'
                     try:
                         factura_response = api_instance.resource_get(factura_resource, access_token)
-                        s['factura'] = factura_response['fiscal_documents'][0]['filename']
-                        s['factura_id'] = factura_response['fiscal_documents'][0]['id']
+                        for file in factura_response['fiscal_documents']:
+                            if file['file_type'] == 'application/pdf':
+                                s['factura'] = file['filename'][:-4].upper()
+                                s['factura_id'] = file['id']
 
                     except ApiException as e:
                         pass

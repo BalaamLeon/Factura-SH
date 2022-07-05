@@ -671,13 +671,23 @@ class ApiClient(object):
                     continue
                 file_names = v if type(v) is list else [v]
                 for n in file_names:
-                    with open(n, 'rb') as f:
-                        filename = os.path.basename(f.name)
-                        filedata = f.read()
-                        mimetype = (mimetypes.guess_type(filename)[0] or
-                                    'application/octet-stream')
-                        params.append(
-                            tuple([k, tuple([filename, filedata, mimetype])]))
+                    if type(n) is dict:
+                        for file in n:
+                            print(file)
+                            f = n[file]
+                            filename = f[0]
+                            filedata = f[1].read()
+                            mimetype = f[2]
+                            params.append(
+                                tuple([k, tuple([filename, filedata, mimetype])]))
+                    else:
+                        with open(n, 'rb') as f:
+                            filename = os.path.basename(f.name)
+                            filedata = f.read()
+                            mimetype = (mimetypes.guess_type(filename)[0] or
+                                        'application/octet-stream')
+                            params.append(
+                                tuple([k, tuple([filename, filedata, mimetype])]))
 
         return params
 
