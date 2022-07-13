@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-05 11:10-0500\n"
+"POT-Creation-Date: 2022-07-13 10:39-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,8 +31,8 @@ msgstr "Selecciona los archivos de CFDI."
 msgid "Send message to buyer."
 msgstr "Enviar mensaje al comprador."
 
-#: .\apps\base\forms\invoice_form.py:81 .\apps\base\views\answer_views.py:15
-#: .\apps\base\views\answer_views.py:20
+#: .\apps\base\forms\invoice_form.py:81 .\apps\base\views\answer_views.py:16
+#: .\apps\base\views\answer_views.py:22
 msgid "Message"
 msgstr "Mensaje"
 
@@ -50,11 +50,11 @@ msgstr ""
 "El %(obj_name)s no puede ser eliminado, existe información que depende de "
 "este."
 
-#: .\apps\base\models\customer.py:51
+#: .\apps\base\models\customer.py:50
 msgid "Customer"
 msgstr "Cliente"
 
-#: .\apps\base\models\customer.py:52 .\templates\sidebar.html:62
+#: .\apps\base\models\customer.py:51 .\templates\sidebar.html:62
 msgid "Customers"
 msgstr "Clientes"
 
@@ -86,15 +86,28 @@ msgid "Invoice"
 msgstr "Solicitud"
 
 #: .\apps\base\models\invoice.py:66 .\apps\base\views\invoice_views.py:50
-#: .\templates\sidebar.html:87
+#: .\templates\sidebar.html:72
 msgid "Invoices"
 msgstr "Solicitudes"
 
-#: .\apps\base\models\predefined_answers.py:19
+#: .\apps\base\models\predefined_answers.py:11
+msgid "Question"
+msgstr "Pregunta"
+
+#: .\apps\base\models\predefined_answers.py:12
+msgid "Chat"
+msgstr "Chat"
+
+#: .\apps\base\models\predefined_answers.py:13 .\templates\sidebar.html:110
+#: .\templates\sidebar.html:135
+msgid "All"
+msgstr "Todas"
+
+#: .\apps\base\models\predefined_answers.py:25
 msgid "Predefined Answer"
 msgstr "Respuesta rápida"
 
-#: .\apps\base\models\predefined_answers.py:20 .\templates\sidebar.html:161
+#: .\apps\base\models\predefined_answers.py:26 .\templates\sidebar.html:153
 msgid "Predefined Answers"
 msgstr "Respuestas rápidas"
 
@@ -243,6 +256,35 @@ msgstr "Solicitudes a enviar"
 msgid "Send"
 msgstr "Enviar"
 
+#: .\apps\base\templates\question\_list_table.html:108
+#: .\apps\base\templates\sales\modal_chat.html:35
+msgid "New"
+msgstr "Nuevo"
+
+#: .\apps\base\templates\question\_list_table.html:111
+#: .\apps\base\templates\sales\modal_chat.html:37
+msgid "Predefined answers"
+msgstr "Respuestas rápidas"
+
+#: .\apps\base\templates\question\_list_table.html:114
+#: .\apps\base\templates\sales\modal_chat.html:39
+msgid "New Key"
+msgstr "Nueva clave"
+
+#: .\apps\base\templates\question\_list_table.html:121
+#, fuzzy
+#| msgid "Your message"
+msgid "Your answer"
+msgstr "Tu mensaje"
+
+#: .\apps\base\templates\question\_list_table.html:127
+msgid "Answer"
+msgstr "Responder"
+
+#: .\apps\base\templates\question\_list_table.html:143
+msgid "No questions found."
+msgstr "No se encontraron preguntas"
+
 #: .\apps\base\templates\sales\modal_chat.html:7
 msgid "Sale"
 msgstr "Venta"
@@ -253,18 +295,6 @@ msgstr "Venta"
 #| msgid "Marked as read"
 msgid "Mark as read"
 msgstr "Marcar como leído"
-
-#: .\apps\base\templates\sales\modal_chat.html:35
-msgid "New"
-msgstr "Nuevo"
-
-#: .\apps\base\templates\sales\modal_chat.html:37
-msgid "Predefined answers"
-msgstr "Respuestas rápidas"
-
-#: .\apps\base\templates\sales\modal_chat.html:39
-msgid "New Key"
-msgstr "Nueva clave"
 
 #: .\apps\base\templates\sales\modal_chat.html:43
 msgid "Your message"
@@ -381,11 +411,15 @@ msgstr "Recortar la imagen"
 msgid "Crop"
 msgstr "Recortar"
 
-#: .\apps\base\views\answer_views.py:14 .\apps\base\views\answer_views.py:19
+#: .\apps\base\views\answer_views.py:15 .\apps\base\views\answer_views.py:21
 #: .\apps\base\views\customer_views.py:23
 #: .\apps\base\views\customer_views.py:32 .\apps\base\views\factura_views.py:25
 msgid "Name"
 msgstr "Nombre"
+
+#: .\apps\base\views\answer_views.py:17 .\apps\base\views\answer_views.py:23
+msgid "Context"
+msgstr "Contexto"
 
 #: .\apps\base\views\customer_views.py:22
 #: .\apps\base\views\customer_views.py:31 .\apps\base\views\factura_views.py:24
@@ -456,6 +490,18 @@ msgstr "Solicitudes canceladas"
 msgid "Invoices with tracking"
 msgstr "Con seguimiento"
 
+#: .\apps\base\views\question_views.py:39
+msgid "Mercado Libre Questions"
+msgstr "Preguntas de Mercado Libre"
+
+#: .\apps\base\views\question_views.py:59
+msgid "Free Shipping"
+msgstr "Envío gratis"
+
+#: .\apps\base\views\question_views.py:63
+msgid "Paused out of stock"
+msgstr "Pausado sin stock"
+
 #: .\apps\base\views\sale_views.py:40
 msgid "Sales with new messages"
 msgstr "Ventas con mensajes nuevos"
@@ -511,42 +557,40 @@ msgstr "El equipo de %(site_name)s"
 msgid "Password reset on %(site_name)s"
 msgstr "Restablecimiento de contraseña en %(site_name)s"
 
-#: .\templates\sidebar.html:70
-msgid "Customer List"
-msgstr "Lista de Clientes"
-
-#: .\templates\sidebar.html:76
-msgid "New Customer"
-msgstr "Cliente Nuevo"
-
-#: .\templates\sidebar.html:95
+#: .\templates\sidebar.html:80
 msgid "With tracking"
 msgstr "Con seguimiento"
 
-#: .\templates\sidebar.html:101
+#: .\templates\sidebar.html:86
 msgid "Pending"
 msgstr "Pendientes"
 
-#: .\templates\sidebar.html:107
+#: .\templates\sidebar.html:92
 msgid "To Send"
 msgstr "Para Enviar"
 
-#: .\templates\sidebar.html:113
+#: .\templates\sidebar.html:98
 msgid "Sent"
 msgstr "Enviadas"
 
-#: .\templates\sidebar.html:119
+#: .\templates\sidebar.html:104
 msgid "Cancelled"
 msgstr "Canceladas"
 
-#: .\templates\sidebar.html:125 .\templates\sidebar.html:150
-msgid "All"
-msgstr "Todas"
-
-#: .\templates\sidebar.html:136
+#: .\templates\sidebar.html:121
 msgid "Sales"
 msgstr "Ventas"
 
-#: .\templates\sidebar.html:144
+#: .\templates\sidebar.html:129
 msgid "New messages"
 msgstr "Mensajes nuevos"
+
+#: .\templates\sidebar.html:145
+msgid "Questions"
+msgstr "Preguntas"
+
+#~ msgid "Customer List"
+#~ msgstr "Lista de Clientes"
+
+#~ msgid "New Customer"
+#~ msgstr "Cliente Nuevo"
