@@ -42,13 +42,14 @@ answer_select.addEventListener("change", function(){
 })
 
 function save_answer(key, message){
-    var url = '/es/sale/predefined_answer';
+    var url = '/es/answer/predefined';
     $.ajax({
         type:'POST',
         url:url,
         data:{
             key:key,
             message:message,
+            context: 'c',
             csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
             action: 'post'
         },

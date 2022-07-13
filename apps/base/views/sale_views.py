@@ -163,7 +163,7 @@ class SaleChatView(TemplateView):
         context = super(SaleChatView, self).get_context_data(**kwargs)
 
         sale_id = self.kwargs['s_pk']
-        context['answers'] = Answer.objects.all()
+        context['answers'] = Answer.objects.filter(context='c')
         my_id = UserConfig.objects.get(key='meli_user_id').value
         context['my_id'] = int(my_id)
         messages = []
@@ -280,25 +280,3 @@ def mark_as_read(request):
 
         return HttpResponse(json.dumps(response_data), content_type='application/json')
 
-
-def predefined_answer(request):
-    response_data = {}
-    if request.POST.get('action') == 'get':
-        key = request.POST.get('key')
-        message = Answer.objects.get(name=key).message
-        response_data['message'] = message
-        return JsonResponse(response_data)
-
-    if request.POST.get('action') == 'post':
-        key = request.POST.get('key')
-        message = request.POST.get('message')
-        m, created = Answer.objects.get_or_create(
-            name=key,
-            message=message
-        )
-        if created:
-            response_data['message'] = message
-            return JsonResponse(response_data)
-        else:
-            response_data['message'] = m.message
-            return JsonResponse(response_data)

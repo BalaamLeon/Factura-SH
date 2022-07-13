@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+{% include "common/_modal.html" %}
+{% include 'common/message.html' %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb page_title page_url %}
+{% endblock %}
+
+<div class="row">
+    <div class="col-12">
+        {% include 'question/_list_table.html' %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% for js_file in js_files %}
+<script type="text/javascript" src="{% static js_file %}"></script>
+{% endfor %}
+{% endblock %}
+
+

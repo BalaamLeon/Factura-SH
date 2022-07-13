@@ -12,5 +12,6 @@ urlpatterns = [
     path('customer/', include('apps.base.urls.customer_urls')),
     path('invoice/', include('apps.base.urls.invoice_urls')),
     path('sale/', include('apps.base.urls.sale_urls')),
+    path('question/', include('apps.base.urls.question_urls')),
     path('<int:meli_sale>/', include('apps.base.urls.front_urls')),
 ]

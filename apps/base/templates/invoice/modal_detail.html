@@ -39,7 +39,7 @@
                 <label for="cp">Uso de Factura</label>
             </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="form-floating">
                             <textarea class="textinput textInput form-control invoice-detail" id="regimen"
                                       style="height: 80px; resize:none; overflow:hidden;"
@@ -48,6 +48,12 @@
                 <label for="regimen">Régimen Fiscal</label>
             </div>
         </div>
+        {% if object.customer.constancia %}
+        <div class="col-md-4">
+            <a href="{{ object.customer.constancia.url }}" class="btn btn-info"
+                   style="margin-top: .8rem; width:100%;" target="_blank">{{ object.customer.constancia }}</a>
+        </div>
+        {% endif %}
 
         {% if factura == '' %}
 

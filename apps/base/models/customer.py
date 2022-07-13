@@ -39,8 +39,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=200, unique=True)
     cp = models.CharField(max_length=5)
     regimen = models.CharField(max_length=3, choices=REGIMEN_CHOICES)
-    constancia = models.FileField(storage=OverwriteStorage(), upload_to='constancias/',
-                                  validators=[FileExtensionValidator(['pdf'])])
+    constancia = models.FileField(upload_to='constancias/', validators=[FileExtensionValidator(['pdf'])])
 
     objects = models.Manager()
 
@@ -55,5 +54,5 @@ class Customer(models.Model):
         self.rfc = self.rfc.upper()
         self.name = self.name.title()
         new_name = str(self.rfc) + '.pdf'
-        self.constancia.name = new_name
+        self.constancia.name = 'constancias/' + new_name
         super(Customer, self).save(*args, **kwargs)

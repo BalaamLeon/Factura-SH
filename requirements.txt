@@ -9,4 +9,5 @@ django_formtools==2.3
 python_dateutil==2.8.2
 requests==2.22.0
 six==1.15.0
+timeago==1.0.15
 urllib3==1.25.7

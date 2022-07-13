@@ -56,33 +56,18 @@
 
             <!-- Customers -->
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-box"></i>
+                <a href="{% url 'Customer:list' %}" class="nav-link">
+                    <i class="nav-icon fas fa-people-group"></i>
                     <p>
                         {% translate 'Customers' %}
-                        <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{% url 'Customer:list' %}" class="nav-link">
-                            <i class="fas fa-list nav-icon"></i>
-                            <p>{% translate 'Customer List' %}</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'Customer:add' %}" class="nav-link">
-                            <i class="fas fa-plus-circle nav-icon"></i>
-                            <p>{% translate 'New Customer' %}</p>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
             <!-- Invoices -->
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="nav-icon fas fa-shopping-cart"></i>
+                    <i class="nav-icon fa-solid fa-file-circle-check"></i>
                     <p>
                         {% translate 'Invoices' %}
                         <i class="fas fa-angle-left right"></i>
@@ -153,13 +138,19 @@
                 </ul>
             </li>
 
+            <!-- Meli Questions -->
+            <li class="nav-item">
+                <a href="{% url 'Question:list' %}" class="nav-link">
+                    <i class="nav-icon fa-solid fa-circle-question"></i>
+                    <p> {% translate 'Questions' %} </p>
+                </a>
+            </li>
+
             <!-- Predefined Answers -->
             <li class="nav-item">
                 <a href="{% url 'Answer:list' %}" class="nav-link">
                     <i class="nav-icon fas fa-message"></i>
-                    <p>
-                        {% translate 'Predefined Answers' %}
-                    </p>
+                    <p> {% translate 'Predefined Answers' %} </p>
                 </a>
             </li>
 
@@ -177,7 +168,7 @@
         </label>
     </div>
     <a href="#" class="btn btn-secondary hide-on-collapse pos-right"><i class="fas fa-cogs"></i></a>
-<!--    <a href="#" class="btn btn-secondary hide-on-collapse pos-right">Help</a>-->
+    <!--    <a href="#" class="btn btn-secondary hide-on-collapse pos-right">Help</a>-->
 </div>
 <script>
   var toggleSwitch = document.getElementById('theme-switch');
@@ -236,5 +227,6 @@
         .addClass('menu-open').prev('a')
         .addClass('active');
     });
+
 </script>
 <!-- /.sidebar-custom -->

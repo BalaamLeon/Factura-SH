@@ -1,0 +1,146 @@
+{% load humanize %}
+{% load custom_tags %}
+
+{% if questions %}
+
+{% for key, value in questions.items %}
+{% if value.status == 'Paused out of stock' %}
+<div class="card question-card" style="--bs-bg-opacity: .4;">
+{% else %}
+<div class="card question-card">
+{% endif %}
+    <div class="card-header">
+        {% if value.catalog %}
+        <div class="question-item--catalogue bg-primary">CATÁLOGO</div>
+        {% endif %}
+        <div class="question-item-header__content">
+            <div class="question-basic-information">
+                <div class="question-thumbnail-container">
+                    <div class="question-thumbnail">
+                        <img src="{{ value.thumbnail }}" class="question-basic-information__img" alt="{{ value.title }}">
+                    </div>
+                </div>
+                <div class="question-basic-information__labels-container">
+                    <div class="question-label-secondary">
+                        <a class="text-secondary text-decoration-none" href="{{ value.url }}" target="_blank">
+                            SKU: {{ value.sku }}
+                        </a>
+                    </div>
+                    <div class="question-label-textlink">
+                        <a class="question-label-textlink-modified" href="{{ value.url }}" target="_blank">
+                            {{ value.title }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="question-content question-item-infocontainer text-secondary">
+                $ {{ value.price }} x {{ value.stock }} u.
+            </div>
+            <div class="question-content question-item-infocontainer text-secondary">
+                {{ value.shipping }}
+            </div>
+            <div class="question-content question-item-infocontainer text-dark">
+                <strong>{{ value.status }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="accordion" id="{{ key }}_questions">
+            {% for question in value.questions %}
+            <div class="accordion-item">
+                <div class="accordion-header" id="heading_{{ key }}_{{ forloop.counter }}">
+                    <div class="accordion-button collapsed"
+                         data-bs-toggle="collapse"
+                         data-bs-target="#collapse_{{ key }}_{{ forloop.counter }}" aria-expanded="false"
+                         aria-controls="collapse_{{ key }}_{{ forloop.counter }}">
+                        <div class="question-toggle-header">
+                            <div class="qc-personal-information-hover">
+                                <div class="qc-label__text text-secondary">{{ question.customer }}</div>
+                                <span class="qc-block-btn text-primary">Bloquear comprador</span>
+                            </div>
+                            <div class="question-detail">
+                                {% if question.status == 'UNANSWERED' %}
+                                <span class="question-detail__badge bg-info"></span>
+                                {% endif %}
+                                <span class="question-detail__question">
+                                    <span class="question-detail__question--text">
+                                        {{ question.text }}
+                                    </span>
+                                {% if question.status == 'ANSWERED' %}
+                                    <span class="question-response">{{ question.answer.text }}</span>
+                                {% endif %}
+                                    <span class="question-detail__date text-secondary">
+                                        {{ question.date }}
+                                    </span>
+                                    <span class="question-del-btn text-primary">Eliminar</span>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="collapse_{{ key }}_{{ forloop.counter }}" class="accordion-collapse collapse"
+                     aria-labelledby="heading_{{ key }}_{{ forloop.counter }}">
+                    <div class="accordion-body">
+                        {% if question.status == 'ANSWERED' %}
+                        <div class="question-response-container">
+                            <div class="question-response-divider"></div>
+                            <div class="question-response">
+                                {{ question.answer.text }}
+                            </div>
+                        </div>
+                        {% else %}
+                        <form method="post" action="" id="{{ question.id }}-form"
+                              data-form-url="{% url 'Question:send_answer' %}" autocomplete="off"
+                              class="needs-validation question-form" novalidate>
+                            {% csrf_token %}
+                            <input class="question_id" value="{{ question.id }}" hidden>
+                            <div class="input-group">
+                                <div class="form-floating col-3" style="padding-right:0;">
+                                    <div class="form-floating" style="padding-right:0;">
+                                        <select id="{{ question.id }}-answers" class="answers-select form-select"
+                                                aria-label="Default select example">
+                                            <option selected></option>
+                                            {% for answer in answers %}
+                                            <option value="{{ answer.message }}">{{ answer.name }}</option>
+                                            {% endfor %}
+                                            <option value="new">{% translate 'New' %}</option>
+                                        </select>
+                                        <label for="{{ question.id }}-answers">
+                                            {% translate 'Predefined answers' %}
+                                        </label>
+                                    </div>
+                                    <input class="new_key" placeholder="{% translate 'New Key' %}"
+                                           style="width: 100%;display:none;">
+                                </div>
+                                <div class="form-floating col-8" style="padding-right:0;">
+                                    <textarea type="text" id="{{ question.id }}-answer" name="answer"
+                                              class="answer-text-input form-control"
+                                              maxlength="2000"></textarea>
+                                    <label for="{{ question.id }}-answer">{% translate 'Your answer' %}</label>
+                                    <div class="text-end">
+                                        <small class="characters-left">0/2000</small>
+                                    </div>
+                                </div>
+                                <div class="answer-btn">
+                                    <button type="submit" class="btn btn-primary">{{ _('Answer') }}</button>
+                                </div>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+    <div class="card-header text-center">
+        <h3>{{ _('No questions found.') }}</h3>
+    </div>
+</div>
+{% endif %}

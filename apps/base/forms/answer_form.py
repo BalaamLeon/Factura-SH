@@ -18,6 +18,7 @@ class AnswerForm(BSModalModelForm):
         self.helper.layout = Layout(
             Row(FloatingField('name', css_class='col-md-12'), css_class='form-group'),
             Row(FloatingField('message', css_class='col-md-12'), css_class='form-group'),
+            Row(FloatingField('context', css_class='col-md-12'), css_class='form-group'),
         )
 
     class Meta:

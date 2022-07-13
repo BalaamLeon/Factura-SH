@@ -7,8 +7,14 @@ from apps.base.models.base import BaseEntity
 
 # predefined answer model
 class Answer(BaseEntity):
+    CONTEXT_CHOICES = (
+        ('q', _('Question')),
+        ('c', _('Chat')),
+        ('a', _('All')),
+    )
     name = models.CharField(max_length=20, unique=True)
     message = models.TextField(max_length=350, blank=True, null=True)
+    context = models.CharField(max_length=1, choices=CONTEXT_CHOICES, default='c')
     objects = models.Manager()
 
     def __str__(self):

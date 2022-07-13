@@ -1,5 +1,6 @@
 # Django Library
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalDeleteView, BSModalUpdateView
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -13,16 +14,19 @@ from apps.base.views.father_view import FatherListView, FatherDetailView, Father
 OBJECT_FIELDS = [
     {'string': _("Name"), 'field': 'name'},
     {'string': _("Message"), 'field': 'message'},
+    {'string': _("Context"), 'field': 'get_context_display'},
 ]
 
 OBJECT_LIST_FIELDS = [
     {'string': _("Name"), 'field': 'name'},
     {'string': _("Message"), 'field': 'message'},
+    {'string': _("Context"), 'field': 'get_context_display'},
 ]
 
 OBJECT_FORM_FIELDS = [
     'name',
     'message',
+    'context',
 ]
 
 
@@ -70,3 +74,29 @@ class AnswerUpdateView(BSModalUpdateView, FatherUpdateView):
 class AnswersTable(FatherTableListView):
     model = Answer
     fields = OBJECT_LIST_FIELDS
+
+
+
+def predefined_answer(request):
+    response_data = {}
+    if request.POST.get('action') == 'get':
+        key = request.POST.get('key')
+        message = Answer.objects.get(name=key).message
+        response_data['message'] = message
+        return JsonResponse(response_data)
+
+    if request.POST.get('action') == 'post':
+        key = request.POST.get('key')
+        message = request.POST.get('message')
+        m, created = Answer.objects.get_or_create(
+            name=key,
+            message=message
+        )
+        m.context = request.POST.get('context')
+        m.save()
+        if created:
+            response_data['message'] = message
+            return JsonResponse(response_data)
+        else:
+            response_data['message'] = m.message
+            return JsonResponse(response_data)
