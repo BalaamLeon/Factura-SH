@@ -279,7 +279,7 @@ msgstr "Tu mensaje"
 
 #: .\apps\base\templates\question\_list_table.html:127
 msgid "Answer"
-msgstr "Responder"
+msgstr "Enviar"
 
 #: .\apps\base\templates\question\_list_table.html:143
 msgid "No questions found."

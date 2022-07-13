@@ -1,23 +1,16 @@
 # Django Library
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import TemplateView
 
 # Thirdparty Library
-import json
 from datetime import datetime
-
 import timeago as timeago
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView
-from django.utils.translation import ugettext_lazy as _
 
-from apps.base.models import Answer, Invoice
+# Localfolder Library
+from apps.base.models import Answer
 from apps.base.models.customuser_config import UserConfig
 from apps.base.views.auth_view import check_meli_session
 from apps.meli import ApiException, RestClientApi, ApiClient
-
-
-# Localfolder Library
 
 
 # ========================================================================== #
