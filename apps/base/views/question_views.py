@@ -1,4 +1,5 @@
 # Django Library
+from django.http import JsonResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
@@ -184,6 +185,7 @@ def send_answer(request):
     if request.POST.get('action') == 'post':
         question_id = request.POST.get('question_id')
         message = request.POST.get('message')
+        print(question_id, message)
 
         check_meli_session()
         with ApiClient() as api_client:

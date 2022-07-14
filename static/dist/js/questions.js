@@ -186,7 +186,7 @@ $('.question-form').on("submit", function (event) {
         }
 
         var form_url = this_form.data('form-url');
-        var question_id = this_form.find('.question-id').val();
+        var question_id = this_form.find('.question_id').val();
 
         $.ajax({
             type:'POST',
