@@ -200,7 +200,7 @@ def send_answer(request):
             try:
                 # Resource path GET
                 api_response = api_instance.resource_post(resource, access_token, body)
-                response_data['response'] = api_response[1]
+                print(api_response)
             except ApiException as e:
                 print("Exception when calling OAuth20Api->get_token: %s\n" % e)
                 response_data['response'] = e.body

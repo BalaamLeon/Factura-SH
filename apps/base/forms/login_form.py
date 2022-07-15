@@ -22,10 +22,4 @@ class LoginForm(AuthenticationForm):
             ),
         )
 
-    # class Meta:
-    #     fields = ['username', 'password', 'remember_me', 'submit']
-
-    class Media:
-        js = ('dist/js/pages/bootstrap5_form_validation.js',)
-
     remember_me = forms.BooleanField(required=False)
