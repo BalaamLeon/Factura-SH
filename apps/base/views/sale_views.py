@@ -83,7 +83,6 @@ class SaleListView(TemplateView):
                         msg_resource = 'messages/packs/' + str(order_id if pack_id == "None" else pack_id) + '/sellers/' \
                                        + my_id + '?tag=post_sale&mark_as_read=false'
                         msg_response = api_instance.resource_get(msg_resource, access_token)
-                        print(msg_response)
 
                         conversation_status = msg_response['conversation_status']['status']
                         for msg in msg_response['messages']:
