@@ -90,7 +90,9 @@
                                         <div class="sc-title-subtitle-action__container">
                                             {% if sale.conversation_status == 'active' %}
                                             <button type="button" class="chat-btn btn btn-sm btn-outline-info"
-                                                    data-form-url="{% url 'Sale:chat' sale.pack_id sale.buyer_name sale.buyer_id %}"
+
+                                                    data-form-url="{% url 'Sale:chat' sale.conversation_id sale.buyer_name sale.buyer_id %}"
+
                                                     title="{{ title }} details" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom">
                                                 <i class="fa fa-message"></i>

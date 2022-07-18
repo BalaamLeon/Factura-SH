@@ -80,9 +80,10 @@ class SaleListView(TemplateView):
                             print('Exception in order info')
 
                     try:
-                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' \
+                        msg_resource = 'messages/packs/' + str(order_id if pack_id == "None" else pack_id) + '/sellers/' \
                                        + my_id + '?tag=post_sale&mark_as_read=false'
                         msg_response = api_instance.resource_get(msg_resource, access_token)
+                        print(msg_response)
 
                         conversation_status = msg_response['conversation_status']['status']
                         for msg in msg_response['messages']:
@@ -109,6 +110,7 @@ class SaleListView(TemplateView):
                                     'seller_sku': response['order_items'][0]['item']['seller_sku'],
                                     },
                         'conversation_status': conversation_status,
+                        'conversation_id': order_id if pack_id == "None" else pack_id,
                         'messages_count': messages_count,
                         'invoice': invoice
                     }
