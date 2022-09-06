@@ -163,6 +163,7 @@ $('#submit').click(function(){
      var total = $('#id_total').val();
      if (total.startsWith('$   ')){
         total = total.slice(4);
+        total = total.replaceAll(',', '');
         $('#id_total').val(total);
      }
     $('#factura_form').submit();
