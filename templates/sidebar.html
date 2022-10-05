@@ -20,7 +20,7 @@
                  alt="User Image">
         </div>
         <div class=" info">
-            <a href="#">{% if request.user.first_name or request.user.last_name %} {{ request.user.first_name }}
+            <a  >{% if request.user.first_name or request.user.last_name %} {{ request.user.first_name }}
                 {{ request.user.last_name }} {% else %} {{ request.user.username }} {% endif %}</a>
 
         </div>
@@ -66,7 +66,7 @@
 
             <!-- Invoices -->
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a   class="nav-link">
                     <i class="nav-icon fa-solid fa-file-circle-check"></i>
                     <p>
                         {% translate 'Invoices' %}
@@ -115,7 +115,7 @@
 
             <!-- Sales -->
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a   class="nav-link">
                     <i class="nav-icon fas fa-shopping-cart"></i>
                     <p>
                         {% translate 'Sales' %}
@@ -167,8 +167,8 @@
             <i class="fas fa-moon nav-icon"></i>
         </label>
     </div>
-    <a href="#" class="btn btn-secondary hide-on-collapse pos-right"><i class="fas fa-cogs"></i></a>
-    <!--    <a href="#" class="btn btn-secondary hide-on-collapse pos-right">Help</a>-->
+    <a href="{% url base:dashboard}" class="btn btn-secondary hide-on-collapse pos-right"><i class="fas fa-cogs"></i></a>
+    <!--    <a   class="btn btn-secondary hide-on-collapse pos-right">Help</a>-->
 </div>
 <script>
   var toggleSwitch = document.getElementById('theme-switch');

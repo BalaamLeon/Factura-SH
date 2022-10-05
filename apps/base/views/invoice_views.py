@@ -4,7 +4,7 @@ from datetime import datetime
 
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalDeleteView, BSModalUpdateView
 from django.contrib import messages
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
@@ -34,6 +34,7 @@ class InvoiceListView(TemplateView):
                           'sent': ('3', _('Sent Invoices')),
                           'cancelled': ('4', _('Cancelled Invoices'))}
         invoices = []
+
 
         check_meli_session()
         with ApiClient() as api_client:
@@ -79,7 +80,7 @@ class InvoiceListView(TemplateView):
                             print('Exception in order info')
                     conversation_status = ''
                     try:
-                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id\
+                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id \
                                        + '?tag=post_sale&mark_as_read=false'
                         msg_response = api_instance.resource_get(msg_resource, access_token)
 
@@ -282,48 +283,51 @@ class SendCFDI(FormView):
         files = self.request.FILES.getlist('files')
         pack_id = form.cleaned_data['pack_id']
         invoice = Invoice.objects.get(pk=form.cleaned_data['invoice_id'])
-        invoice.status = '3'
+        # invoice.status = '3'
         invoice.save()
 
-        check_meli_session()
-        with ApiClient() as api_client:
-            api_instance = RestClientApi(api_client)
-            access_token = UserConfig.objects.get(key='access_token').value
-            resource = 'packs/' + pack_id + '/fiscal_documents'
-            fiscal_docs = {}
-            for file in files:
-                fiscal_docs[file.name] = (file.name, file, file.content_type)
-            try:
-                # Resource path GET
-                api_response = api_instance.resource_post(resource, access_token, {'fiscal_document': fiscal_docs})
-                print(api_response)
+        if invoice.status != '3':
+            check_meli_session()
+            with ApiClient() as api_client:
+                api_instance = RestClientApi(api_client)
+                access_token = UserConfig.objects.get(key='access_token').value
+                resource = 'packs/' + pack_id + '/fiscal_documents'
+                fiscal_docs = {}
+                for file in files:
+                    fiscal_docs[file.name] = (file.name, file, file.content_type)
+                try:
+                    # Resource path GET
+                    api_response = api_instance.resource_post(resource, access_token, {'fiscal_document': fiscal_docs})
+                    print(api_response)
 
-            except ApiException as e:
-                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+                except ApiException as e:
+                    print("Exception when calling OAuth20Api->get_token: %s\n" % e)
 
-            if form.cleaned_data['send_message']:
-                message = form.cleaned_data['message']
-                if message:
-                    my_id = UserConfig.objects.get(key='meli_user_id').value
-                    buyer_id = self.kwargs['buyer_id']
-                    resource = 'messages/packs/' + str(pack_id) + '/sellers/' + str(my_id) + '?tag=post_sale'
-                    body = {
-                        "from": {
-                            "user_id": str(my_id),
-                        },
-                        "to": {
-                            "user_id": str(buyer_id),
-                        },
-                        "text": message,
-                    }
+                if form.cleaned_data['send_message']:
+                    message = form.cleaned_data['message']
+                    if message:
+                        my_id = UserConfig.objects.get(key='meli_user_id').value
+                        buyer_id = self.kwargs['buyer_id']
+                        resource = 'messages/packs/' + str(pack_id) + '/sellers/' + str(my_id) + '?tag=post_sale'
+                        body = {
+                            "from": {
+                                "user_id": str(my_id),
+                            },
+                            "to": {
+                                "user_id": str(buyer_id),
+                            },
+                            "text": message,
+                        }
 
-                    try:
-                        # Resource path GET
-                        msg_response = api_instance.resource_post_with_http_info(resource, access_token, body)
-                        print(msg_response)
-                    except ApiException as e:
-                        print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+                        try:
+                            # Resource path GET
+                            msg_response = api_instance.resource_post_with_http_info(resource, access_token, body)
+                            print(msg_response)
+                        except ApiException as e:
+                            print("Exception when calling OAuth20Api->get_token: %s\n" % e)
 
+        invoice.status = '3'
+        invoice.save()
 
         return super(SendCFDI, self).form_valid(form)
 
@@ -430,10 +434,22 @@ class InvoiceFromSaleCreateView(BSModalCreateView, FatherCreateView):
 
 # # ========================================================================== #
 class InvoiceDeleteView(BSModalDeleteView, FatherDeleteView):
+    template_name = 'invoice/delete.html'
     model = Invoice
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['action_url'] = 'Invoice:delete'
+        context['query'] = self.kwargs['query']
+        return context
 
     def get_success_url(self):
         return reverse_lazy('Invoice:list', kwargs={'query': self.kwargs['query']})
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ProductInvoiceCreateModalView(BSModalCreateView, FatherCreateView):
@@ -502,7 +518,8 @@ class InvoicesTable(TemplateView):
                             print('Exception in order info')
 
                     try:
-                        msg_resource = 'messages/packs/' + str(pack_id) + '/sellers/' + my_id + '?tag=post_sale&mark_as_read=false'
+                        msg_resource = 'messages/packs/' + str(
+                            pack_id) + '/sellers/' + my_id + '?tag=post_sale&mark_as_read=false'
                         msg_response = api_instance.resource_get(msg_resource, access_token)
 
                         conversation_status = msg_response['conversation_status']['status']
