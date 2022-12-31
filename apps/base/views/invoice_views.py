@@ -192,6 +192,8 @@ class InvoiceDetailView(FatherDetailView):
                         item['subtotal'] = item['quantity'] * item['unit_price']
                         products.append(item)
                         total += item['quantity'] * item['unit_price']
+                    shipping = order_response['payments'][0]['shipping_cost']
+                    total += shipping
             except ApiException as e:
                 print("Exception when calling OAuth20Api->get_token: %s\n" % e)
                 try:
@@ -203,16 +205,18 @@ class InvoiceDetailView(FatherDetailView):
                         item['subtotal'] = item['quantity'] * item['unit_price']
                         products.append(item)
                         total += item['subtotal']
+                    shipping = order_response['payments'][0]['shipping_cost']
+                    total += shipping
                 except ApiException as e:
                     print("Exception when calling OAuth20Api->get_token: %s\n" % e)
 
-            resource = 'shipments/' + pack_id + '/costs'
-            try:
-                shipment_response = api_instance.resource_get(resource, access_token)
-                shipping = shipment_response['receiver']['cost']
-                total += shipping
-            except ApiException as e:
-                print("Exception when calling OAuth20Api->get_token: %s\n" % e)
+            # resource = 'shipments/' + pack_id + '/costs'
+            # try:
+            #     shipment_response = api_instance.resource_get(resource, access_token)
+            #     shipping = shipment_response['receiver']['cost']
+            #     total += shipping
+            # except ApiException as e:
+            #     print("Exception when calling OAuth20Api->get_token: %s\n" % e)
 
             context['factura'] = ''
             context['factura_id'] = ''
