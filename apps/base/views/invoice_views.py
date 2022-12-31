@@ -43,15 +43,19 @@ class InvoiceListView(TemplateView):
             my_id = UserConfig.objects.get(key='meli_user_id').value
 
             try:
-                if query == 'tracking':
-                    db_invoices = Invoice.objects.filter(tracking__tracking=True)
-                    context['page_title'] = _('Invoices with tracking')
-                elif query == 'all':
-                    db_invoices = Invoice.objects.all()
-                    context['page_title'] = _('Invoices')
+                if query != 'null':
+                    if query == 'tracking':
+                        db_invoices = Invoice.objects.filter(tracking__tracking=True)
+                        context['page_title'] = _('Invoices with tracking')
+                    elif query == 'all':
+                        db_invoices = Invoice.objects.all()
+                        context['page_title'] = _('Invoices')
+                    else:
+                        db_invoices = Invoice.objects.filter(status=STATUS_CHOICES[query][0])
+                        context['page_title'] = STATUS_CHOICES[query][1]
                 else:
-                    db_invoices = Invoice.objects.filter(status=STATUS_CHOICES[query][0])
-                    context['page_title'] = STATUS_CHOICES[query][1]
+                    db_invoices = Invoice.objects.none()
+
                 for invoice in db_invoices:
                     tracked_sale = invoice.tracking.first()
                     if tracked_sale is not None:
@@ -90,6 +94,8 @@ class InvoiceListView(TemplateView):
                                 messages_count += 1
                     except ApiException as e:
                         print('Exception in messages')
+
+                    print(invoice.pk)
 
                     s = {
                         'pk': invoice.pk,
