@@ -154,6 +154,37 @@
                 </a>
             </li>
 
+            <!-- Quzpide -->
+            <li class="nav-item">
+                <a   class="nav-link">
+                    <i class="nav-icon fas fa-q"></i>
+                    <p>
+                        {% translate 'Quzpide' %}
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{% url 'MeliPost:list' %}" class="nav-link">
+                            <i class="fas fa-sign-hanging nav-icon"></i>
+                            <p>{% translate 'Posts' %}</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'Quzpide:list' 'new_messages' %}" class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>{% translate 'New messages' %}</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'Quzpide:list' 'all' %}" class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>{% translate 'All' %}</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
 
         </ul>
     </nav>

@@ -1,0 +1,57 @@
+{% load static %}
+<form method="post" action="" id="message-form" data-form-url="{% url 'Sale:send_message' %}" autocomplete="off"
+      class="needs-validation" novalidate>
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h5 class="modal-title">{{ buyer_name }} - {% translate 'Sale' %} #{{ sale_id }}</h5>
+        <div class="text-end">
+            <button type="button" id="mark_as_read" class="btn btn-light" data-bs-dismiss="modal"
+                    data-form-url="{% url 'Sale:mark_as_read' %}"
+                    aria-label="{{ _('Mark as read') }}">
+                <i class="fas fa-envelope-open-text"></i> {{ _('Mark as read') }}
+            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        {% include 'sales/chat.html' %}
+    </div>
+
+
+    <div class="modal-footer">
+        <input id="pack_id" value="{{ sale_id }}" hidden>
+        <input id="buyer_id" value="{{ buyer_id }}" hidden>
+        <div class="input-group">
+            <div class="form-floating col-3" style="padding-right:0;">
+                <div class="form-floating" style="padding-right:0;">
+                    <select id="answers" class="form-select" aria-label="Default select example"
+                            data-form-url="{{ request.scheme }}://{{ request.get_host }}{% url 'Quzpide:list' sale_id %}">
+                        <option selected></option>
+                        {% for answer in answers %}
+                        <option value="{{ answer.message }}">{{ answer.name }}</option>
+                        {% endfor %}
+                        <option value="new">{% translate 'New' %}</option>
+                    </select>
+                    <label for="answers">{% translate 'Predefined answers' %}</label>
+                </div>
+                <input id="new_key" placeholder="{% translate 'New Key' %}" style="width: 100%;display:none;">
+            </div>
+            <div class="form-floating col-8" style="padding-right:0;">
+                <textarea type="text" id="message" name="message" class="form-control" maxlength="350"></textarea>
+                <label for="message">{% translate 'Your message' %}</label>
+            </div>
+            <span class="input-group-append">
+                <button type="submit" class="btn btn-primary btn-circle"><span
+                        class="fa-solid fa-paper-plane"></span></button>
+            </span>
+        </div>
+        <div style="width: 100%;">
+            <small class="col-11 text-muted">
+                {% translate 'Do not include personal info, offensive language, links to social networks or Mercado Pago.' %}
+            </small>
+            <small class="col-1 float-right text-muted" id="characters-left">0/350</small>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_tags %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+{% include "common/_modal.html" %}
+{% include 'common/message.html' %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb page_title page_url %}
+{% endblock %}
+
+<div class="row">
+    <div class="col-12">
+        {% include 'sales/_list_table.html' %}
+    </div>
+</div>
+
+<script>
+
+    function chatModal() {
+        $(".chat-btn").each(function () {
+            $(this).on("click", function(){
+                $('#modal-chat').find('.modal-content').load($(this).data("form-url"), function () {
+                    $('#modal-chat').modal("show");
+                });
+
+            });
+        });
+    }
+    chatModal();
+
+    $( "#modal-chat" ).on('shown.bs.modal', function(){
+        var me = document.querySelector('script[src="{% static 'dist/js/chat.js' %}"]');
+        if(me !== null){
+            me.remove();
+        }
+        var js = document.createElement("script");
+        js.type = "text/javascript";
+        js.src = '{% static 'dist/js/chat.js' %}';
+        document.body.appendChild(js);
+    });
+
+    function saleMenu() {
+        $(".sc-ui-trigger-content__trigger").each(function () {
+            $(this).on("click", function(){
+                $(".sc-ui-trigger-content__content").not($(this)).addClass("sc-ui-trigger-content__content--hidden");
+                $(".sc-ui-trigger-content__trigger").not($(this)).addClass("sc-ui-trigger-content__trigger--non-triggered");
+                $(".sc-ui-trigger-content__trigger").not($(this)).removeClass("sc-ui-trigger-content__trigger--triggered");
+                $(this).siblings(".sc-ui-trigger-content__content").removeClass("sc-ui-trigger-content__content--hidden");
+                $(this).removeClass("sc-ui-trigger-content__trigger--non-triggered");
+                $(this).addClass("sc-ui-trigger-content__trigger--triggered");
+            });
+        });
+    }
+    saleMenu();
+
+
+    document.addEventListener('click', function handleClickOutsideBox(event) {
+        const box = $('.sc-ui-trigger-content');
+        if (box.find(event.target).length === 0) {
+            box.children('.sc-ui-trigger-content__trigger').addClass("sc-ui-trigger-content__trigger--non-triggered");
+            box.children('.sc-ui-trigger-content__trigger').removeClass("sc-ui-trigger-content__trigger--triggered");
+            box.children(".sc-ui-trigger-content__content").addClass("sc-ui-trigger-content__content--hidden");
+        }
+    });
+
+
+$(document).ready(function(){
+
+    // Object Detail button
+    function detailModalForm() {
+        $(".view_invoice_btn").each(function () {
+            $(this).modalForm({
+                modalID: "#modal-lg",
+                formURL: $(this).data("form-url")
+            });
+        });
+    }
+    detailModalForm();
+
+    // Update object asynchronous button
+    // message
+    var asyncSuccessMessageUpdate = [
+        "<script>",
+        "    toastr.success('Success: Invoice crated successfully.');",
+        "<\/script>"
+    ].join("");
+
+    // modal form
+    function createInvoiceModalForm() {
+        $(".add_invoice_btn").each(function () {
+            $(this).modalForm({
+                modalID: "#modal-invoice",
+                formURL: $(this).data("form-url"),
+                errorClass: ".invalid-feedback",
+            });
+        });
+    }
+
+    createInvoiceModalForm();
+
+    $( "#modal-invoice" ).on('shown.bs.modal', function(){
+        var me = document.querySelector('script[src="{% static 'dist/js/invoice_from_sale.js' %}"]');
+        if(me !== null){
+            me.remove();
+        }
+        var js = document.createElement("script");
+        js.type = "text/javascript";
+        js.src = '{% static 'dist/js/invoice_from_sale.js' %}';
+        document.body.appendChild(js);
+    });
+
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function() {
+        $('#id_regimen').select2();
+    });
+
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+    });
+});
+
+
+</script>
+<div id="script-container">
+    {% block javascript %}
+    {% for js_file in js_files %}
+    <script type="text/javascript" src="{% static js_file %}"></script>
+    {% endfor %}
+    {% endblock %}
+</div>
+
+
+{% endblock %}

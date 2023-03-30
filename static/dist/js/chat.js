@@ -33,6 +33,9 @@ answer_select.addEventListener("change", function(){
             if(answer_select.value.includes('invoice_url')){
                 message_input.value = answer_select.value.replace('invoice_url', answer_select.dataset.formUrl);
                 OnInput();
+            } else if(answer_select.value.includes('diseno_url')){
+                message_input.value = answer_select.value.replace('diseno_url', answer_select.dataset.formUrl);
+                OnInput();
             } else {
                 message_input.value = answer_select.value;
             }
