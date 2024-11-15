@@ -594,3 +594,9 @@ img.question-basic-information__img {
     word-break: break-word;
 }
 
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
