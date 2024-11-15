@@ -1,1 +1,4 @@
-# Django FACTURA Project
+# Factura SH
+
+Aplicación web para administrar solicitudes de facturación de clientes.
+Django framework
