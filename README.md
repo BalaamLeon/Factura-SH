@@ -1,11 +1,5 @@
 # Factura SH
 
-Aplicación web para administrar solicitudes de facturación de clientes.
-Django framework
-
-
-# Django Billing API for Mercado Libre Sales
-
 ## Overview
 This Django-based application processes billing requests from customers who made purchases on Mercado Libre. It provides an API for handling invoices, managing customer data, and integrating with external accounting services.
 
